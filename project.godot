@@ -1,0 +1,38 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="TCG卡牌引擎"
+config/features=PackedStringArray("4.4", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+CoreSystem="*res://addons/godot_core_system/source/core_system.gd"
+lg="*res://addons/godot_core_system/source/logger/logger.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_core_system/plugin.cfg")
+
+[file_customization]
+
+folder_colors={
+"res://addons/": "green",
+"res://src/": "orange"
+}
+
+[godot_core_system]
+
+logger/color_debug=Color(0.317391, 0.650492, 0.435305, 1)
+logger/color_info=Color(0.857501, 0.857501, 0.857501, 1)
+logger/color_warning=Color(0.784373, 0.641772, 0.369648, 1)
+logger/color_error=Color(0.487756, 1.02879e-06, 3.36915e-07, 1)
