@@ -51,9 +51,13 @@ func populate(config: Dictionary)->bool:
 		router_source = config.router
 	if config.has("nodes"):
 		var nodes_dict: Array   = config.nodes
-		if nodes_dict.is_empty() && (!executor_source || executor_source.is_empty()):
-			lg.fatal("Template config executor!")
+		var has_nodes = !nodes_dict.is_empty()
+		var has_executor = executor_source && !executor_source.is_empty()
+		if !has_nodes && !has_executor:
+			lg.fatal("Template executor and nodes both empty!")
 			return false
+		if has_nodes && has_executor:
+			lg.warning("Template nodes configured, executor disabled!")
 		var key_map: Dictionary = {}
 		for node in nodes_dict:
 			var template = ProcessTemplate.new()

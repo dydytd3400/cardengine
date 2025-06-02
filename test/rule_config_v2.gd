@@ -18,7 +18,17 @@ const battle: Dictionary = {
 		},{
 			"name" = "确定先手",
 			"key" = "pick_first",
-			"executor" = "res://src/core/process_system/process_task_executor.gd"
+			"executor" = "res://src/core/process_system/process_task_executor.gd",
+			"nodes" = [{
+					"name"= "回合准备",
+					"key" = "turn_initial",
+					"executor" = "res://src/core/process_system/process_task_executor.gd"
+				},{
+					"name" = "回合动作",
+					"key" = "turn_pick_first",
+					"executor" = "res://src/core/process_system/process_task_executor.gd"
+				}
+			]
 		},{
 			"name" = "回合进行",
 			"key" = "turn_during",

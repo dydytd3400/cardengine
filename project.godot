@@ -33,6 +33,7 @@ folder_colors={
 [godot_core_system]
 
 logger/color_debug=Color(0.317391, 0.650492, 0.435305, 1)
-logger/color_info=Color(0.00103548, 0.210224, 0.756946, 1)
-logger/color_warning=Color(0.784373, 0.641772, 0.369648, 1)
-logger/color_error=Color(0.61009, 2.4667e-06, 4.81307e-07, 1)
+logger/color_info=Color(0.425471, 0.613067, 1, 1)
+logger/color_warning=Color(1, 0.870588, 0.4, 1)
+logger/color_error=Color(1, 0.54902, 0.8, 1)
+logger/color_fatal=Color(1, 0.470588, 0.419608, 1)
