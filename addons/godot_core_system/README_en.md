@@ -59,16 +59,16 @@ A highly modular and extensible core system framework designed for Godot 4.4+
 extends Node
 
 func _ready():
-    # Access managers through CoreSystem singleton
-    CoreSystem.state_machine_manager  # State Machine Manager
-    CoreSystem.save_manager          # Save Manager
-    CoreSystem.audio_manager         # Audio Manager
-    CoreSystem.input_manager         # Input Manager
-    CoreSystem.logger               # Logger
-    CoreSystem.resource_manager     # Resource Manager
-    CoreSystem.scene_manager        # Scene Manager
-    CoreSystem.tag_manager         # Tag Manager
-    CoreSystem.trigger_manager     # Trigger Manager
+	# Access managers through CoreSystem singleton
+	CoreSystem.state_machine_manager  # State Machine Manager
+	CoreSystem.save_manager          # Save Manager
+	CoreSystem.audio_manager         # Audio Manager
+	CoreSystem.input_manager         # Input Manager
+	CoreSystem.logger               # Logger
+	CoreSystem.resource_manager     # Resource Manager
+	CoreSystem.scene_manager        # Scene Manager
+	CoreSystem.tag_manager         # Tag Manager
+	CoreSystem.trigger_manager     # Trigger Manager
 ```
 
 ## 📚 Documentation
@@ -137,6 +137,6 @@ If you encounter any issues or have suggestions:
 ---
 
 <div align="center">
-    <strong>Built by Liweimin0512 with ❤️</strong><br>
-    <sub>Making game development easier</sub>
+	<strong>Built by Liweimin0512 with ❤️</strong><br>
+	<sub>Making game development easier</sub>
 </div>

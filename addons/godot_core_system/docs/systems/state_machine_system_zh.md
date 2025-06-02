@@ -32,12 +32,12 @@
 # 创建一个简单的状态
 class_name IdleState extends BaseState
 func enter(msg := {}):
-    super.enter(msg)
-    print("进入空闲状态")
+	super.enter(msg)
+	print("进入空闲状态")
 
 func update(delta: float):
-    if agent.is_moving:
-        transition_to("move")
+	if agent.is_moving:
+		transition_to("move")
 
 # 使用状态机
 var state_machine = BaseStateMachine.new()
@@ -53,13 +53,13 @@ class_name CombatState extends BaseState
 var sub_state_machine: BaseStateMachine
 
 func _init():
-    sub_state_machine = BaseStateMachine.new(self)
-    sub_state_machine.add_state("attack", AttackState)
-    sub_state_machine.add_state("defend", DefendState)
+	sub_state_machine = BaseStateMachine.new(self)
+	sub_state_machine.add_state("attack", AttackState)
+	sub_state_machine.add_state("defend", DefendState)
 
 func enter(msg := {}):
-    super.enter(msg)
-    sub_state_machine.transition_to("attack")
+	super.enter(msg)
+	sub_state_machine.transition_to("attack")
 
 # 在主状态机中使用
 main_state_machine.add_state("combat", CombatState)
@@ -71,10 +71,10 @@ main_state_machine.add_state("explore", ExploreState)
 # 在状态中处理事件
 class_name PlayerState extends BaseState
 func _on_damage_taken(amount: int):
-    if amount > 50:
-        transition_to("hurt")
-    elif parent_state:
-        parent_state.handle_event("damage_taken", [amount])
+	if amount > 50:
+		transition_to("hurt")
+	elif parent_state:
+		parent_state.handle_event("damage_taken", [amount])
 
 # 触发事件
 state_machine.handle_event("damage_taken", [30])
@@ -142,21 +142,21 @@ state_machine.handle_event("damage_taken", [30])
 
 ```gdscript
 class MyState extends BaseState:
-    func _enter(msg := {}) -> void:
-        # 进入状态时调用
-        pass
-        
-    func _exit() -> void:
-        # 退出状态时调用
-        pass
-        
-    func _update(delta: float) -> void:
-        # 每帧调用
-        pass
-        
-    func _handle_input(event: InputEvent) -> void:
-        # 处理输入事件
-        pass
+	func _enter(msg := {}) -> void:
+		# 进入状态时调用
+		pass
+
+	func _exit() -> void:
+		# 退出状态时调用
+		pass
+
+	func _update(delta: float) -> void:
+		# 每帧调用
+		pass
+
+	func _handle_input(event: InputEvent) -> void:
+		# 处理输入事件
+		pass
 ```
 
 #### BaseStateMachine（基础状态机）
@@ -168,13 +168,13 @@ class MyState extends BaseState:
 
 ```gdscript
 class MyStateMachine extends BaseStateMachine:
-    func _ready() -> void:
-        # 注册状态
-        add_state("idle", IdleState.new(self))
-        add_state("walk", WalkState.new(self))
-        
-        # 设置初始状态
-        start("idle")
+	func _ready() -> void:
+		# 注册状态
+		add_state("idle", IdleState.new(self))
+		add_state("walk", WalkState.new(self))
+
+		# 设置初始状态
+		start("idle")
 ```
 
 #### StateMachineManager（状态机管理器）
@@ -196,27 +196,27 @@ CoreSystem.state_machine_manager.register_state_machine("player", player_state_m
 ```gdscript
 # 角色状态机
 class CharacterStateMachine extends BaseStateMachine:
-    func _ready() -> void:
-        add_state("idle", IdleState.new(self))
-        add_state("walk", WalkState.new(self))
-        add_state("jump", JumpState.new(self))
-        start("idle")
+	func _ready() -> void:
+		add_state("idle", IdleState.new(self))
+		add_state("walk", WalkState.new(self))
+		add_state("jump", JumpState.new(self))
+		start("idle")
 
 # 空闲状态
 class IdleState extends BaseState:
-    func _enter(msg := {}) -> void:
-        owner.play_animation("idle")
-    
-    func _handle_input(event: InputEvent) -> void:
-        if event.is_action_pressed("move"):
-            switch_to("walk")
-        elif event.is_action_pressed("jump"):
-            switch_to("jump")
+	func _enter(msg := {}) -> void:
+		owner.play_animation("idle")
+
+	func _handle_input(event: InputEvent) -> void:
+		if event.is_action_pressed("move"):
+			switch_to("walk")
+		elif event.is_action_pressed("jump"):
+			switch_to("jump")
 
 # 注册到管理器
 func _ready() -> void:
-    var character_sm = CharacterStateMachine.new(self)
-    CoreSystem.state_machine_manager.register_state_machine("character", character_sm)
+	var character_sm = CharacterStateMachine.new(self)
+	CoreSystem.state_machine_manager.register_state_machine("character", character_sm)
 ```
 
 ## 最佳实践

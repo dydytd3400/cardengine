@@ -1,6 +1,6 @@
-extends BaseState
 ## 基础状态机类, 状态机本身也是一个状态。
 class_name BaseStateMachine
+extends BaseState
 
 # 信号
 ## 状态改变

@@ -1,10 +1,8 @@
 ## 流程任务
 ##
 ## 相对于[BaseState]，[ProcessTask]拆分出了专注于具体业务逻辑的执行模块类[ProcessTaskExecutor]和负责自身状态切换的任务路由类[ProcessTaskRouter]。
-## [ProcessTask]不再参与除自身状态管理以外的具体逻辑，而是分别交给[ProcessTaskExecutor]和[ProcessTaskRouter]各自负责处理，从而实现进一步解耦。[br]
-## [br]
-## [ProcessTask]可通过流程模版配置[ProcessTemplate]动态化配置[ProcessTask]，实现动态化管理状态机，具体参考流程模版配置类[ProcessTemplate]。[br]
-## [br]
+## [ProcessTask]不再参与除自身状态管理以外的具体逻辑，而是分别交给[ProcessTaskExecutor]和[ProcessTaskRouter]各自负责处理，从而实现进一步解耦。[br][br]
+## [ProcessTask]可通过流程模版配置[ProcessTemplate]动态化配置[ProcessTask]，实现动态化管理状态机，具体参考流程模版配置类[ProcessTemplate]。[br][br]
 ## [ProcessTask]仍然可以被视作一个普通的[BaseState]被[BaseStateMachine]所管理
 ## @experimental: 该方法尚未完善。
 class_name ProcessTask

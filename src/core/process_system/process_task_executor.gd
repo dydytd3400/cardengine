@@ -27,8 +27,12 @@ func cancel(task: ProcessTask, msg: Dictionary = {}):
 
 
 func _execute(task: ProcessTask, msg: Dictionary = {}):
+	#task.state_exited.connect(_test.bind(task.get_state_id_tree_str()))
+	lg.info("Complate Task " + task.get_state_id_tree_str())
 	complated(task, msg) # 默认流程任务执行者的逻辑是直接完成了当前任务
 
+func _test(id:String):
+	lg.warning(id+" is Exited!")
 
 func _complated(task: ProcessTask, msg: Dictionary = {}):
 	pass

@@ -30,11 +30,11 @@ func add_task(_state_id: StringName, new_task: ProcessTask) -> void:
 
 
 func _exit() -> void:
-	_debug("Current task batch is finished!")
 	# 通常如果子状态机正常结束，
 	# 如果是被外部手动调用，需要主动停止状态机
 	if private_state_machine.is_active:
 		private_state_machine.stop()
+	#lg.info(" [State] "+get_state_id_tree_str() + " : Finish task batch: "+state_id)
 
 func _set_state_id(value:StringName) -> void:
 	private_state_machine.state_id = value

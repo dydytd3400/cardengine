@@ -1,6 +1,6 @@
-extends RefCounted
 ## 基础状态类
 class_name BaseState
+extends RefCounted
 
 # 信号
 ## 状态进入
