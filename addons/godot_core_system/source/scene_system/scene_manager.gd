@@ -319,7 +319,7 @@ func _do_scene_switch(
 			new_scene.init_state(scene_data)
 		else:
 			CoreSystem.logger.warning("Scene %s does not have an init_state method" % new_scene.get_name())
-	
+
 	await get_tree().process_frame
 	scene_changed.emit(old_scene, new_scene)
 

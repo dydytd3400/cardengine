@@ -2,18 +2,18 @@
 
 ## Features
 
-- **Efficient Algorithm**:  
-  - Implements Alias Method for `O(1)` time complexity weighted random selection  
-  - Provides manual/automatic probability table rebuild parameters to optimize high-frequency operations  
-- **Dynamic Operations**:  
-  - Supports add/remove/update items with weights, batch operations  
-  - Automatic or manual probability table rebuild after item changes (controlled via method parameters)  
-- **Flexible Configuration**:  
-  - Supports multiple input formats (arrays/dictionaries), auto-converts to unified structure (see examples)  
-  - Optional duplicate checking and auto-rebuild  
-- **Safety Mechanisms**:  
-  - Auto-filters invalid weights (non-positive values)  
-  - Provides pool status monitoring (empty detection, item count query)  
+- **Efficient Algorithm**:
+  - Implements Alias Method for `O(1)` time complexity weighted random selection
+  - Provides manual/automatic probability table rebuild parameters to optimize high-frequency operations
+- **Dynamic Operations**:
+  - Supports add/remove/update items with weights, batch operations
+  - Automatic or manual probability table rebuild after item changes (controlled via method parameters)
+- **Flexible Configuration**:
+  - Supports multiple input formats (arrays/dictionaries), auto-converts to unified structure (see examples)
+  - Optional duplicate checking and auto-rebuild
+- **Safety Mechanisms**:
+  - Auto-filters invalid weights (non-positive values)
+  - Provides pool status monitoring (empty detection, item count query)
   - Supports duplicate merging and cleanup
 
 ---
@@ -24,7 +24,7 @@
 ```gdscript
 # Initialize pool (disable auto-rebuild and duplicate check for performance)
 var pool = CoreSystem.RandomPicker.new([
-	["sword", 10], 
+	["sword", 10],
 	{"data": "gem", "weight": 5}
 ], check_repeat=false)
 
@@ -49,10 +49,10 @@ pool.remove_items(["sword", "gem"], rebuild=true)
 ### Dynamic Operations & Signals
 ```gdscript
 # Connect signals
-pool.item_picked.connect(func(item): 
+pool.item_picked.connect(func(item):
 	print("Selected:", item)
 )
-pool.pool_emptied.connect(func(): 
+pool.pool_emptied.connect(func():
 	print("★ Pool emptied!")
 )
 
@@ -68,13 +68,13 @@ while not pool.is_empty():
 ---
 ## Best Practices
 
-1. **Data Validity**:  
-   - Weights must be positive, otherwise operations are rejected  
+1. **Data Validity**:
+   - Weights must be positive, otherwise operations are rejected
    - Returns `null` for `get_random_item` when total weight is `0`
 
-2. **Performance Optimization**:  
-   - For high-frequency operations (e.g., batch adds), disable `rebuild` and `check_repeat`, call `rebuild_alias_table()` manually.  
-   - Stress tests show 100k items pool averages <`0.001ms` per random access, but ~`580ms` initialization (lightweight laptop). Manage duplicates carefully for large datasets.  
+2. **Performance Optimization**:
+   - For high-frequency operations (e.g., batch adds), disable `rebuild` and `check_repeat`, call `rebuild_alias_table()` manually.
+   - Stress tests show 100k items pool averages <`0.001ms` per random access, but ~`580ms` initialization (lightweight laptop). Manage duplicates carefully for large datasets.
    - Set `check_repeat=false` during initialization if duplicates are impossible (saves ~`100ms` for 100k items).
 
 ---

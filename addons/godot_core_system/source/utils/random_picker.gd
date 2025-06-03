@@ -164,7 +164,7 @@ func get_random_item(should_remove: bool = false) -> Variant:
 	item_picked.emit(selected_item.data)
 	return selected_item.data
 
-## 重建别名表和概率表 
+## 重建别名表和概率表
 ## 给予开发者更多自由，避免一个原子操作中被迫多次构建别名表和概率表
 func rebuild_alias_table()->void:
 	_build_alias_table()

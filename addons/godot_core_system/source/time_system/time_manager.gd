@@ -12,7 +12,7 @@ class GameTimer:
 	var loop: bool
 	var paused: bool
 	var callback: Callable
-	
+
 	func _init(p_id: String, p_duration: float, p_loop: bool = false, p_callback: Callable = Callable()):
 		id = p_id
 		duration = p_duration
@@ -29,29 +29,29 @@ var _game_time: float = 0.0
 func _process(delta: float):
 	if _paused:
 		return
-	
+
 	var scaled_delta = delta * _time_scale
 	_game_time += scaled_delta
-	
+
 	# 更新所有计时器
 	var completed_timers = []
-	
+
 	for timer in _timers.values():
 		if timer.paused:
 			continue
-		
+
 		timer.elapsed += scaled_delta
 		if timer.elapsed >= timer.duration:
 			if timer.callback.is_valid():
 				timer.callback.call()
-			
+
 			timer_completed.emit(timer.id)
-			
+
 			if timer.loop:
 				timer.elapsed = 0.0
 			else:
 				completed_timers.append(timer.id)
-	
+
 	# 移除已完成的非循环计时器
 	for timer_id in completed_timers:
 		_timers.erase(timer_id)
@@ -79,11 +79,11 @@ func get_game_time() -> float:
 	return _game_time
 
 ## 创建计时器
-func create_timer(id: String, duration: float, loop: bool = false, 
+func create_timer(id: String, duration: float, loop: bool = false,
 				 callback: Callable = Callable()) -> void:
 	if has_timer(id):
 		push_warning("Timer with id '%s' already exists. Overwriting..." % id)
-	
+
 	_timers[id] = GameTimer.new(id, duration, loop, callback)
 
 ## 暂停计时器
@@ -99,7 +99,7 @@ func resume_timer(timer_id: String) -> bool:
 		_timers[timer_id].paused = false
 		return true
 	return false
-	
+
 ## 重置计时器
 func reset_timer(timer_id: String) -> bool:
 	if has_timer(timer_id):

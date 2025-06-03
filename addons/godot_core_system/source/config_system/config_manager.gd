@@ -45,7 +45,7 @@ func _exit() -> void:
 ## [return] bool 加载是否成功（文件不存在视为成功，但会记录信息）
 func load_config(p_path: String = "") -> bool:
 	var path_to_load = p_path if not p_path.is_empty() else config_path
-	
+
 	# 确保目标目录存在，load 不会创建目录
 	var dir_path = path_to_load.get_base_dir()
 	if not DirAccess.dir_exists_absolute(dir_path):
