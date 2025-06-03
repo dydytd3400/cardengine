@@ -19,14 +19,14 @@ func _init(_router: ProcessTaskRouter):
 	super._init(ProcessTaskExecutorBatch.new(),_router)
 	private_state_machine.is_debug = true
 
-## 添加子任务 [param _state_id]：子任务在当前流程组的唯一ID。[param new_task]：需要添加的子任务
-func add_task(_state_id: StringName, new_task: ProcessTask) -> void:
+## 添加子任务 [param task_id]：子任务在当前流程组的唯一ID。[param new_task]：需要添加的子任务
+func add_task(task_id: StringName, new_task: ProcessTask) -> void:
 	if is_active:
 		push_error("ProcessTaskBatch %s is active!" % state_id)
 		return
 	tasks.append(new_task)
 	new_task.parent = self
-	private_state_machine.add_state(_state_id, new_task)
+	private_state_machine.add_state(task_id, new_task)
 
 
 func _exit() -> void:
@@ -34,7 +34,6 @@ func _exit() -> void:
 	# 如果是被外部手动调用，需要主动停止状态机
 	if private_state_machine.is_active:
 		private_state_machine.stop()
-	#lg.info(" [State] "+get_state_id_tree_str() + " : Finish task batch: "+state_id)
 
 func _set_state_id(value:StringName) -> void:
 	private_state_machine.state_id = value

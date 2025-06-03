@@ -32,7 +32,7 @@ func _ready() -> void:
 	# 设置默认值
 	audio_node_root = self
 	_setup_audio_buses()
-	
+
 	for type in AudioType.values():
 		_volumes[type] = 1.0
 		_audio_players[type] = []
@@ -56,26 +56,26 @@ func preload_audio(path: String, type: AudioType) -> void:
 func play_music(path: String, fade_duration: float = 1.0, loop: bool = true) -> void:
 	if _current_music and _current_music.playing:
 		_fade_out_music(fade_duration)
-	
+
 	# 断开旧音乐的finished信号连接
 	if _current_music and _current_music.is_connected("finished", _on_music_finished):
 		_current_music.disconnect("finished", _on_music_finished)
-	
+
 	var audio_resource = _get_audio_resource(path)
 	if audio_resource:
 		if not loop and _is_audio_loop(audio_resource):
 			push_warning("The audio is imported with loop enabled, and it will always loop regardless of loop parameter!")
-		
+
 		_current_music = _get_audio_player(AudioType.MUSIC)
 		_current_music.stream = audio_resource
 		_current_music.bus = DEFAULT_BUSES[AudioType.MUSIC]
 		_current_music.volume_db = linear_to_db(_volumes[AudioType.MUSIC])
 		_current_music.play()
-		
+
 		# 连接循环信号
 		if loop:
 			_current_music.connect("finished", _on_music_finished)
-		
+
 		if fade_duration > 0:
 			_fade_in_music(fade_duration)
 
@@ -122,7 +122,7 @@ func set_volume(type: AudioType, volume: float) -> void:
 func stop_all() -> void:
 	if _current_music:
 		_current_music.stop()
-	
+
 	for type in _audio_players:
 		for player in _audio_players[type]:
 			player.stop()
@@ -133,7 +133,7 @@ func stop_all() -> void:
 func _get_audio_resource(path: String) -> AudioStream:
 	if _audio_cache.has(path):
 		return _audio_cache[path].resource
-	
+
 	var audio_resource = load(path)
 	if audio_resource:
 		_audio_cache[path] = {
@@ -151,7 +151,7 @@ func _get_audio_player(type: AudioType) -> AudioStreamPlayer:
 	for player in _audio_players[type]:
 		if not player.playing:
 			return player
-	
+
 	# 创建新的播放器
 	var new_player = AudioStreamPlayer.new()
 	audio_node_root.add_child(new_player)
@@ -172,13 +172,13 @@ func _fade_in_music(duration: float) -> void:
 	if _current_music:
 		_current_music.volume_db = -80.0
 		var tween = audio_node_root.create_tween()
-		tween.tween_property(_current_music, "volume_db", 
+		tween.tween_property(_current_music, "volume_db",
 			linear_to_db(_volumes[AudioType.MUSIC]), duration)
 
 ## 设置音频扬声器
 func _setup_audio_buses():
 	# var audio_bus_layout = AudioServer.get_bus_layout()
-	
+
 	for type in DEFAULT_BUSES:
 		var bus_name = DEFAULT_BUSES[type]
 		if AudioServer.get_bus_index(bus_name) == -1:
@@ -196,10 +196,10 @@ func _on_music_finished() -> void:
 func _is_audio_loop(audio:AudioStream)->bool:
 	if audio == null:
 		return false
-	
+
 	if audio is AudioStreamWAV:
 		return audio.loop_mode != AudioStreamWAV.LoopMode.LOOP_DISABLED
 	elif audio is AudioStreamMP3 or audio is AudioStreamOggVorbis or audio is AudioStreamPlaylist:
 		return audio.loop
-	
+
 	return false
