@@ -5,7 +5,9 @@
 ## @experimental: 该方法尚未完善。
 class_name ProcessTaskExecutorBatch
 extends ProcessTaskExecutor
+
 var _task_count
+
 func _execute(task: ProcessTask, msg: Dictionary = {}) -> void:
 	if !(task is ProcessTaskBatch):
 		push_error("Invalid task type: Must be ProcessTaskBatch!")

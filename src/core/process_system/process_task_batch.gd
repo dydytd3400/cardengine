@@ -15,7 +15,8 @@ var private_state_machine: BaseStateMachine = BaseStateMachine.new()
 var tasks: Array[ProcessTask]               = []
 ## 子任务集字典容器，方便通过state_id获取任务
 var tasks_dict: Dictionary[StringName, ProcessTask] = {}
-## 请通过[ProcessTaskBatch]实例化传入，后续请勿更改以免发生不可预知的错误
+## 是否为并发任务
+## 该值为true时，该[ProcessTaskBatch]的当前层级的子[ProcessTask]将会并发执行，在执行完成后，[ProcessTask]会各自退出且不再进行路由。当所有子[ProcessTask]都退出后，该[ProcessTaskBatch]也随之完成。
 var concurrent:bool = false
 
 ## 构造方法，和[ProcessTask]一样只能直接创建，不同之处在于只可以传入一个[ProcessTaskRouter]。
