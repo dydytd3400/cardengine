@@ -17,7 +17,11 @@ func next(current_task: ProcessTask, complated: bool, msg: Dictionary = {}) -> v
 			next_task._debug("Has no parent, about to exit")
 			next_task.exit()
 		else :
-			current_task.switch_to(next_task.state_id,msg)
+			if parent is ProcessTaskBatch && parent.concurrent:
+				next_task.exit()
+			else:
+				current_task.switch_to(next_task.state_id,msg)
+
 
 ## 返回下一个同级流程任务
 func _find_next(_current_task: ProcessTask, _complated: bool, _msg: Dictionary = {}) -> ProcessTask:

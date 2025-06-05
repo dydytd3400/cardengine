@@ -7,6 +7,9 @@ extends RefCounted
 ## 当前节点ID
 ## [b]必填[/b]
 var key: String
+## 当前节点如果为流程任务组时，该值才生效，用于配置该流程任务组是否并发任务
+## [b]可选，默认为：false[/i]
+var concurrent :bool = false
 ## 当前节点的子节点
 ## [i]可选，默认为：空[/i]
 var nodes: Array[ProcessTemplate]
@@ -16,6 +19,8 @@ var executor_source:Dictionary
 ## 当前节点的路由
 ## [i]可选，默认为：[/i][ProcessTaskRouterSequential]
 var router_source: Dictionary
+
+var _concurrent_child:bool = false
 
 ## 自定义执行模块和路由模块的加载回调方法，具体参数参见[method module_loader]
 var custom_module_loader:Callable = Callable()
@@ -60,12 +65,17 @@ func populate(config: Dictionary)->bool:
 	if config.has("nodes"):
 		var nodes_dict: Array   = config.nodes
 		var has_nodes = !nodes_dict.is_empty()
+		if config.has("concurrent"):
+			concurrent = config.has("concurrent")
+		else:
+			concurrent = false
 		var has_executor = executor_source && !executor_source.is_empty()
 		if has_nodes && has_executor:
 			lg.warning("Template nodes configured, executor disabled!")
 		var key_map: Dictionary = {}
 		for node in nodes_dict:
 			var template = ProcessTemplate.new()
+			template._concurrent_child = concurrent
 			if key_map.has(node.key):
 				lg.fatal("Template nodes key repeated: [%s]" % node.key)
 				return false
@@ -94,7 +104,7 @@ func generate(config: Dictionary = {},_custom_module_loader:Callable = Callable(
 
 ## 创建流程任务组
 func _create_process_task_batch() -> ProcessTaskBatch:
-	var current_node := ProcessTaskBatch.new(_create_process_router())
+	var current_node := ProcessTaskBatch.new(_create_process_router(),concurrent)
 	current_node.state_id = key
 	for node in nodes:
 		current_node.add_task(node.key, node.generate({},custom_module_loader))
@@ -122,6 +132,8 @@ func _create_process_executor() -> ProcessTaskExecutor:
 
 ## 创建流程任务路由
 func _create_process_router() -> ProcessTaskRouter:
+	if _concurrent_child:
+		return ProcessTaskRouterInterrupt.new()
 	var router
 	if router_source and !router_source.is_empty():
 		router = module_loader.call("router",key,router_source)

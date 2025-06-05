@@ -6,18 +6,6 @@
 class_name ProcessTaskRouterSequential
 extends ProcessTaskRouter
 
-## 当前任务结束时，会通过该方法调用[method ProcessTaskRouter._find_next]找到下一个同级流程任务并在当前方法路由[br]
-## 如果[method ProcessTaskRouter._find_next]返回空，则流程任务会挂起，直到[method ProcessTaskRouter.next]被再次执行或退出了当前流程任务。如果返回的流程任务没有父节点，则会直接退出当前流程任务。
-func next(current_task: ProcessTask, complated: bool, msg: Dictionary = {}) -> void:
-	var next_task := _find_next(current_task,complated,msg)
-	if next_task:
-		var parent = next_task.parent
-		if !parent:
-			next_task._debug("Has no parent, about to exit")
-			next_task.exit()
-		else :
-			current_task.switch_to(next_task.state_id,msg)
-
 ## 以被添加进当前[member ProcessTask.parent]的先后顺序的方式返回下一个同级[ProcessTask]，如果已经是最后一个了，则会停止[member ProcessTask.parent]的流程。[br]
 ## 当前[member ProcessTask.parent]可以是[ProcessTaskBatch]或[BaseStateMachine]。需要注意的是，如果[member ProcessTask.parent]是[BaseStateMachine]类型,那么其顺序则是不可预期的。
 func _find_next(current_task: ProcessTask, _complated: bool, _msg: Dictionary = {}) -> ProcessTask:

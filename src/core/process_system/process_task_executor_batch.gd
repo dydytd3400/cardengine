@@ -5,20 +5,33 @@
 ## @experimental: 该方法尚未完善。
 class_name ProcessTaskExecutorBatch
 extends ProcessTaskExecutor
-
+var _task_count
 func _execute(task: ProcessTask, msg: Dictionary = {}) -> void:
 	if !(task is ProcessTaskBatch):
 		push_error("Invalid task type: Must be ProcessTaskBatch!")
 		return
 	var task_batch: ProcessTaskBatch =  task as ProcessTaskBatch
-	var last_task                    := task_batch.tasks[task_batch.tasks.size()-1]
-	last_task.state_exited.connect(_finish.bind(task))
-	var first_task := task_batch.tasks[0]
-	if !task_batch.private_state_machine.current_state: # 如果子状态机没启动 则启动第一个子流程任务  否则切换至第一个子流程任务
-		task_batch.private_state_machine.start(first_task.state_id, msg)
+	_task_count = task_batch.tasks.size()
+
+	if task_batch.concurrent:
+		for item_task in task_batch.tasks:
+			item_task.state_exited.connect(_finish_one.bind(task,msg))
+			item_task.enter(msg)
 	else:
-		task_batch.private_state_machine.switch_to(first_task.state_id, msg)
+		var last_task := task_batch.tasks[task_batch.tasks.size()-1]
+		last_task.state_exited.connect(_finish.bind(task,msg))
+		var first_task := task_batch.tasks[0]
+		if !task_batch.private_state_machine.current_state: # 如果子状态机没启动 则启动第一个子流程任务  否则切换至第一个子流程任务
+			task_batch.private_state_machine.start(first_task.state_id, msg)
+		else:
+			task_batch.private_state_machine.switch_to(first_task.state_id, msg)
 
 
-func _finish(task: ProcessTask) -> void:
-	complated(task)
+func _finish(task: ProcessTask, msg: Dictionary = {}) -> void:
+	complated(task, msg)
+
+func _finish_one(task: ProcessTask, msg: Dictionary = {}) -> void:
+	task.state_exited.disconnect(_finish_one)
+	_task_count-=1
+	if _task_count<=0:
+		complated(task, msg)

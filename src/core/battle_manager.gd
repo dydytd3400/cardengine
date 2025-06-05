@@ -6,40 +6,53 @@ var first_index = -1:
 	set(value):
 		first_index = value
 		current_player_index = value
+	get: return first_index
 var current_player_index = -1
 var current_player:Player:
 	get():return players[current_player_index]
 var turn_count = -1
 
 func next() -> Player:
-	var next_player = players[0] if players[0] != current_player else players[1]
-	current_player_index = next_player.id
+	current_player_index = 0 if current_player_index != 0 else 1
 	return current_player
 
 func _ready() -> void:
 	var config = {
-		"key" = "battle_process",
+		"key" = "对战流程",
 		"nodes" = [{
-				"key" = "battle_initial",
+				"key" = "战场初始化",
 				"executor" = "res://src/core/processes/battle_initial.gd"
 			},{
-				"key" = "pick_first",
+				"key" = "随机先手玩家",
 				"executor" = "res://src/core/processes/pick_first.gd"
 			},{
-				"key" = "first_draw",
-				"executor" = "res://src/core/processes/initial_hand.gd"
+				"key" = "初始化手牌",
+				"concurrent" = true,
+				"nodes" = [{
+						"key" = "先手玩家抽牌",
+						"executor" = {
+							"resource"="res://src/core/processes/initial_hand.gd",
+							"count" = 3
+						}
+					},{
+						"key" = "后手玩家抽牌",
+						"executor" = {
+							"resource"="res://src/core/processes/initial_hand.gd",
+							"count" = 4
+						}
+					}]
 			},{
-				"key" = "second_draw",
-				"executor" = "res://src/core/processes/initial_hand.gd"
-			},{
-				"key" = "turn_during",
+				"key" = "开始回合",
 				"executor" = "res://src/core/processes/turn_during.gd"
 			},{
-				"key" = "checkmate",
+				"key" = "回合结束胜负判定",
 				"executor" = "res://src/core/processes/checkmate.gd",
-				"router" = "res://src/core/processes/checkmate_router.gd"
-			}
-		]
+				"router" = {
+					"resource" = "res://src/core/processes/checkmate_router.gd",
+					"continue_task" = "开始回合"
+				}
+			}],
+		"monitor" = ""
 	}
 	var process: ProcessTask = ProcessTemplate.new().generate(config)
 	process.enter({ manager=self})
