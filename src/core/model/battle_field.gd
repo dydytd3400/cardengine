@@ -1,96 +1,65 @@
-extends Node
+extends Object
 class_name BattleField
 
-var players:Array[Player] = []
+var players: Array[Player] = []
 var first_index = -1:
 	set(value):
 		first_index = value
 		current_player_index = value
+		current_player.is_first = true
+		next_player.is_first = false
 	get: return first_index
 var current_player_index = -1
-var current_player:Player:
-	get():return players[current_player_index]
-var turn_count = -1
+var current_player: Player:
+	get(): return players[current_player_index]
+var next_player:Player:
+	get():
+		var next_index = 0 if current_player_index != 0 else 1
+		return players[next_index]
+var turn_count = 0
 
-func next() -> Player:
+## 切换至下个玩家
+func switch_next() -> Player:
 	current_player_index = 0 if current_player_index != 0 else 1
+	turn_count += 1
 	return current_player
 
-func _ready() -> void:
-	var root = "res://src/core/intent/executors/%s.gd"
-	var config = {
-		"key" = "对战流程",
-		"nodes" = [{
-				"key" = "战场初始化",
-				"executor" = root % "battle_initial"
-			},{
-				"key" = "随机先手玩家",
-				"executor" = root % "pick_first"
-			},{
-				"key" = "初始化手牌",
-				"concurrent" = true,
-				"nodes" = [{
-						"key" = "先手玩家抽牌",
-						"executor" = {
-							"resource"= root % "initial_hand",
-							"count" = 3
-						}
-					},{
-						"key" = "后手玩家抽牌",
-						"executor" = {
-							"resource"= root % "initial_hand",
-							"count" = 4
-						}
-					}]
-			},{
-				"key" = "开始回合",
-				"executor" = root % "turn_during",
-			},{
-				"key" = "回合结束胜负判定",
-				"executor" = root % "checkmate",
-				"router" = {
-					"resource" = root % "checkmate_router",
-					"continue_task" = "开始回合"
-				}
-			}],
-		"monitor" = ""
-	}
-	var process: ProcessTask = ProcessTemplate.new().generate(config)
-	process.enter({ battle_field=self})
+func pick_first() -> Player:
+	first_index = randi_range(0,1)
+	lg.info("当前先手玩家是 %s" % current_player.player_name)
+	return current_player
 
-func _default_module_loader(type:String,key:String,module_config:Dictionary)->Variant:
-	if type=="executor":
-		var executor
-		match(key):
-				"battle_initial":
-					executor = BattleInitial.new()
-				"pick_first":
-					executor = PickFirst.new()
-				"first_draw":
-					executor = InitalHand.new()
-				"second_draw":
-					executor = InitalHand.new()
-				"turn_during":
-					executor = TurnDuring.new()
-				"checkmate":
-					executor = Checkmate.new()
-		if executor:
-			executor.battle_field = self
-			return executor
-	if type=="router":
-		var router
-		match(key):
-				"checkmate":
-					router = CheckmateRouter.new()
-		if router:
-			return router
+func checkmate() ->bool:
+	if turn_count < 10:
+		switch_next()
+		return false
+	else:
+		return true
 
-	var resource:String = module_config.resource
-	if !resource || resource.is_empty():
-		lg.fatal("Template %s empty!" % type)
-		return null
-	var module = load(resource).new()
-	for param in module_config.keys():
-		if param != "resource":
-			module[param] = module_config[param]
-	return module
+func draw_card(player:Player,count:int = 1):
+	return player.draw_card(count)
+
+func _init():
+	# 虚构基础数据
+	players.append(create_player("张三"))
+	players.append(create_player("李四"))
+
+func create_player(name:String)->Player:
+	var player:Player=Player.new()
+	player.player_id = UUID.generate()
+	player.player_name = name
+	for i in 30:
+		player.cards.append(create_card(i))
+	return player
+
+func create_card(name:int):
+	var card :Card = Card.new()
+	card.card_id = UUID.generate()
+	card.card_name = "卡牌_"+str(name)
+	card.attack = randi_range(0,10)
+	card.attack_max = randi_range(0,10)
+	card.cost = randi_range(0,10)
+	card.cost_max = randi_range(0,10)
+	card.health = randi_range(0,10)
+	card.health_max = randi_range(0,10)
+	return card

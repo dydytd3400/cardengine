@@ -1,46 +1,36 @@
 extends Object
 class_name Player
 
-var name:String
-var id:int
+## 玩家UUID
+var player_id:StringName
+## 玩家昵称
+var player_name: String = ""
+## 当前血量
+var health: int = 0
+## 初始血量
+var health_max: int = 0
+## 当前金币
+var gold: int = 0
+## 初始卡牌 该数据不可发生变化
 var cards:Array[Card] = []
+## 当前牌库
+var deck:Array[Card] = []
+## 当前手牌
+var hand:Array[Card] = []
+## 当前牌桌上的卡牌
+var plays:Array[Card] = []
+## 当前墓堆
+var graveyard:Array[Card] = []
+## 废弃的卡
+var trashed:Array[Card] = []
+## 是否先手玩家
+var is_first:bool = false
 
-var _health: int      = 0
-var _gold: int        = 0
-var _nickname: String = ""
-var player_id: String = ""
-
-
-#var controller:TableController:
-	#get:
-		#return battlefield.table_controller
-#var slots:Array[CardSlot]:
-	#get: return controller.slot_of_player[player_id]
-#
-#var slot_not_emptys:Array[CardSlot]:
-	#get: return slots.filter(func (item:CardSlot): return !item.is_empty())
-#
-#var inbattles:Array[Card]:
-	#get: return slot_not_emptys.map(func (item:CardSlot): return item.card)
-#
-#var cards:Array[Card]:
-	#get: return _hand._cards + _deck._cards + inbattles + _tomb._cards
-#
-#var sync_task:SyncTask = SyncTask.new(self)
-#
-#func is_self()->bool:
-	#return battlefield.self_player_id == player_id
-#
-#func is_player()->bool:
-	#return battlefield.players[0].player_id == player_id
-#
-#func is_enemy()->bool:
-	#return battlefield.players[1].player_id == player_id
-#
-#func enemy()->Player:
-	#if battlefield.players[0] == self:
-		#return battlefield.players[1]
-	#return battlefield.players[0]
-#
-#func on_bind_data():
-	#player_id = _data.player_id
+func draw_card(count:int = 1)->Array[Card]:
+	var draws = []
+	if deck.is_empty():
+		return draws
+	var real_count = min(count,deck.size())
+	for i in range(real_count):
+		draws.append(deck.pop_at(randi_range(0,real_count-1-i)))
+	return draws

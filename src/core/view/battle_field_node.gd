@@ -1,0 +1,96 @@
+class_name BattleFieldNode
+extends Node
+
+var battle_field: BattleField = BattleField.new()
+
+func _ready() -> void:
+	var root = "res://src/core/intent/executors/%s.gd"
+	var config = {
+		"key" = "对战流程",
+		"nodes" = [ {
+				"key" = "战场初始化",
+				"executor" = root % "battle_initial"
+			}, {
+				"key" = "随机先手玩家",
+				#"executor" = root % "pick_first"
+				"executor" = {
+					"resource" = "res://addons/godot_core_system/source/process_system/process_task_executor call_context.gd",
+					"target" = "battle_field",
+					"method" = "pick_first"
+				}
+			}, {
+				"key" = "初始化手牌",
+				"concurrent" = true,
+				"nodes" = [ {
+						"key" = "先手玩家抽牌",
+						"executor" = {
+							"resource" = root % "draw_card",
+							"count" = 3,
+							"source_player_type" = "current_player",
+							"source_cards_type" = "deck",
+							"target_player_type" = "current_player",
+							"target_cards_type" = "hand"
+						}
+					}, {
+						"key" = "后手玩家抽牌",
+						"executor" = {
+							"resource" = root % "draw_card",
+							"count" = 4,
+							"source_player_type" = "next_player",
+							"source_cards_type" = "deck",
+							"target_player_type" = "next_player",
+							"target_cards_type" = "hand"
+						}
+					}]
+			}, {
+				"key" = "开始回合",
+				"executor" = root % "turn_during",
+			}, {
+				"key" = "回合结束胜负判定",
+				"executor" = root % "checkmate",
+				"router" = {
+					"resource" = root % "checkmate_router",
+					"continue_task" = "开始回合"
+				}
+			}],
+		"monitor" = ""
+	}
+	var process: ProcessTask = ProcessTemplate.new().generate(config)
+	process.enter({"battle_field" = battle_field})
+
+# func _default_module_loader(type: String, key: String, module_config: Dictionary) -> Variant:
+# 	if type == "executor":
+# 		var executor
+# 		match (key):
+# 				"battle_initial":
+# 					executor = BattleInitial.new()
+# 				"pick_first":
+# 					executor = PickFirst.new()
+# 				"first_draw":
+# 					executor = DrawCard.new()
+# 				"second_draw":
+# 					executor = DrawCard.new()
+# 				"turn_during":
+# 					executor = TurnDuring.new()
+# 				"checkmate":
+# 					executor = Checkmate.new()
+# 		if executor:
+# 			executor.battle_field = self
+# 			return executor
+# 	if type == "router":
+# 		var router
+# 		match (key):
+# 				"checkmate":
+# 					router = CheckmateRouter.new()
+# 		if router:
+# 			return router
+
+# 	var resource: String = module_config.resource
+# 	if !resource || resource.is_empty():
+# 		lg.fatal("Template %s empty!" % type)
+# 		return null
+# 	var module = load(resource).new()
+# 	for param in module_config.keys():
+# 		if param != "resource":
+# 			module[param] = module_config[param]
+# 	return module

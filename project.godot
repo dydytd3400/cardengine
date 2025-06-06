@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="TCG卡牌引擎"
+run/main_scene="uid://ccwgy4fi35nyu"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
