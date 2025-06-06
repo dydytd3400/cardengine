@@ -1,5 +1,5 @@
 extends Node
-class_name BattleManager
+class_name BattleField
 
 var players:Array[Player] = []
 var first_index = -1:
@@ -17,38 +17,39 @@ func next() -> Player:
 	return current_player
 
 func _ready() -> void:
+	var root = "res://src/core/intent/executors/%s.gd"
 	var config = {
 		"key" = "对战流程",
 		"nodes" = [{
 				"key" = "战场初始化",
-				"executor" = "res://src/core/processes/battle_initial.gd"
+				"executor" = root % "battle_initial"
 			},{
 				"key" = "随机先手玩家",
-				"executor" = "res://src/core/processes/pick_first.gd"
+				"executor" = root % "pick_first"
 			},{
 				"key" = "初始化手牌",
 				"concurrent" = true,
 				"nodes" = [{
 						"key" = "先手玩家抽牌",
 						"executor" = {
-							"resource"="res://src/core/processes/initial_hand.gd",
+							"resource"= root % "initial_hand",
 							"count" = 3
 						}
 					},{
 						"key" = "后手玩家抽牌",
 						"executor" = {
-							"resource"="res://src/core/processes/initial_hand.gd",
+							"resource"= root % "initial_hand",
 							"count" = 4
 						}
 					}]
 			},{
 				"key" = "开始回合",
-				"executor" = "res://src/core/processes/turn_during.gd"
+				"executor" = root % "turn_during",
 			},{
 				"key" = "回合结束胜负判定",
-				"executor" = "res://src/core/processes/checkmate.gd",
+				"executor" = root % "checkmate",
 				"router" = {
-					"resource" = "res://src/core/processes/checkmate_router.gd",
+					"resource" = root % "checkmate_router",
 					"continue_task" = "开始回合"
 				}
 			}],
