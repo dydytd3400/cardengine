@@ -39,12 +39,12 @@ func run(task: ProcessTask, msg: Dictionary):
 		stop_timer(true)
 	_execute(task,msg)
 	if _run_count == 0 and finish_on_stop:
-		complated(task, msg)
+		completed(task, msg)
 
 ## 完成并结束当前执行模块,该方法会停止之前正在执行的定时任务
-func complated(task: ProcessTask, msg: Dictionary = {}):
+func completed(task: ProcessTask, msg: Dictionary = {}):
 	stop_timer(true)
-	super.complated(task,msg)
+	super.completed(task,msg)
 
 ## 取消并结束当前执行模块,该方法会停止之前正在执行的定时任务
 func cancel(task: ProcessTask, msg: Dictionary = {}):

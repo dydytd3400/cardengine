@@ -8,7 +8,7 @@ extends ProcessTaskRouter
 
 ## 以被添加进当前[member ProcessTask.parent]的先后顺序的方式返回下一个同级[ProcessTask]，如果已经是最后一个了，则会停止[member ProcessTask.parent]的流程。[br]
 ## 当前[member ProcessTask.parent]可以是[ProcessTaskBatch]或[BaseStateMachine]。需要注意的是，如果[member ProcessTask.parent]是[BaseStateMachine]类型,那么其顺序则是不可预期的。
-func _find_next(current_task: ProcessTask, _complated: bool, _msg: Dictionary = {}) -> ProcessTask:
+func _find_next(current_task: ProcessTask, _completed: bool, _msg: Dictionary = {}) -> ProcessTask:
 	# 处理完成后 通过自身路由获取下个同级任务
 	var next_task:ProcessTask
 	if !current_task.parent:

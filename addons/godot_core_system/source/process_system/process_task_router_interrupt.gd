@@ -5,6 +5,6 @@
 class_name ProcessTaskRouterInterrupt
 extends ProcessTaskRouter
 
-func _find_next(current_task: ProcessTask, _complated: bool, _msg: Dictionary = {}) -> ProcessTask:
+func _find_next(current_task: ProcessTask, _completed: bool, _msg: Dictionary = {}) -> ProcessTask:
 	current_task.exit()
 	return null

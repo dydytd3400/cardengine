@@ -30,10 +30,10 @@ func _execute(task: ProcessTask, msg: Dictionary = {}) -> void:
 
 
 func _finish(task: ProcessTask, msg: Dictionary = {}) -> void:
-	complated(task, msg)
+	completed(task, msg)
 
 func _finish_one(task: ProcessTask, msg: Dictionary = {}) -> void:
 	task.state_exited.disconnect(_finish_one)
 	_task_count-=1
 	if _task_count<=0:
-		complated(task, msg)
+		completed(task, msg)

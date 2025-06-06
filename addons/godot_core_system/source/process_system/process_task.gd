@@ -33,5 +33,5 @@ func _task_entered(msg := {}) -> void:
 
 
 ## 当前[member executor]执行完毕，路由至下一个流程任务
-func _executor_finished(complated: bool, msg: Dictionary) -> void:
-	router.next(self, complated, msg) # 路由至下一个流程任务
+func _executor_finished(completed: bool, msg: Dictionary) -> void:
+	router.next(self, completed, msg) # 路由至下一个流程任务
