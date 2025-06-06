@@ -56,7 +56,7 @@ func _ready() -> void:
 		"monitor" = ""
 	}
 	var process: ProcessTask = ProcessTemplate.new().generate(config)
-	process.enter({ manager=self})
+	process.enter({ battle_field=self})
 
 func _default_module_loader(type:String,key:String,module_config:Dictionary)->Variant:
 	if type=="executor":
@@ -75,7 +75,7 @@ func _default_module_loader(type:String,key:String,module_config:Dictionary)->Va
 				"checkmate":
 					executor = Checkmate.new()
 		if executor:
-			executor.battle_manager = self
+			executor.battle_field = self
 			return executor
 	if type=="router":
 		var router

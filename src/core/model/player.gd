@@ -3,7 +3,7 @@ class_name Player
 
 var name:String
 var id:int
-#var cards:Array[Card] = []
+var cards:Array[Card] = []
 
 var _health: int      = 0
 var _gold: int        = 0
