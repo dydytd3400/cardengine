@@ -11,4 +11,7 @@ func _execute(task: ProcessTask, msg: Dictionary = {}):
 
 func init_player_deck(player:Player):
 	for card in player.cards:
-		player.deck.append(card.duplicate(true))
+		var new_card:Card= card.duplicate(true)
+		new_card.owner = player
+		new_card.creator = player
+		player.deck.append(new_card)

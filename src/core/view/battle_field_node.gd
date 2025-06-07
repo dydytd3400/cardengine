@@ -4,20 +4,15 @@ extends Node
 var battle_field: BattleField = BattleField.new()
 
 func _ready() -> void:
-	var root = "res://src/core/intent/executors/%s.gd"
+	var root = "res://src/core/intent/battles/%s.gd"
 	var config = {
 		"key" = "对战流程",
 		"nodes" = [ {
 				"key" = "战场初始化",
 				"executor" = root % "battle_initial"
 			}, {
-				"key" = "随机先手玩家",
-				#"executor" = root % "pick_first"
-				"executor" = {
-					"resource" = "res://addons/godot_core_system/source/process_system/process_task_executor call_context.gd",
-					"target" = "battle_field",
-					"method" = "pick_first"
-				}
+				"key" = "决出先手玩家",
+				"executor" = root % "pick_first"
 			}, {
 				"key" = "初始化手牌",
 				"concurrent" = true,
@@ -44,7 +39,37 @@ func _ready() -> void:
 					}]
 			}, {
 				"key" = "开始回合",
-				"executor" = root % "turn_during",
+				"nodes" = [ {
+						"key" = "回合初始化数据", # 通常用于
+						"executor" = root % "turn_initial",
+					}, {
+						"key" = "发放利息",
+						"executor" = root % "interest_payout",
+					}, {
+						"key" = "补充手牌",
+						"executor" = root % "draw_card",
+					}, {
+						"key" = "牌桌流程",
+						"executor" = {
+							"resource" = "res://addons/godot_core_system/source/process_system/process_task_executor_launcher.gd",
+							"context_key" = "card",
+							"context_values" = "@context{battle_field.current_player.plays}",
+							"process" = {
+								"key" = "卡牌行动",
+								"nodes" = [ {
+									"key" = "移动",
+									"executor" = root % "card_move",
+								}, {
+									"key" = "攻击",
+									"executor" = root % "card_attack",
+								}]
+							},
+						}
+					},{
+						"key" = "出牌",
+						"executor" = root % "play_card"
+					}
+				]
 			}, {
 				"key" = "回合结束胜负判定",
 				"executor" = root % "checkmate",

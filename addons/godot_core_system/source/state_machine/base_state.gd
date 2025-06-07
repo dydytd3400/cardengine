@@ -52,8 +52,8 @@ func exit() -> bool:
 	if not is_active:
 		_logger.warning("State[%s] is not active!" % state_id)
 		return false
-	is_active = false
 	_exit()
+	is_active = false
 	_debug("Exiting state: %s" % state_id)
 	state_exited.emit()
 	return true

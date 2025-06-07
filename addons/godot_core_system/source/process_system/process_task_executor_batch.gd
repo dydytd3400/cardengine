@@ -23,10 +23,10 @@ func _execute(task: ProcessTask, msg: Dictionary = {}) -> void:
 		var last_task := task_batch.tasks[task_batch.tasks.size()-1]
 		last_task.state_exited.connect(_finish.bind(task,msg))
 		var first_task := task_batch.tasks[0]
-		if !task_batch.private_state_machine.current_state: # 如果子状态机没启动 则启动第一个子流程任务  否则切换至第一个子流程任务
+		if task_batch.private_state_machine.current_state==null: # 如果子状态机没启动 则启动第一个子流程任务  否则切换至第一个子流程任务
 			task_batch.private_state_machine.start(first_task.state_id, msg)
 		else:
-			task_batch.private_state_machine.switch_to(first_task.state_id, msg)
+			task_batch.private_state_machine.switch(first_task.state_id, msg)
 
 
 func _finish(task: ProcessTask, msg: Dictionary = {}) -> void:

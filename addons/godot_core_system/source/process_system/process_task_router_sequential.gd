@@ -20,8 +20,8 @@ func _find_next(current_task: ProcessTask, _completed: bool, _msg: Dictionary = 
 			push_error("State not exist at %d" % at)
 			return null
 		if at >= process.tasks.size()-1:
-			#current_task.exit()
-			process.private_state_machine.stop()
+			process.executor.completed(process,_msg)
+			#process.private_state_machine.stop()
 			lg.info("is out batch")
 			return null
 		next_task = process.tasks[at+1]

@@ -14,7 +14,7 @@ func next(current_task: ProcessTask, completed: bool, msg: Dictionary = {}) -> v
 	if next_task:
 		var parent = next_task.parent
 		if !parent:
-			next_task._debug("Has no parent, about to exit")
+			lg.warning("Has no parent, about to exit : %s" % next_task.state_id)
 			next_task.exit()
 		else :
 			if parent is ProcessTaskBatch && parent.concurrent:

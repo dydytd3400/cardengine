@@ -20,7 +20,6 @@ var parent: Variant:
 
 ## 构造方法，需要传入[ProcessTaskExecutor]和[ProcessTaskRouter]，也就预示着[ProcessTask]只能直接创建
 func _init(_executor: ProcessTaskExecutor,_router: ProcessTaskRouter):
-	is_debug = true
 	executor = _executor
 	router = _router
 	state_entered.connect(_task_entered)

@@ -23,7 +23,7 @@ var concurrent:bool = false
 func _init(_router: ProcessTaskRouter,_concurrent:bool=false):
 	super._init(ProcessTaskExecutorBatch.new(),_router)
 	concurrent=_concurrent
-	private_state_machine.is_debug = true
+	private_state_machine.is_debug = is_debug
 
 ## 添加子任务 [param task_id]：子任务在当前流程组的唯一ID。[param new_task]：需要添加的子任务
 func add_task(task_id: StringName, new_task: ProcessTask) -> void:
@@ -56,7 +56,7 @@ func _exit() -> void:
 	# 通常如果子状态机正常结束，
 	# 如果是被外部手动调用，需要主动停止状态机
 	if !concurrent:
-		if private_state_machine.is_active:
+		#if private_state_machine.is_active:
 			private_state_machine.stop()
 	else:
 		for task in tasks:

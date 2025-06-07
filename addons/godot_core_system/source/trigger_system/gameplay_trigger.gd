@@ -18,7 +18,7 @@ enum TRIGGER_TYPE {
 @export var period : float = 1.0									## 周期
 @export var trigger_chance: float = 1.0							## 触发概率
 
-var _time_since_last_tirgger : float = 0.0						
+var _time_since_last_tirgger : float = 0.0
 var _is_active : bool = false
 var _context : Dictionary = {}
 
@@ -74,7 +74,7 @@ func deactivate() -> void:
 		CoreSystem.logger.warning("Trigger is not active")
 		return
 	_is_active = false
-	
+
 	match trigger_type:
 		TRIGGER_TYPE.ON_EVENT:
 			if trigger_event.is_empty():
@@ -113,7 +113,7 @@ func _try_trigger(context: Dictionary) -> void:
 	if max_triggers > 0 and trigger_count >= max_triggers:
 		CoreSystem.logger.debug("Trigger count reached limit")
 		return
-	
+
 	# 概率不满足
 	if randf() > trigger_chance:
 		CoreSystem.logger.debug("Trigger chance not satisfied")

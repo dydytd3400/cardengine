@@ -160,7 +160,11 @@ func module_loader(type:String,key:String,module_config:Dictionary)->Variant:
 	var module = load(resource).new()
 	for param in module_config.keys():
 		if param != "resource":
-			module[param] = module_config[param]
+			var content = module_config[param]
+			if content && content is String && content.begins_with("@context{") && content.ends_with("}"):
+				module["context_reader"][param] =  module_config[param]
+			else:
+				module[param] = module_config[param]
 	return module
 
 func _init(config: Dictionary = {}):
