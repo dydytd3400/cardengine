@@ -40,7 +40,7 @@ func play_card():
 		if card.cost <= gold:
 			gold -= card.cost
 			plays.append(card)
-			lg.info("玩家: %s打出了一张牌%d费:%s,当前剩余%d枚金币" % [player_name, card.cost, card.card_name,gold])
+			lg.info("玩家: %s打出了一张牌%d费:%s,当前剩余%d枚金币" % [player_name, card.cost, card.card_name,gold],{},"BattleProcess")
 			hand.remove_at(i)
 
 # TODO 每个move都应该需要await 因为每次移动都可能变更后者的移动范围

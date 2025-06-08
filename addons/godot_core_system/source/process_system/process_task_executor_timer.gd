@@ -3,7 +3,7 @@
 ## 根据[member duration]设置的时间间隔(秒)来执行[method _execute]，如果[member loop]设置为[code]true[/code]，则会周期执行。此时如果[member repeat]大于0，则会在执行指定次数后停止
 ## 当执行模块结束，定时任务会停止。你也可以手动调用[method stop_timer]、[method pause_timer]、[method resume_timer]来停止、暂停、恢复定时任务[br][br]
 ## 无论以何种方式停止定时任务，当前状态都不会主动完成，除非[member finish_on_stop]赋值为[code]true[/code].
-## @experimental: 该方法尚未完善。
+## @deprecated: 暂时弃用，后期大改
 class_name ProcessTaskExecutorTimer
 extends ProcessTaskExecutor
 
@@ -74,4 +74,4 @@ func resume_timer(unlog:bool = false):
 		lg.warning("Timer is unstarted.")
 
 func _execute(task: ProcessTask, msg: Dictionary = {}):
-	lg.info("Execute Task to do something " + task.state_id)
+	task._debug("Execute Task to do something ")

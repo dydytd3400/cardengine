@@ -2,15 +2,17 @@
 ##
 ## 基于[ProcessTask]的拓展类，用于管理多个[ProcessTask]子任务。[br]
 ## [br]
-## [ProcessTaskBatch]的执行模块[ProcessTaskExecutor]不再可通过[ProcessTemplate]配置，而是固定由[ProcessTaskExecutorBatch]或[ProcessTaskExecutorConcurrent]代理。[br]
+## [ProcessTaskBatch]的执行模块[ProcessTaskExecutor]不再可通过[ProcessTemplate]配置，而是固定由[ProcessTaskExecutor]代理。[br]
 ## [br]
 ## 和[ProcessTask]一样，[ProcessTaskBatch]仍然可以被做为一个普通[BaseState]被[BaseStateMachine]所管理[br]
 ## @experimental: 该方法尚未完善。
 class_name ProcessTaskBatch
 extends ProcessTask
 
-## 子状态机，用于管理被添加到当前[ProcessTaskBatch]的子任务集
-var private_state_machine: BaseStateMachine = BaseStateMachine.new()
+# 信号
+## 状态改变
+signal state_changed(from_state: ProcessTask, to_state: ProcessTask)
+
 ## 子任务集数组容器，该数组的下标即为被添加进当前流程任务组的时序
 var tasks: Array[ProcessTask]               = []
 ## 子任务集字典容器，方便通过state_id获取任务
@@ -19,52 +21,95 @@ var tasks_dict: Dictionary[StringName, ProcessTask] = {}
 ## 该值为true时，该[ProcessTaskBatch]的当前层级的子[ProcessTask]将会并发执行，在执行完成后，[ProcessTask]会各自退出且不再进行路由。当所有子[ProcessTask]都退出后，该[ProcessTaskBatch]也随之完成。
 var concurrent:bool = false
 
+## 当前状态
+var current_task:ProcessTask
+
+## 上一个状态
+var previous_task: StringName = &""
+
+var _task_count
+
 ## 构造方法，和[ProcessTask]一样只能直接创建，不同之处在于只可以传入一个[ProcessTaskRouter]。
 func _init(_router: ProcessTaskRouter,_concurrent:bool=false):
-	super._init(ProcessTaskExecutorBatch.new(),_router)
+	super._init(ProcessTaskExecutor.new(),_router)
 	concurrent=_concurrent
-	private_state_machine.is_debug = is_debug
+
+## 进入当前任务状态
+## 调度[member executor]执行具体任务，并通过[param msg]附带参数
+func enter(msg: Dictionary = {}) -> bool:
+	if super.enter(msg):
+		_task_count = tasks.size()
+		if concurrent:
+			for item_task in tasks:
+				item_task.state_exited.connect(_finish_one.bind(msg))
+				item_task.enter(msg)
+		else:
+			switch(tasks[0].state_id, msg)
+		return true
+	return false
+
+
+func exit() ->bool:
+	if super.exit():
+		if !concurrent:
+			if current_task:
+				current_task.exit()
+		else:
+			for task in tasks:
+				if task.is_active:
+					task.exit()
+		return true
+	return false
 
 ## 添加子任务 [param task_id]：子任务在当前流程组的唯一ID。[param new_task]：需要添加的子任务
 func add_task(task_id: StringName, new_task: ProcessTask) -> void:
 	if is_active:
-		push_error("ProcessTaskBatch %s is active!" % state_id)
+		lg.fatal("ProcessTaskBatch %s is active!" % state_id)
 		return
 	tasks.append(new_task)
 	new_task.parent = self
-	if !concurrent:
-		private_state_machine.add_state(task_id, new_task)
-	else:
-		tasks_dict[task_id] = new_task
-		new_task.is_debug = is_debug
-		new_task.state_id = state_id
-		new_task.parent = self
+	tasks_dict[task_id] = new_task
+	new_task.state_id = task_id
+
+## 切换状态
+func switch(state_id: StringName, msg: Dictionary = {}) -> void:
+	if concurrent:
+		lg.fatal("Attempting to transition to non-existent state: %s" % state_id)
+		return
+
+	if not tasks_dict.has(state_id):
+		lg.fatal("Attempting to transition to non-existent state: %s" % state_id)
+		return
+
+	var from_task = current_task
+	if current_task:
+		previous_task = get_current_task_name()
+		current_task.exit()
+
+	current_task = tasks_dict[state_id]
+	if not current_task:
+		lg.fatal("Attempting to transition to non-existent state: %s" % state_id)
+		return
+
+	current_task.enter(msg)
+	state_changed.emit(from_task, current_task)
+
+
+func _finish_one(msg: Dictionary = {}) -> void:
+	_task_count-=1
+	if _task_count<=0:
+		executor.completed(self,msg)
+
+
+## 获取当前状态名称
+func get_current_task_name() -> StringName:
+	return current_task.state_id if current_task else &""
+
 
 ## 通过task_id获取子任务
 func get_task(task_id:StringName) -> ProcessTask:
-	if !concurrent:
-		return private_state_machine.states[task_id]
-	else:
-		return tasks_dict[task_id]
+	return tasks_dict[task_id]
 
 ## 通过task_index获取子任务
 func get_task_at(task_index:int) -> ProcessTask:
 	return tasks[task_index]
-
-
-func _exit() -> void:
-	# 通常如果子状态机正常结束，
-	# 如果是被外部手动调用，需要主动停止状态机
-	if !concurrent:
-		#if private_state_machine.is_active:
-			private_state_machine.stop()
-	else:
-		for task in tasks:
-			if task.is_active:
-				task.exit()
-
-func _set_state_id(value:StringName) -> void:
-	private_state_machine.state_id = value
-
-func _get_state_id() -> StringName:
-	return private_state_machine.state_id

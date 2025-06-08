@@ -27,7 +27,7 @@ func switch_next() -> Player:
 
 func pick_first() -> Player:
 	first_index = randi_range(0, 1)
-	lg.info("当前先手玩家是 %s" % current_player.player_name)
+	lg.info("当前先手玩家是 %s" % current_player.player_name,{},"BattleProcess")
 	return current_player
 
 func checkmate() -> bool:

@@ -38,7 +38,7 @@ func _ready() -> void:
 						}
 					}]
 			}, {
-				"key" = "开始回合",
+				"key" = "回合流程",
 				"nodes" = [ {
 						"key" = "回合初始化数据", # 通常用于
 						"executor" = root % "turn_initial",
@@ -48,24 +48,26 @@ func _ready() -> void:
 					}, {
 						"key" = "补充手牌",
 						"executor" = root % "draw_card",
-					}, {
-						"key" = "牌桌流程",
-						"executor" = {
-							"resource" = "res://addons/godot_core_system/source/process_system/process_task_executor_launcher.gd",
-							"context_key" = "card",
-							"context_values" = "@context{battle_field.current_player.plays}",
-							"process" = {
-								"key" = "卡牌行动",
-								"nodes" = [ {
-									"key" = "移动",
-									"executor" = root % "card_move",
-								}, {
-									"key" = "攻击",
-									"executor" = root % "card_attack",
-								}]
-							},
-						}
-					},{
+					},
+					 {
+					 	"key" = "牌桌流程",
+					 	"executor" = {
+					 		"resource" = "res://addons/godot_core_system/source/process_system/process_task_executor_launcher.gd",
+					 		"context_key" = "card",
+					 		"context_values" = "@context{battle_field.current_player.plays}",
+					 		"process" = {
+					 			"key" = "卡牌行动",
+					 			"nodes" = [ {
+					 				"key" = "移动",
+					 				"executor" = root % "card_move",
+					 			}, {
+					 				"key" = "攻击",
+					 				"executor" = root % "card_attack",
+					 			}]
+					 		},
+					 	}
+					 },
+					{
 						"key" = "出牌",
 						"executor" = root % "play_card"
 					}
@@ -75,7 +77,7 @@ func _ready() -> void:
 				"executor" = root % "checkmate",
 				"router" = {
 					"resource" = root % "checkmate_router",
-					"continue_task" = "开始回合"
+					"continue_task" = "回合流程"
 				}
 			}],
 		"monitor" = ""

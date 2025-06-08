@@ -110,7 +110,6 @@ func add_state(state_id: StringName, new_state: BaseState) -> BaseState:
 	states[state_id] = new_state
 	new_state.state_machine = self
 	new_state.agent = agent
-	new_state.is_debug = is_debug
 	new_state.state_id = state_id
 	_debug("Adding state: %s" % state_id)
 	return new_state

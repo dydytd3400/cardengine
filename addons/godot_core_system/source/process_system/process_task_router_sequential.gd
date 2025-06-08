@@ -17,12 +17,12 @@ func _find_next(current_task: ProcessTask, _completed: bool, _msg: Dictionary = 
 		var process: ProcessTaskBatch = current_task.parent as ProcessTaskBatch
 		var at: int = process.tasks.find(current_task)
 		if at < 0:
-			push_error("State not exist at %d" % at)
+			lg.fatal("State not exist at %d" % at)
 			return null
 		if at >= process.tasks.size()-1:
-			process.executor.completed(process,_msg)
-			#process.private_state_machine.stop()
-			lg.info("is out batch")
+			#current_task.exit()
+			#process.exit()
+			#process._debug("------------------Finish Process[AUTO]: "+process.state_id)
 			return null
 		next_task = process.tasks[at+1]
 	else:
@@ -30,11 +30,11 @@ func _find_next(current_task: ProcessTask, _completed: bool, _msg: Dictionary = 
 		var state_keys               = parent.states.keys()
 		var at: int                  = state_keys.find(current_task.state_id)
 		if at < 0:
-			push_error("State not exist at %d" % at)
+			lg.fatal("State not exist at %d" % at)
 			return null
 		if at >= state_keys.size()-1:
 			parent.stop()
-			lg.info("is out machine")
+			parent._debug("is out machine")
 			return null
 		next_task = parent.states[state_keys[at+1]]
 	return next_task

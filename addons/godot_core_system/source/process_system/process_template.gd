@@ -20,8 +20,6 @@ var executor_source:Dictionary
 ## [i]可选，默认为：[/i][ProcessTaskRouterSequential]
 var router_source: Dictionary
 
-var _concurrent_child:bool = false
-
 ## 自定义执行模块和路由模块的加载回调方法，具体参数参见[method module_loader]
 var custom_module_loader:Callable = Callable()
 
@@ -75,7 +73,6 @@ func populate(config: Dictionary)->bool:
 		var key_map: Dictionary = {}
 		for node in nodes_dict:
 			var template = ProcessTemplate.new()
-			template._concurrent_child = concurrent
 			if key_map.has(node.key):
 				lg.fatal("Template nodes key repeated: [%s]" % node.key)
 				return false
@@ -87,7 +84,7 @@ func populate(config: Dictionary)->bool:
 ## 填充配置项并生成对应的流程任务[br]
 ## [param config] 配置字典 不为空时会验证整个配置字典的合法性，否则会只当对前已经填充的配置属性进行合法性校验[br]
 ## [param _custom_module_loader] 执行模块和路由模块的加载回调方法，传入该参数后，会覆盖[method module_loader]
-func generate(config: Dictionary = {},_custom_module_loader:Callable = Callable())->ProcessTask:
+func generate(config: Dictionary = {},level:int=0,_custom_module_loader:Callable = Callable())->ProcessTask:
 	# 如果没有指定初始字典，则验证实例数据
 	if !config or config.is_empty():
 		if !validation():
@@ -97,23 +94,25 @@ func generate(config: Dictionary = {},_custom_module_loader:Callable = Callable(
 	custom_module_loader = _custom_module_loader
 	# 此时实例数据已经初始化，开始依赖模版实例数据去生成节点
 	if nodes and !nodes.is_empty():
-		return _create_process_task_batch() # 如果子节点数不为空 则创建流程任务组
+		return _create_process_task_batch(level) # 如果子节点数不为空 则创建流程任务组
 	else:
-		return _create_process_task() # 否则创建单个流程任务
+		return _create_process_task(level) # 否则创建单个流程任务
 
 
 ## 创建流程任务组
-func _create_process_task_batch() -> ProcessTaskBatch:
+func _create_process_task_batch(level:int=0) -> ProcessTaskBatch:
 	var current_node := ProcessTaskBatch.new(_create_process_router(),concurrent)
 	current_node.state_id = key
+	current_node.level = level
 	for node in nodes:
-		current_node.add_task(node.key, node.generate({},custom_module_loader))
+		current_node.add_task(node.key, node.generate({},level+1,custom_module_loader))
 	return current_node
 
 ## 创建流程任务
-func _create_process_task() -> ProcessTask:
+func _create_process_task(level:int=0) -> ProcessTask:
 	var current_node = ProcessTask.new(_create_process_executor(), _create_process_router())
 	current_node.state_id = key
+	current_node.level = level
 	return current_node
 
 ## 创建流程任务执行模块
@@ -132,8 +131,6 @@ func _create_process_executor() -> ProcessTaskExecutor:
 
 ## 创建流程任务路由
 func _create_process_router() -> ProcessTaskRouter:
-	if _concurrent_child:
-		return ProcessTaskRouterInterrupt.new()
 	var router
 	if router_source and !router_source.is_empty():
 		router = module_loader.call("router",key,router_source)

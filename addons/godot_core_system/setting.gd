@@ -173,6 +173,26 @@ const SETTING_INFO_DICT: Dictionary[StringName, Dictionary] = {
 		"default": true,
 	},
 
+	"logger/ignore_level":
+	{
+		"name": SETTING_LOGGER + "ignore_level",
+		"type": TYPE_ARRAY,
+		"hint": PROPERTY_HINT_TYPE_STRING,
+		"hint_string": "2/2:DEBUG,INFO,WARNING,ERROR,FATAL",
+		"basic": true,
+		"default": [],
+	},
+
+	"logger/tag_filter":
+	{
+		"name": SETTING_LOGGER + "tag_filter",
+		"type": TYPE_ARRAY,
+		"hint": PROPERTY_HINT_TYPE_STRING,
+		"hint_string": "4:",
+		"basic": true,
+		"default": [],
+	},
+
 	"logger/color_debug":
 	{
 		"name": SETTING_LOGGER + "color_debug",

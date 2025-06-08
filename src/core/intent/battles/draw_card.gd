@@ -44,9 +44,9 @@ func _execute(task: ProcessTask, msg: Dictionary = {}):
 											source_cards_type,
 											count,
 											_target_player.player_name,
-											target_cards_type])
+											target_cards_type],{},"BattleProcess")
 	#var time = randf_range(1, 8)
-	#lg.info(str(time) + "秒后结束")
+	#lg.info(str(time) + "秒后结束",{},"BattleProcess")
 	#CoreSystem.time_manager.create_timer(UUID.generate(), time, false, func(): completed(task, msg))
 	completed(task, msg)
 

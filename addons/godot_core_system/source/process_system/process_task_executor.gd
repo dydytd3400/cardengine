@@ -18,12 +18,13 @@ var context_reader:Dictionary[String,String] = {}
 
 ## 当前执行模块结束信号，[param completed]为[code]true[/code]时，则表示当前[ProcessTask]是通过[method completed]结束的，否则是通过[method cancel]结束的。
 signal finished(completed: bool)
-
+signal execution(task: ProcessTask, msg: Dictionary)
 
 ## 处理[param task]的具体逻辑,当[ProcessTask]启动时会通过[param msg]携带一些附加参数
 func execute(task: ProcessTask, msg: Dictionary = {}):
 	read_context(msg)
 	_execute(task, msg)
+	execution.emit(task,msg)
 
 ## 完成并结束当前执行模块
 func completed(task: ProcessTask, msg: Dictionary = {}):
@@ -48,13 +49,18 @@ func read_context(msg:Dictionary):
 			value = value[r]
 		self[member] = value
 
-func _execute(task: ProcessTask, msg: Dictionary = {}):
-	completed(task, msg) # 默认流程任务执行者的逻辑是直接完成了当前任务，根据自身需求重载该方法
+func destroy():
+	context_reader.clear()
+	for conn in finished.get_connections():
+		finished.disconnect(conn)
+	for conn in execution.get_connections():
+		execution.disconnect(conn)
 
+func _execute(task: ProcessTask, msg: Dictionary = {}):
+	pass
 
 func _completed(_task: ProcessTask, _msg: Dictionary = {}):
 	pass
-
 
 func _cancel(_task: ProcessTask, _msg: Dictionary = {}):
 	pass

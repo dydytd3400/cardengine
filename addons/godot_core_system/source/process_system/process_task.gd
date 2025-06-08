@@ -22,15 +22,32 @@ var parent: Variant:
 func _init(_executor: ProcessTaskExecutor,_router: ProcessTaskRouter):
 	executor = _executor
 	router = _router
-	state_entered.connect(_task_entered)
+	_initial_executor()
+
+func _initial_executor():
 	executor.finished.connect(_executor_finished)
 
 ## 进入当前任务状态
 ## 调度[member executor]执行具体任务，并通过[param msg]附带参数
-func _task_entered(msg := {}) -> void:
-	executor.execute(self, msg)
+func enter(msg: Dictionary = {}) -> bool:
+	if super.enter(msg):
+		executor.execute(self, msg)
+		return true
+	return false
 
 
 ## 当前[member executor]执行完毕，路由至下一个流程任务
 func _executor_finished(completed: bool, msg: Dictionary) -> void:
 	router.next(self, completed, msg) # 路由至下一个流程任务
+
+## 切换状态
+func switch_to(state_id: StringName, msg: Dictionary = {}) -> void:
+	if parent:
+		if parent is BaseStateMachine:
+			super.switch_to(state_id,msg)
+			return
+		elif parent is ProcessTaskBatch:
+			parent.switch(state_id,msg)
+			return
+	lg.warning("Unexpected call!")
+	super.switch_to(state_id,msg)

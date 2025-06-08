@@ -8,10 +8,7 @@ signal state_entered(msg: Dictionary)
 ## 状态退出
 signal state_exited
 
-var _state_id : StringName = &""
-var state_id : StringName :
-	set(value): _set_state_id(value)
-	get: return _get_state_id()
+var state_id : StringName = &""
 
 ## 状态机引用
 var state_machine : BaseStateMachine = null
@@ -22,12 +19,14 @@ var agent: Object = null : set = _agent_setter
 var is_active: bool = false
 var _is_ready
 
-var is_debug: bool = false
 var _logger : CoreSystem.Logger = CoreSystem.logger
+
+## 状态层级标志位
+var level:int = 0
 
 func ready() -> void:
 	if _is_ready:
-		_logger.warning("State is already ready!")
+		_logger.warning("State is already ready!",{},"State")
 		return
 	_ready()
 	_is_ready = true
@@ -39,22 +38,22 @@ func dispose() -> void:
 ## 进入状态
 func enter(msg: Dictionary = {}) -> bool:
 	if is_active:
-		_logger.warning("State[%s] is already active!" % state_id)
+		_logger.warning("State[%s] is already active!" % state_id,{},"State")
 		return false
 	is_active = true
 	_enter(msg)
-	_debug("Entering state: %s" % state_id)
+	_debug(">>>%s Entering state: %s" % ["　　".repeat(level),state_id])
 	state_entered.emit(msg)
 	return true
 
 ## 退出状态
 func exit() -> bool:
 	if not is_active:
-		_logger.warning("State[%s] is not active!" % state_id)
+		_logger.warning("State[%s] is not active!" % state_id,{},"State")
 		return false
 	_exit()
 	is_active = false
-	_debug("Exiting state: %s" % state_id)
+	_debug("<<<%s Exiting state: %s" % ["　　".repeat(level),state_id])
 	state_exited.emit()
 	return true
 
@@ -106,28 +105,6 @@ func has_variable(key: StringName) -> bool:
 		return state_machine.has_variable(key)
 	return false
 
-## 获取状态树ID
-func get_state_id_tree() -> Array[StringName]:
-	var state_ids:Array[StringName] = []
-	var cur_state = self
-	while cur_state:
-		state_ids.insert(0,cur_state.state_id)
-		cur_state = cur_state.state_machine
-	return state_ids
-
-## 获取并拼接状态树ID
-func get_state_id_tree_str() -> String:
-	var state_id_tree: Array[StringName] = get_state_id_tree()
-	var state_ids: String                = ""
-	var i = 0
-	for id in state_id_tree:
-		i+=1
-		if i<state_id_tree.size():
-			state_ids += id + "-"
-		else:
-			state_ids += id + " -> "
-	return state_ids
-
 ## 虚函数 - 准备
 func _ready() -> void:
 	pass
@@ -158,16 +135,11 @@ func _handle_input(_event: InputEvent) -> void:
 
 
 func _debug(debug: String) -> void:
-	if not is_debug:
-		return
-	_logger.debug("[State] " + get_state_id_tree_str() + ": " + debug)
+	var str = state_id
+	if state_id.length()<10:
+		str += "　".repeat(10-str.length())
+	_logger.debug("[State] " + str + ": " + debug,{},"State")
 
 
 func _agent_setter(value: Object) -> void:
 	agent = value
-
-func _set_state_id(value:StringName) -> void:
-	_state_id = value
-
-func _get_state_id() -> StringName:
-	return _state_id

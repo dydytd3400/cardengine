@@ -11,16 +11,31 @@ extends RefCounted
 ## 如果[method _find_next]返回空，则流程任务会挂起，直到[method next]被再次执行或退出了当前流程任务。如果返回的流程任务没有父节点，则会直接退出当前流程任务。
 func next(current_task: ProcessTask, completed: bool, msg: Dictionary = {}) -> void:
 	var next_task := _find_next(current_task,completed,msg)
+	if next_task == current_task: # 返回自身 则表示当前任务尚未彻底结束 挂起
+		return
+	var parent = current_task.parent
 	if next_task:
-		var parent = next_task.parent
 		if !parent:
-			lg.warning("Has no parent, about to exit : %s" % next_task.state_id)
-			next_task.exit()
-		else :
-			if parent is ProcessTaskBatch && parent.concurrent:
-				next_task.exit()
-			else:
+			lg.warning("Has no parent, [%s] exit and [%s] enter" % [current_task.state_id,next_task.state_id])
+			current_task.exit()
+			next_task.enter(msg)
+		#elif !(parent is ProcessTaskBatch && parent.concurrent): # 当前任务不是并发子任务时，进行路由，否则不做处理
+			#current_task.switch_to(next_task.state_id,msg)
+		elif parent is ProcessTaskBatch:
+			if !parent.concurrent:
 				current_task.switch_to(next_task.state_id,msg)
+			else:
+				current_task.exit()
+	else: # 返回空 当前任务退出，并通知父节点完成相应任务
+		if parent:
+			if parent is ProcessTaskBatch:
+				if !parent.concurrent: # 如果父节点为流程任务组，且为非并发任务 则表示父节点执行模块已经结束，父节点进入路由
+					parent.executor.completed(current_task,msg)
+					return
+			elif parent is BaseStateMachine :
+				parent.stop()
+				return
+		current_task.exit()
 
 
 ## 返回下一个同级流程任务
