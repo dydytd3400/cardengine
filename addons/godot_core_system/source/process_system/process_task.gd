@@ -19,7 +19,7 @@ var parent: Variant:
 	get: return parent if parent else state_machine
 
 ## 构造方法，需要传入[ProcessTaskExecutor]和[ProcessTaskRouter]，也就预示着[ProcessTask]只能直接创建
-func _init(_executor: ProcessTaskExecutor,_router: ProcessTaskRouter):
+func _init(_executor: ProcessTaskExecutor, _router: ProcessTaskRouter):
 	executor = _executor
 	router = _router
 	_initial_executor()
@@ -44,10 +44,21 @@ func _executor_finished(completed: bool, msg: Dictionary) -> void:
 func switch_to(state_id: StringName, msg: Dictionary = {}) -> void:
 	if parent:
 		if parent is BaseStateMachine:
-			super.switch_to(state_id,msg)
+			super.switch_to(state_id, msg)
 			return
 		elif parent is ProcessTaskBatch:
-			parent.switch(state_id,msg)
+			parent.switch(state_id, msg)
 			return
 	lg.warning("Unexpected call!")
-	super.switch_to(state_id,msg)
+	super.switch_to(state_id, msg)
+
+
+## 通过task_id获取同级任务
+func get_parent_task(task_id: StringName) -> ProcessTask:
+	if parent:
+		if parent is ProcessTaskBatch:
+			return parent.get_task(task_id)
+		elif parent is BaseStateMachine:
+			return parent.states[task_id]
+	lg.warning("Has no parent")
+	return null

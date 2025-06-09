@@ -14,15 +14,15 @@ extends ProcessTask
 signal state_changed(from_state: ProcessTask, to_state: ProcessTask)
 
 ## 子任务集数组容器，该数组的下标即为被添加进当前流程任务组的时序
-var tasks: Array[ProcessTask]               = []
+var tasks: Array[ProcessTask] = []
 ## 子任务集字典容器，方便通过state_id获取任务
 var tasks_dict: Dictionary[StringName, ProcessTask] = {}
 ## 是否为并发任务
 ## 该值为true时，该[ProcessTaskBatch]的当前层级的子[ProcessTask]将会并发执行，在执行完成后，[ProcessTask]会各自退出且不再进行路由。当所有子[ProcessTask]都退出后，该[ProcessTaskBatch]也随之完成。
-var concurrent:bool = false
+var concurrent: bool = false
 
 ## 当前状态
-var current_task:ProcessTask
+var current_task: ProcessTask
 
 ## 上一个状态
 var previous_task: StringName = &""
@@ -30,9 +30,9 @@ var previous_task: StringName = &""
 var _task_count
 
 ## 构造方法，和[ProcessTask]一样只能直接创建，不同之处在于只可以传入一个[ProcessTaskRouter]。
-func _init(_router: ProcessTaskRouter,_concurrent:bool=false):
-	super._init(ProcessTaskExecutor.new(),_router)
-	concurrent=_concurrent
+func _init(_router: ProcessTaskRouter, _concurrent: bool = false):
+	super._init(ProcessTaskExecutor.new(), _router)
+	concurrent = _concurrent
 
 ## 进入当前任务状态
 ## 调度[member executor]执行具体任务，并通过[param msg]附带参数
@@ -49,7 +49,7 @@ func enter(msg: Dictionary = {}) -> bool:
 	return false
 
 
-func exit() ->bool:
+func exit() -> bool:
 	if super.exit():
 		if !concurrent:
 			if current_task:
@@ -96,9 +96,9 @@ func switch(state_id: StringName, msg: Dictionary = {}) -> void:
 
 
 func _finish_one(msg: Dictionary = {}) -> void:
-	_task_count-=1
-	if _task_count<=0:
-		executor.completed(self,msg)
+	_task_count -= 1
+	if _task_count <= 0:
+		executor.completed(self, msg)
 
 
 ## 获取当前状态名称
@@ -107,9 +107,9 @@ func get_current_task_name() -> StringName:
 
 
 ## 通过task_id获取子任务
-func get_task(task_id:StringName) -> ProcessTask:
+func get_task(task_id: StringName) -> ProcessTask:
 	return tasks_dict[task_id]
 
 ## 通过task_index获取子任务
-func get_task_at(task_index:int) -> ProcessTask:
+func get_task_at(task_index: int) -> ProcessTask:
 	return tasks[task_index]

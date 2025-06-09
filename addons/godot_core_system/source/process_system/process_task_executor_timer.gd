@@ -12,11 +12,11 @@ var duration: float
 ## 是否开启任务循环 默认不开启
 var loop: bool = false
 ## 定时任务重复执行次数 仅[code]loop = true && repeat > 0[/code]时生效。当定时任务停止后次数会被重置
-var repeat:int = 0
+var repeat: int = 0
 ## 是否立即执行 定时器开启后，首次是否不等待直接执行
-var run_now:bool = false
+var run_now: bool = false
 ## 定时任务停止后，是否立即结束执行模块
-var finish_on_stop:bool = false
+var finish_on_stop: bool = false
 
 ## 定时器ID 不建议手动复制
 var _timer_id = UUID.generate()
@@ -30,29 +30,29 @@ func execute(task: ProcessTask, msg: Dictionary = {}) -> void:
 		lg.fatal("Duration must > 0!")
 		return
 	if run_now:
-		run(task,msg)
-	CoreSystem.time_manager.create_timer(_timer_id,duration,loop,run.bind(task,msg))
+		run(task, msg)
+	CoreSystem.time_manager.create_timer(_timer_id, duration, loop, run.bind(task, msg))
 
 func run(task: ProcessTask, msg: Dictionary):
-	_run_count+=1
-	if !loop || _run_count >= repeat :
+	_run_count += 1
+	if !loop || _run_count >= repeat:
 		stop_timer(true)
-	_execute(task,msg)
+	_execute(task, msg)
 	if _run_count == 0 and finish_on_stop:
 		completed(task, msg)
 
 ## 完成并结束当前执行模块,该方法会停止之前正在执行的定时任务
 func completed(task: ProcessTask, msg: Dictionary = {}):
 	stop_timer(true)
-	super.completed(task,msg)
+	super.completed(task, msg)
 
 ## 取消并结束当前执行模块,该方法会停止之前正在执行的定时任务
 func cancel(task: ProcessTask, msg: Dictionary = {}):
 	stop_timer(true)
-	super.cancel(task,msg)
+	super.cancel(task, msg)
 
 ## 停止计时任务
-func stop_timer(unlog:bool = false):
+func stop_timer(unlog: bool = false):
 	_run_count = 0
 	if CoreSystem.time_manager.has_timer(_timer_id):
 		CoreSystem.time_manager.remove_timer(_timer_id)
@@ -60,14 +60,14 @@ func stop_timer(unlog:bool = false):
 		lg.warning("Timer is unstarted.")
 
 ## 暂停计时任务
-func pause_timer(unlog:bool = false):
+func pause_timer(unlog: bool = false):
 	if CoreSystem.time_manager.has_timer(_timer_id):
 		CoreSystem.time_manager.pause_timer(_timer_id)
 	elif !unlog:
 		lg.warning("Timer is unstarted.")
 
 ## 恢复计时任务
-func resume_timer(unlog:bool = false):
+func resume_timer(unlog: bool = false):
 	if CoreSystem.time_manager.has_timer(_timer_id):
 		CoreSystem.time_manager.resume_timer(_timer_id)
 	elif !unlog:

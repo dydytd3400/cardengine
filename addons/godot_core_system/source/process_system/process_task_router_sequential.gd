@@ -10,31 +10,31 @@ extends ProcessTaskRouter
 ## 当前[member ProcessTask.parent]可以是[ProcessTaskBatch]或[BaseStateMachine]。需要注意的是，如果[member ProcessTask.parent]是[BaseStateMachine]类型,那么其顺序则是不可预期的。
 func _find_next(current_task: ProcessTask, _completed: bool, _msg: Dictionary = {}) -> ProcessTask:
 	# 处理完成后 通过自身路由获取下个同级任务
-	var next_task:ProcessTask
+	var next_task: ProcessTask
 	if !current_task.parent:
 		return current_task
-	if current_task.parent is ProcessTaskBatch:# 目前只有流程任务组存在默认路由
+	if current_task.parent is ProcessTaskBatch: # 目前只有流程任务组存在默认路由
 		var process: ProcessTaskBatch = current_task.parent as ProcessTaskBatch
 		var at: int = process.tasks.find(current_task)
 		if at < 0:
 			lg.fatal("State not exist at %d" % at)
 			return null
-		if at >= process.tasks.size()-1:
+		if at >= process.tasks.size() - 1:
 			#current_task.exit()
 			#process.exit()
 			#process._debug("------------------Finish Process[AUTO]: "+process.state_id)
 			return null
-		next_task = process.tasks[at+1]
+		next_task = process.tasks[at + 1]
 	else:
-		var parent :BaseStateMachine = current_task.parent as BaseStateMachine
-		var state_keys               = parent.states.keys()
-		var at: int                  = state_keys.find(current_task.state_id)
+		var parent: BaseStateMachine = current_task.parent as BaseStateMachine
+		var state_keys = parent.states.keys()
+		var at: int = state_keys.find(current_task.state_id)
 		if at < 0:
 			lg.fatal("State not exist at %d" % at)
 			return null
-		if at >= state_keys.size()-1:
+		if at >= state_keys.size() - 1:
 			parent.stop()
 			parent._debug("is out machine")
 			return null
-		next_task = parent.states[state_keys[at+1]]
+		next_task = parent.states[state_keys[at + 1]]
 	return next_task

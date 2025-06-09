@@ -59,6 +59,8 @@ var abilitys: Array[Ability] = []
 @export
 var text: String
 
+var activated = false
+
 ## 卡牌持有者 仅卡牌处于战场时有值 当[member owner]为空时，则代表该卡牌为中立单位
 #TODO 后期是否需要拓展出中立单位对象 否则需要多出一个字段来标记是否处于战场
 var owner: Player
@@ -69,9 +71,18 @@ var creator: Player
 var slot: Slot
 
 func to_move():
+	if !activated:
+		return
 	if move_type && mobility>0 && !move_area.is_empty():
 		move_type.execute()
 
 func to_attack():
+	if !activated:
+		return
 	if attack_type && attack>0 && !attack_area.is_empty():
 		move_type.execute()
+
+func to_activate():
+	if activated:
+		return
+	activated = true

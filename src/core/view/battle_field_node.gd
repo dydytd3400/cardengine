@@ -19,7 +19,7 @@ func _ready() -> void:
 				"nodes" = [ {
 						"key" = "先手玩家抽牌",
 						"executor" = {
-							"resource" = root % "draw_card",
+							"resource" = root % "player/draw_card",
 							"count" = 3,
 							"source_player_type" = "current_player",
 							"source_cards_type" = "deck",
@@ -29,7 +29,7 @@ func _ready() -> void:
 					}, {
 						"key" = "后手玩家抽牌",
 						"executor" = {
-							"resource" = root % "draw_card",
+							"resource" = root % "player/draw_card",
 							"count" = 4,
 							"source_player_type" = "next_player",
 							"source_cards_type" = "deck",
@@ -44,10 +44,10 @@ func _ready() -> void:
 						"executor" = root % "turn_initial",
 					}, {
 						"key" = "发放利息",
-						"executor" = root % "interest_payout",
+						"executor" = root % "player/interest_payout",
 					}, {
 						"key" = "补充手牌",
-						"executor" = root % "draw_card",
+						"executor" = root % "player/draw_card",
 					},
 					 {
 					 	"key" = "牌桌流程",
@@ -58,26 +58,32 @@ func _ready() -> void:
 					 		"process" = {
 					 			"key" = "卡牌行动",
 					 			"nodes" = [ {
+					 				"key" = "激活",
+					 				"executor" = root % "card/card_activate",
+					 			},{
 					 				"key" = "移动",
-					 				"executor" = root % "card_move",
+					 				"executor" = root % "card/card_move",
 					 			}, {
 					 				"key" = "攻击",
-					 				"executor" = root % "card_attack",
+					 				"executor" = root % "card/card_attack",
 					 			}]
 					 		},
 					 	}
 					 },
 					{
 						"key" = "出牌",
-						"executor" = root % "play_card"
+						"executor" = root % "player/play_card"
 					}
 				]
 			}, {
 				"key" = "回合结束胜负判定",
 				"executor" = root % "checkmate",
 				"router" = {
-					"resource" = root % "checkmate_router",
-					"continue_task" = "回合流程"
+					"resource" = "res://addons/godot_core_system/source/process_system/process_task_router_match.gd",
+					"routers" = [{
+						"matcher" = "@context{battle_field}.checkmate()",
+						"回合流程" = false
+					} ]
 				}
 			}],
 		"monitor" = ""
