@@ -7,12 +7,12 @@
 class_name ProcessTaskRouterMatch
 extends ProcessTaskRouter
 
-
-var routers = []
+var matchers = []
 var error_id = UUID.generate()
+
 ## 返回下一个同级流程任务
 func _find_next(_current_task: ProcessTask, _completed: bool, _msg: Dictionary = {}) -> ProcessTask:
-	for cfg in routers:
+	for cfg in matchers:
 		var matcher = cfg.matcher
 		var matcher_value = parse_matcher(matcher, _msg)
 		if _eq(error_id,matcher_value):

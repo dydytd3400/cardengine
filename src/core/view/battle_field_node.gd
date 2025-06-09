@@ -80,7 +80,7 @@ func _ready() -> void:
 				"executor" = root % "checkmate",
 				"router" = {
 					"resource" = "res://addons/godot_core_system/source/process_system/process_task_router_match.gd",
-					"routers" = [{
+					"matchers" = [{
 						"matcher" = "@context{battle_field}.checkmate()",
 						"回合流程" = false
 					} ]
