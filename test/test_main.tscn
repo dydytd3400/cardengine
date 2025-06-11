@@ -1,8 +1,103 @@
-[gd_scene load_steps=2 format=3 uid="uid://ccwgy4fi35nyu"]
+[gd_scene load_steps=12 format=3 uid="uid://ccwgy4fi35nyu"]
 
 [ext_resource type="Script" uid="uid://wtnqddi4df7p" path="res://src/core/view/battle_field_node.gd" id="1_6bdyj"]
+[ext_resource type="Texture2D" uid="uid://b150rkbxox2c8" path="res://icon.svg" id="2_3d8c4"]
+[ext_resource type="Script" uid="uid://ctk8m8664hojt" path="res://src/core/view/players/enemy_node.gd" id="3_ediae"]
+[ext_resource type="Script" uid="uid://d288x1douvbek" path="res://src/core/model/battle_field.gd" id="3_kct3m"]
+[ext_resource type="Script" uid="uid://cpb2tyf4kq1ug" path="res://src/core/view/players/player_node.gd" id="3_nx1br"]
+[ext_resource type="PackedScene" uid="uid://bc8kkfddm2kqx" path="res://src/core/view/players/player_info_node.tscn" id="4_7fvdu"]
+[ext_resource type="Script" uid="uid://dvqwla63egy5w" path="res://src/core/model/player.gd" id="4_28u7c"]
+[ext_resource type="Script" uid="uid://cr20hpuen52ep" path="res://src/core/model/card.gd" id="5_pf256"]
+[ext_resource type="Script" uid="uid://dullst0koq1iw" path="res://src/core/view/table_node.gd" id="5_xbbxs"]
+[ext_resource type="PackedScene" uid="uid://ch0ymq37t65xw" path="res://src/core/view/players/golds.tscn" id="6_wrm0s"]
+[ext_resource type="Script" uid="uid://brtwohsu3qrcu" path="res://src/core/model/table.gd" id="8_xflxi"]
 
 [node name="TestMain" type="Node2D"]
 script = ExtResource("1_6bdyj")
 
-[node name="Node" type="Node" parent="."]
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = 130.0
+offset_right = 1150.0
+offset_bottom = 720.0
+
+[node name="Icon" type="Sprite2D" parent="."]
+position = Vector2(620, 321)
+texture = ExtResource("2_3d8c4")
+
+[node name="TableNode" type="Node2D" parent="."]
+visible = false
+script = ExtResource("5_xbbxs")
+metadata/_custom_type_script = "uid://dullst0koq1iw"
+
+[node name="Enemy" type="Control" parent="." node_paths=PackedStringArray("player_info_node", "golds_node")]
+physics_interpolation_mode = 0
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_right = 1280.0
+offset_bottom = 720.0
+grow_horizontal = 0
+mouse_filter = 1
+script = ExtResource("3_ediae")
+player_info_node = NodePath("PlayerInfoNode")
+golds_node = NodePath("Golds")
+metadata/_custom_type_script = "uid://ctk8m8664hojt"
+
+[node name="PlayerInfoNode" parent="Enemy" instance=ExtResource("4_7fvdu")]
+layout_direction = 3
+layout_mode = 2
+
+[node name="Golds" parent="Enemy" instance=ExtResource("6_wrm0s")]
+position = Vector2(1096, 21)
+
+[node name="Player" type="Control" parent="." node_paths=PackedStringArray("player_info_node", "golds_node")]
+physics_interpolation_mode = 0
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_right = 1280.0
+offset_bottom = 720.0
+grow_vertical = 0
+script = ExtResource("3_nx1br")
+player_info_node = NodePath("PlayerInfoNode")
+golds_node = NodePath("Golds")
+metadata/_custom_type_script = "uid://cpb2tyf4kq1ug"
+
+[node name="PlayerInfoNode" parent="Player" instance=ExtResource("4_7fvdu")]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -180.0
+offset_bottom = 0.0
+grow_vertical = 0
+
+[node name="Golds" parent="Player" instance=ExtResource("6_wrm0s")]
+position = Vector2(169, 675)
+
+[node name="models" type="Node" parent="."]
+
+[node name="BattleField" type="Node" parent="models" node_paths=PackedStringArray("players")]
+script = ExtResource("3_kct3m")
+players = [NodePath("Player"), NodePath("Enemy")]
+metadata/_custom_type_script = "uid://d288x1douvbek"
+
+[node name="Enemy" type="Node" parent="models/BattleField" node_paths=PackedStringArray("view", "table")]
+script = ExtResource("4_28u7c")
+view = NodePath("../../../Enemy")
+table = NodePath("../Table")
+card_res = ExtResource("5_pf256")
+metadata/_custom_type_script = "uid://dvqwla63egy5w"
+
+[node name="Player" type="Node" parent="models/BattleField" node_paths=PackedStringArray("view", "table")]
+script = ExtResource("4_28u7c")
+view = NodePath("../../../Player")
+table = NodePath("../Table")
+card_res = ExtResource("5_pf256")
+metadata/_custom_type_script = "uid://dvqwla63egy5w"
+
+[node name="Table" type="Node" parent="models/BattleField" node_paths=PackedStringArray("view")]
+script = ExtResource("8_xflxi")
+view = NodePath("../../../TableNode")

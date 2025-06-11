@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=4 format=3 uid="uid://luvyj0bruo3m"]
+
+[ext_resource type="Script" uid="uid://b7jd7b7l1vu8v" path="res://src/core/intent/parts/abilities/ability.gd" id="1_2fhgl"]
+[ext_resource type="Script" uid="uid://cp1rxu1phxaax" path="res://src/datas/card_data.gd" id="2_2fhgl"]
+[ext_resource type="Script" uid="uid://b0yvh6181tyt1" path="res://src/core/view/card_node.gd" id="2_lhkye"]
+
+[resource]
+script = ExtResource("2_2fhgl")
+card_name = ""
+card_id = &""
+cost = 0
+cost_max = 0
+health = 0
+health_max = 0
+attack = 0
+attack_max = 0
+attack_area = Array[Vector2]([])
+mobility = 0
+mobility_max = 0
+move_area = Array[Vector2]([])
+abilitys = Array[ExtResource("1_2fhgl")]([])
+text = ""
+node_res = ExtResource("2_lhkye")
+metadata/_custom_type_script = "uid://cp1rxu1phxaax"

@@ -1,18 +1,47 @@
-extends Resource
+extends Node
 class_name Player
 
+@export
+var view:PlayerNode
+var data:PlayerData:
+	set (value):
+		data=value
+		bind_data()
+@export
+var table:Table
+
 ## 玩家UUID
-var player_id: StringName
+var player_id: StringName:
+	get():return data.player_id
+
 ## 玩家昵称
-var player_name: String = ""
+var player_name: String :
+	get():return data.player_name
+	set(value): view.player_name = value
 ## 当前血量
-var health: int = 0
+var health: int = 0:
+	get():return health
+	set(value):
+		health = value
+		view.health = value
 ## 初始血量
-var health_max: int = 0
+var health_max: int = 0 :
+	get():return data.health
+	set(value):
+		health = value
+		view.health_max = value
 ## 当前金币
-var gold: int = 0
+var gold: int = 0:
+	get():return gold
+	set(value):
+		gold = value
+		view.gold = value
 ## 初始卡牌 该数据不可发生变化
-var cards: Array[Card] = []
+var cards: Array[CardData]:
+	get():return data.cards
+	set(value):
+		view.cards=value
+
 ## 当前牌库
 var deck: Array[Card] = []
 ## 当前手牌
@@ -25,6 +54,8 @@ var graveyard: Array[Card] = []
 var trashed: Array[Card] = []
 ## 是否先手玩家
 var is_first: bool = false
+@export
+var card_res:Resource
 
 ## 利息增长
 func interest_payout(_turn_count: int) -> int:
@@ -35,6 +66,7 @@ func interest_payout(_turn_count: int) -> int:
 
 ## 出牌 临时随机
 func play_card():
+	self.duplicate()
 	for i in range(hand.size() - 1, -1, -1):
 		var card = hand[i]
 		if card.cost <= gold:
@@ -43,20 +75,21 @@ func play_card():
 			lg.info("玩家: %s打出了一张牌%d费:%s,当前剩余%d枚金币" % [player_name, card.cost, card.card_name,gold],{},"BattleProcess")
 			hand.remove_at(i)
 
-# TODO 每个move都应该需要await 因为每次移动都可能变更后者的移动范围
-# TODO 确立移动时序规则
-## 行军，所有牌桌卡牌移动并攻击 [param _attack],是否移动后立即攻击，默认为true
-# func march(_attack: bool = true) -> void:
-# 	for card in plays:
-# 		await card.move()
-		# if _attack:
-		# 	await card.attack()
+## 初始化牌库
+func init_deck():
+	for card in cards:
+		var card_data:CardData= card.duplicate(true)
+		#var res := load("res://src/core/model/card.gd")
+		var new_card:Card = card_res.new()
+		new_card.view = new_card.view_res.new()
+		new_card.data = card_data
+		new_card.holder = self
+		new_card.creator = self
+		deck.append(new_card)
 
-# func draw_card(count:int = 1)->Array[Card]:
-# 	var draws = []
-# 	if deck.is_empty():
-# 		return draws
-# 	var real_count = min(count,deck.size())
-# 	for i in range(real_count):
-# 		draws.append(deck.pop_at(randi_range(0,real_count-1-i)))
-# 	return draws
+func bind_data():
+	health_max = data.health
+	health = data.health
+	gold = data.gold
+	cards = data.cards
+	player_name = data.player_name

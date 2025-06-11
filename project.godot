@@ -20,6 +20,13 @@ config/icon="res://icon.svg"
 CoreSystem="*res://addons/godot_core_system/source/core_system.gd"
 lg="*res://addons/godot_core_system/source/logger/logger.gd"
 
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/godot_core_system/plugin.cfg")

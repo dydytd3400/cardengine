@@ -3,46 +3,87 @@
 ## <可选> 可选项
 ## [...] ...为默认值
 class_name ProcessConfig extends RefCounted
-
-## 战斗流程
-const battle: Dictionary = {
-	"name" = "战斗流程",																			# 当前状态显示名称 <必填>
-	"key" = "battle_process",																	# 当前状态ID <必填> 
-	"disable" = 0, 																				# 当前状态是否禁用 0:不可禁用 1:禁用 -1:启用 <可选> [0]
-	"sortable" = false,																			# 当前状态是否允许被排序 <可选> [false]
-	"script" = "res://src/core/processes/battle/battle_process.gd",								# 当前状态对应的脚本 <必填> 
-	"tips" = "",																					# 当前状态描述 <可选> [null]
-	"status" = [{																				# 当前状态的子状态 <可选> [空]
-			"name"= "战斗准备",
-			"key" = "initial",
-			"script" = "res://src/core/processes/battle/battle_process_initial_state.gd"
-		},{
-			"name" = "确定先手",
-			"key" = "pick_first",
-			"disable" = -1,
-			"script" = "res://src/core/processes/battle/battle_process_pickfirst_state.gd"
-		},{
-			"name" = "回合进行",
-			"key" = "turn_during",
-			"script" = "res://src/core/processes/battle/battle_process_turn_during_state.gd",
-			"status" = [{
-					"name"= "回合准备",
-					"key" = "initial",
-					"script" = "res://src/core/processes/turn/turn_process_initial_state.gd"
-				},{
-					"name" = "回合动作",
-					"key" = "pick_first",
-					"script" = "res://src/core/processes/turn/turn_process_action_state.gd"
+const root = "res://src/core/intent/battles/%s.gd"
+const battle_process_config = {
+		"key" = "对战流程",
+		"nodes" = [ {
+				"key" = "战场初始化",
+				"executor" = root % "battle_initial"
+			}, {
+				"key" = "决出先手玩家",
+				"executor" = root % "pick_first"
+			}, {
+				"key" = "初始化手牌",
+				"concurrent" = true,
+				"nodes" = [ {
+						"key" = "先手玩家抽牌",
+						"executor" = {
+							"resource" = root % "player/draw_card",
+							"count" = 3,
+							"source_player_type" = "current_player",
+							"source_cards_type" = "deck",
+							"target_player_type" = "current_player",
+							"target_cards_type" = "hand"
+						}
+					}, {
+						"key" = "后手玩家抽牌",
+						"executor" = {
+							"resource" = root % "player/draw_card",
+							"count" = 4,
+							"source_player_type" = "next_player",
+							"source_cards_type" = "deck",
+							"target_player_type" = "next_player",
+							"target_cards_type" = "hand"
+						}
+					}]
+			}, {
+				"key" = "回合流程",
+				"nodes" = [ {
+						"key" = "回合初始化数据", # 通常用于
+						"executor" = root % "turn_initial",
+					}, {
+						"key" = "发放利息",
+						"executor" = root % "player/interest_payout",
+					}, {
+						"key" = "补充手牌",
+						"executor" = root % "player/draw_card",
+					},
+					 {
+					 	"key" = "牌桌流程",
+					 	"executor" = {
+					 		"resource" = "res://addons/godot_core_system/source/process_system/process_task_executor_launcher.gd",
+					 		"context_key" = "card",
+					 		"context_values" = "@context{battle_field.current_player.plays}",
+					 		"process" = {
+					 			"key" = "卡牌行动",
+					 			"nodes" = [ {
+					 				"key" = "激活",
+					 				"executor" = root % "card/card_activate",
+					 			},{
+					 				"key" = "移动",
+					 				"executor" = root % "card/card_move",
+					 			}, {
+					 				"key" = "攻击",
+					 				"executor" = root % "card/card_attack",
+					 			}]
+					 		},
+					 	}
+					 },
+					{
+						"key" = "出牌",
+						"executor" = root % "player/play_card"
+					}
+				]
+			}, {
+				"key" = "回合结束胜负判定",
+				"executor" = root % "checkmate",
+				"router" = {
+					"resource" = "res://addons/godot_core_system/source/process_system/process_task_router_match.gd",
+					"matchers" = [{
+						"matcher" = "@context{battle_field}.checkmate()",
+						"回合流程" = false
+					} ]
 				}
-			]
-		},{
-			"name" = "回合完成",
-			"key" = "turn_finish",
-			"script" = "res://src/core/processes/battle/battle_process_turn_finish_state.gd"
-		},{
-			"name" = "分出胜负",
-			"key" = "checkmate",
-			"script" = "res://src/core/processes/battle/battle_process_checkmate_state.gd"
-		},
-	]
-}
+			}],
+		"monitor" = ""
+	}

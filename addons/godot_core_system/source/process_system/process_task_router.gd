@@ -24,6 +24,8 @@ func next(current_task: ProcessTask, completed: bool, msg: Dictionary = {}) -> v
 			#current_task.switch_to(next_task.state_id,msg)
 		elif parent is ProcessTaskBatch:
 			if !parent.concurrent:
+				var next_task_id = next_task.state_id
+				var current_task_id = current_task.state_id
 				current_task.switch_to(next_task.state_id, msg)
 			else:
 				current_task.exit()

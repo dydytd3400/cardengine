@@ -1,7 +1,11 @@
-extends Object
+extends Node
 class_name BattleField
+var view:BattleFieldNode
+var data:BattleFieldData
 
+@export
 var players: Array[Player] = []
+var turn_count = 0
 var first_index = -1:
 	set(value):
 		first_index = value
@@ -16,7 +20,7 @@ var next_player: Player:
 	get():
 		var next_index = 0 if current_player_index != 0 else 1
 		return players[next_index]
-var turn_count = 0
+
 
 
 ## 切换至下个玩家
@@ -46,27 +50,28 @@ func find_player(_player_id:StringName)->Player:
 			return player
 	return null
 
-func _init():
-	# 虚构基础数据
-	players.append(create_player("张三"))
-	players.append(create_player("李四"))
-
-func create_player(name: String) -> Player:
-	var player: Player = Player.new()
+func create_player(name: String) -> PlayerData:
+	var player: PlayerData = PlayerData.new()
 	player.player_id = UUID.generate()
 	player.player_name = name
+	player.health = 100
 	for i in range(30):
 		player.cards.append(create_card(i))
 	return player
 
 func create_card(name: int):
-	var card: Card = Card.new()
+	var card: CardData = CardData.new()
 	card.card_id = UUID.generate()
 	card.card_name = "卡牌_" + str(name)
-	card.attack_max = randi_range(0, 10)
-	card.attack = card.attack_max
-	card.cost_max = randi_range(0, 10)
-	card.cost = card.cost_max
+	card.attack = randi_range(0, 10)
+	card.cost = randi_range(0, 10)
 	card.health = randi_range(0, 10)
-	card.health_max = randi_range(0, 10)
 	return card
+
+
+func _ready() -> void:
+	# 虚构基础数据
+	players[0].data = create_player("张三")
+	players[1].data = create_player("李四")
+	var process: ProcessTask = ProcessTemplate.new().generate(ProcessConfig.battle_process_config)
+	process.enter({"battle_field" = self})
