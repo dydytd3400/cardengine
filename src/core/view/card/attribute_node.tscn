@@ -1,0 +1,62 @@
+[gd_scene load_steps=4 format=3 uid="uid://cg8i2g4de53xj"]
+
+[ext_resource type="Script" uid="uid://tdi3mvnuwuv" path="res://src/core/view/card/attribute_node.gd" id="1_fq7xi"]
+[ext_resource type="Texture2D" uid="uid://doo17m6mcbvfx" path="res://assets/icons/health.svg" id="2_1lft1"]
+[ext_resource type="FontFile" uid="uid://brra2lqyjienr" path="res://assets/fonts/font1.ttf" id="4_6v5wn"]
+
+[node name="AttributeContainer" type="Control"]
+layout_direction = 1
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -360.0
+offset_right = -600.0
+offset_bottom = -320.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+script = ExtResource("1_fq7xi")
+width_percent = 0.308
+height_percent = 0.222
+metadata/_custom_type_script = "uid://tdi3mvnuwuv"
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="icon" type="TextureRect" parent="MarginContainer"]
+layout_mode = 2
+texture = ExtResource("2_1lft1")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+theme_override_colors/font_color = Color(0.980392, 0.921569, 0.843137, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.764706)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_constants/shadow_outline_size = 1
+theme_override_fonts/font = ExtResource("4_6v5wn")
+theme_override_font_sizes/font_size = 23
+text = "62"
+horizontal_alignment = 1
+vertical_alignment = 1

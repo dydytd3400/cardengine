@@ -1,8 +1,8 @@
 ## 流程任务
 ##
 ## 相对于[BaseState]，[ProcessTask]拆分出了专注于具体业务逻辑的执行模块类[ProcessTaskExecutor]和负责自身状态切换的任务路由类[ProcessTaskRouter]。
-## [ProcessTask]不再参与除自身状态管理以外的具体逻辑，而是分别交给[ProcessTaskExecutor]和[ProcessTaskRouter]各自负责处理，从而实现进一步解耦。
-## [ProcessTask]可通过结合流程模版[ProcessTemplate]配置[ProcessTask]，实现动态化管理任务模块，具体参考流程模版配置类[ProcessTemplate]。[br][br]
+## [ProcessTask]不参与除自身状态管理以外的具体逻辑，而是分别交给[ProcessTaskExecutor]和[ProcessTaskRouter]各自负责处理，从而实现进一步解耦。
+## 通过结合流程模版[ProcessTemplate]配置[ProcessTask]，可实现动态化管理任务模块，具体参考流程模版配置类[ProcessTemplate]。[br][br]
 ## [ProcessTask]仍然可以被视作一个普通的[BaseState]被[BaseStateMachine]所管理
 ## @experimental: 该方法尚未完善。
 class_name ProcessTask
@@ -22,25 +22,42 @@ var parent: Variant:
 func _init(_executor: ProcessTaskExecutor, _router: ProcessTaskRouter):
 	executor = _executor
 	router = _router
+	state_entered.connect(on_entered)
 	_initial_executor()
 
 func _initial_executor():
 	executor.finished.connect(_executor_finished)
+	#executor.finished.connect(router.next)
 
-## 进入当前任务状态
-## 调度[member executor]执行具体任务，并通过[param msg]附带参数
+#### 进入当前任务状态
+#### 调度[member executor]执行具体任务，并通过[param msg]附带上下文参数，该参数如果没有被修改，通常会被一直传递直到流程结束
+#func enter(msg: Dictionary = {}) -> bool:
+	#if super.enter(msg):
+		#executor.execute(self, msg)
+		#return true
+	#return false
+
+#func execute_at(obj:Variant,msg: Dictionary = {}):
+	#obj.excute
+	#enter(msg)
+
 func enter(msg: Dictionary = {}) -> bool:
-	if super.enter(msg):
+	print("当前栈深[enter]=================================>>>>  "+str(get_stack().size()))
+	return super.enter(msg)
+
+func exit() -> bool:
+	print("当前栈深[exit]=================================>>>>  "+str(get_stack().size()))
+	return super.exit()
+
+func on_entered(msg: Dictionary):
+	#if msg.has("battle_field"):
+		#var b:BattleField = msg.battle_field
+		#b.execute(executor,self,msg)
+	#else:
 		executor.execute(self, msg)
-		return true
-	return false
+		print("当前栈深[execute]=================================>>>>  "+str(get_stack().size()))
 
-
-## 当前[member executor]执行完毕，路由至下一个流程任务
-func _executor_finished(completed: bool, msg: Dictionary) -> void:
-	router.next(self, completed, msg) # 路由至下一个流程任务
-
-## 切换状态
+## 切换流程任务
 func switch_to(state_id: StringName, msg: Dictionary = {}) -> void:
 	if parent:
 		if parent is BaseStateMachine:
@@ -62,3 +79,7 @@ func get_parent_task(task_id: StringName) -> ProcessTask:
 			return parent.states[task_id]
 	lg.warning("Has no parent")
 	return null
+
+# 当前executor执行完毕，路由至下一个流程任务
+func _executor_finished(task:ProcessTask, completed: bool, msg: Dictionary) -> void:
+	router.next(self, completed, msg) # 路由至下一个流程任务

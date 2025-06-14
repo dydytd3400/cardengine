@@ -21,7 +21,7 @@ var process: Dictionary
 var _task_count: int = 0
 func _execute(task: ProcessTask, msg: Dictionary = {}) -> void:
 	if !process || process.is_empty():
-		lg.fatal("process is Empty!")
+		lg.fatal("process is empty!")
 		return
 	var is_array = context_values && !context_values.is_empty()
 	var is_single = context_value != null
@@ -30,7 +30,7 @@ func _execute(task: ProcessTask, msg: Dictionary = {}) -> void:
 		return
 	if is_array:
 		if !context_key || context_key.is_empty():
-			lg.fatal("context_key is Empty!")
+			lg.fatal("context_key is empty!")
 			return
 		if concurrent:
 			_task_count = context_values.size()

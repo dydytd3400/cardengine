@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b7jd7b7l1vu8v" path="res://src/core/intent/parts/abilities/ability.gd" id="1_2fhgl"]
 [ext_resource type="Script" uid="uid://cp1rxu1phxaax" path="res://src/datas/card_data.gd" id="2_2fhgl"]
-[ext_resource type="Script" uid="uid://b0yvh6181tyt1" path="res://src/core/view/card_node.gd" id="2_lhkye"]
+[ext_resource type="Script" uid="uid://b0yvh6181tyt1" path="res://src/core/view/card/card_node.gd" id="2_lhkye"]
 
 [resource]
 script = ExtResource("2_2fhgl")

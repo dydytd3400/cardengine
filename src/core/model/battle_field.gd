@@ -5,6 +5,9 @@ var data:BattleFieldData
 
 @export
 var players: Array[Player] = []
+@export
+var table:Table
+
 var turn_count = 0
 var first_index = -1:
 	set(value):
@@ -20,8 +23,12 @@ var next_player: Player:
 	get():
 		var next_index = 0 if current_player_index != 0 else 1
 		return players[next_index]
-
-
+var index = 1
+func initialize():
+	lg.info("战斗开始，初始化双方玩家数据",{},"BattleProcess")
+	players[0].init_deck()
+	players[1].init_deck()
+	table.initialize(7,4,players)
 
 ## 切换至下个玩家
 func switch_next() -> Player:
@@ -35,10 +42,12 @@ func pick_first() -> Player:
 	return current_player
 
 func checkmate() -> bool:
+	lg.info("第%d个回合结束" % turn_count,{},"BattleProcess")
 	if turn_count < 10:
 		switch_next()
 		return false
 	else:
+		lg.info("全部流程结束啦",{},"BattleProcess")
 		return true
 
 func draw_card(player: Player, count: int = 1):
@@ -68,6 +77,9 @@ func create_card(name: int):
 	card.health = randi_range(0, 10)
 	return card
 
+func execute(executor:ProcessTaskExecutor,task:ProcessTask,msg:Dictionary):
+	executor.execute(task,msg)
+	print("当前栈深[BattleField]=================================>>>>  "+str(get_stack().size()))
 
 func _ready() -> void:
 	# 虚构基础数据
@@ -75,3 +87,6 @@ func _ready() -> void:
 	players[1].data = create_player("李四")
 	var process: ProcessTask = ProcessTemplate.new().generate(ProcessConfig.battle_process_config)
 	process.enter({"battle_field" = self})
+
+#func _init():
+	#OS.set_stack_size(2048 )

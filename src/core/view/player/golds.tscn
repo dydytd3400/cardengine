@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://ch0ymq37t65xw"]
+
+[ext_resource type="Script" uid="uid://dni61cjtxrpic" path="res://src/core/view/player/golds_node.gd" id="1_el7tw"]
+[ext_resource type="Texture2D" uid="uid://bkkwmvo4e22w" path="res://assets/icons/golds.svg" id="2_i33mi"]
+
+[node name="Golds" type="Node2D"]
+scale = Vector2(0.25, 0.25)
+script = ExtResource("1_el7tw")
+
+[node name="1" type="Sprite2D" parent="."]
+texture = ExtResource("2_i33mi")
+
+[node name="2" type="Sprite2D" parent="."]
+position = Vector2(105, 15)
+texture = ExtResource("2_i33mi")
+
+[node name="3" type="Sprite2D" parent="."]
+position = Vector2(9, 58)
+texture = ExtResource("2_i33mi")
+
+[node name="4" type="Sprite2D" parent="."]
+position = Vector2(-71, 24)
+texture = ExtResource("2_i33mi")
+
+[node name="5" type="Sprite2D" parent="."]
+position = Vector2(110, 66)
+texture = ExtResource("2_i33mi")
+
+[node name="6" type="Sprite2D" parent="."]
+position = Vector2(40, -19)
+texture = ExtResource("2_i33mi")

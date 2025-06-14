@@ -33,7 +33,7 @@ func next(current_task: ProcessTask, completed: bool, msg: Dictionary = {}) -> v
 		if parent:
 			if parent is ProcessTaskBatch:
 				if !parent.concurrent: # 如果父节点为流程任务组，且为非并发任务 则表示父节点执行模块已经结束，父节点进入路由
-					parent.executor.completed(current_task, msg)
+					parent.executor.completed(parent, msg)
 					return
 			elif parent is BaseStateMachine:
 				parent.stop()

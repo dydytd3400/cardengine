@@ -1,2 +1,2 @@
 class_name BattleFieldNode
-extends Node
+extends Control

@@ -69,7 +69,7 @@ func populate(config: Dictionary) -> bool:
 			concurrent = false
 		var has_executor = executor_source && !executor_source.is_empty()
 		if has_nodes && has_executor:
-			lg.warning("Template nodes configured, executor disabled!")
+			lg.warning("Template[%s] nodes configured, executor disabled! " % config.key)
 		var key_map: Dictionary = {}
 		for node in nodes_dict:
 			var template = ProcessTemplate.new()

@@ -39,15 +39,15 @@ func _input(event: InputEvent) -> void:
 ## [param initial_state] 初始状态, 非空字符串表示自动启动
 ## [param msg] 传递给状态机的消息
 func register_state_machine(
-		id: StringName, 
+		id: StringName,
 		state_machine: BaseStateMachine,
 		agent: Object = null,
-		initial_state: StringName = &"", 
+		initial_state: StringName = &"",
 		msg: Dictionary = {}) -> void:
 	if _state_machines.has(id):
 		push_warning("State machine %s already registered" % id)
 		return
-	
+
 	_state_machines[id] = state_machine
 	state_machine.agent = agent
 	state_machine.ready()
@@ -60,7 +60,7 @@ func register_state_machine(
 func unregister_state_machine(id: StringName) -> void:
 	if not _state_machines.has(id):
 		return
-	
+
 	var state_machine = _state_machines[id]
 	stop_state_machine(id)
 	_state_machines.erase(id)
@@ -77,8 +77,8 @@ func get_state_machine(id: StringName) -> BaseStateMachine:
 ## [param initial_state] 初始状态
 ## [param msg] 传递给状态机的消息
 func start_state_machine(
-		id: StringName, 
-		initial_state: StringName, 
+		id: StringName,
+		initial_state: StringName,
 		msg: Dictionary = {}) -> void:
 	var state_machine = get_state_machine(id)
 	if not state_machine:
@@ -87,7 +87,7 @@ func start_state_machine(
 	if initial_state.is_empty():
 		push_error("Initial state cannot be empty")
 		return
-	
+
 	state_machine.start(initial_state, msg)
 	state_machine_started.emit(id)
 
@@ -98,7 +98,7 @@ func stop_state_machine(id: StringName) -> void:
 	if not state_machine:
 		push_error("State machine %s does not exist" % id)
 		return
-	
+
 	state_machine.stop()
 	state_machine_stopped.emit(id)
 
@@ -144,5 +144,4 @@ func get_current_state() -> BaseState:
 	if current_state_linked_tree:
 		return current_state_linked_tree[-1]
 	else:
-		return null 
-		
+		return null

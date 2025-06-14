@@ -1,17 +1,30 @@
 ## 流程配置字典
-## <必填> 必填项，否则抛出异常
-## <可选> 可选项
-## [...] ...为默认值
 class_name ProcessConfig extends RefCounted
 const root = "res://src/core/intent/battles/%s.gd"
 const battle_process_config = {
 		"key" = "对战流程",
 		"nodes" = [ {
-				"key" = "战场初始化",
-				"executor" = root % "battle_initial"
+				"key" = "战场初始化",# 通常准备一些初始数据
+				"executor" = {
+					"resource" = Process.EXECITOR_EXPRESSION,
+					"expressions" = [{
+						"expression" = "@context{battle_field}.initialize()",
+						"finally" = "complete"
+					}]
+				}
+
+			#},{
+				#"key" = "卡牌初始化",# 进行各个对象初始状态切换和展示
+				#"executor" = root % "battle_initial"
 			}, {
 				"key" = "决出先手玩家",
-				"executor" = root % "pick_first"
+				"executor" = {
+					"resource" = Process.EXECITOR_EXPRESSION,
+					"expressions" = [{
+						"expression" = "@context{battle_field}.pick_first()",
+						"finally" = "complete"
+					}]
+				}
 			}, {
 				"key" = "初始化手牌",
 				"concurrent" = true,
@@ -39,11 +52,18 @@ const battle_process_config = {
 			}, {
 				"key" = "回合流程",
 				"nodes" = [ {
-						"key" = "回合初始化数据", # 通常用于
+						"key" = "回合初始化数据",
 						"executor" = root % "turn_initial",
 					}, {
 						"key" = "发放利息",
-						"executor" = root % "player/interest_payout",
+						#"executor" = root % "player/interest_payout",
+						"executor" = {
+										"resource" = Process.EXECITOR_EXPRESSION,
+										"expressions" = [{
+											"expression" = "@context{battle_field}.current_player.interest_payout(floor(@context{battle_field}.turn_count/2.0))",
+											"finally" = "complete"
+										}]
+									}
 					}, {
 						"key" = "补充手牌",
 						"executor" = root % "player/draw_card",
@@ -51,20 +71,38 @@ const battle_process_config = {
 					 {
 					 	"key" = "牌桌流程",
 					 	"executor" = {
-					 		"resource" = "res://addons/godot_core_system/source/process_system/process_task_executor_launcher.gd",
+					 		"resource" = Process.EXECITOR_LAUNCHER,
 					 		"context_key" = "card",
 					 		"context_values" = "@context{battle_field.current_player.plays}",
 					 		"process" = {
 					 			"key" = "卡牌行动",
 					 			"nodes" = [ {
 					 				"key" = "激活",
-					 				"executor" = root % "card/card_activate",
+									"executor" = {
+													"resource" = Process.EXECITOR_EXPRESSION,
+													"expressions" = [{
+														"expression" = "@context{card}.to_activate()",
+														"finally" = "complete"
+													}]
+												}
 					 			},{
 					 				"key" = "移动",
-					 				"executor" = root % "card/card_move",
+					 				"executor" = {
+													"resource" = Process.EXECITOR_EXPRESSION,
+													"expressions" = [{
+														"expression" = "@context{card}.to_move()",
+														"finally" = "complete"
+													}]
+												}
 					 			}, {
 					 				"key" = "攻击",
-					 				"executor" = root % "card/card_attack",
+					 				"executor" = {
+													"resource" = Process.EXECITOR_EXPRESSION,
+													"expressions" = [{
+														"expression" = "@context{card}.to_attack()",
+														"finally" = "complete"
+													}]
+												}
 					 			}]
 					 		},
 					 	}
@@ -76,10 +114,20 @@ const battle_process_config = {
 				]
 			}, {
 				"key" = "回合结束胜负判定",
-				"executor" = root % "checkmate",
+				"executor" = {
+					"resource" = Process.EXECITOR_EXPRESSION,
+					"expressions" = [{
+						#"expression" = "@context{battle_field}.checkmate()",
+						#"finally" = "complete",
+						#"finally_append" = "gameover"
+						"expression" = "1 == 1",
+						"finally" = "complete",
+					}]
+				},
 				"router" = {
-					"resource" = "res://addons/godot_core_system/source/process_system/process_task_router_match.gd",
+					"resource" = Process.ROUTER_MATCH,
 					"matchers" = [{
+						#"matcher" = "@context{gameover}",
 						"matcher" = "@context{battle_field}.checkmate()",
 						"回合流程" = false
 					} ]
@@ -87,3 +135,41 @@ const battle_process_config = {
 			}],
 		"monitor" = ""
 	}
+
+const card_process_config =  {
+			 			"key" = "卡牌流程",
+			 			"nodes" = [ {
+			 				"key" = "牌库",
+			 				"executor" = root % "card/card_activate",
+			 			},{
+			 				"key" = "手牌",
+			 				"executor" = root % "card/card_activate",
+			 			},{
+			 				"key" = "使用",# 选择目标
+			 				"executor" = root % "card/card_activate",
+			 			},{
+			 				"key" = "生效",# 选择目标
+			 				"executor" = root % "card/card_activate",
+			 			},{
+			 				"key" = "牌桌",
+							"nodes" = [{
+				 				"key" = "待机",
+				 				"executor" = root % "card/card_attack",
+				 			}, {
+				 				"key" = "移动",
+				 				"executor" = root % "card/card_attack",
+				 			}, {
+				 				"key" = "攻击",
+				 				"executor" = root % "card/card_attack",
+				 			}, {
+				 				"key" = "死亡",
+				 				"executor" = root % "card/card_attack",
+				 			}]
+			 			}, {
+			 				"key" = "墓堆",
+			 				"executor" = root % "card/card_attack",
+			 			}, {
+			 				"key" = "销毁",
+			 				"executor" = root % "card/card_attack",
+			 			}]
+			 		}

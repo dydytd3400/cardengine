@@ -19,7 +19,7 @@ var target_cards_type = "hand"
 
 func _execute(task: ProcessTask, msg: Dictionary = {}):
 	if !source_player_type:
-		lg.fatal("\"source_player_type\" is Empty")
+		lg.fatal("\"source_player_type\" is empty")
 		return
 	if source_player_type != "current_player" && source_player_type != "next_player":
 		lg.fatal("\"source_player_type\" must \"current_player\" or \"next_player\"")

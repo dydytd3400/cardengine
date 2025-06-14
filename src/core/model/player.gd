@@ -61,17 +61,18 @@ var card_res:Resource
 func interest_payout(_turn_count: int) -> int:
 	var interest =  1 #+_turn_count + floori(gold / 5.0)
 	gold += interest
+	lg.info("回合开始，玩家: %s 增长了%d枚金币，现在共持有%d枚" % [player_name,interest,gold],{},"BattleProcess")
 	return interest
 
 
 ## 出牌 临时随机
 func play_card():
-	self.duplicate()
 	for i in range(hand.size() - 1, -1, -1):
 		var card = hand[i]
 		if card.cost <= gold:
 			gold -= card.cost
 			plays.append(card)
+			table.hand_to_table(card,0)
 			lg.info("玩家: %s打出了一张牌%d费:%s,当前剩余%d枚金币" % [player_name, card.cost, card.card_name,gold],{},"BattleProcess")
 			hand.remove_at(i)
 
@@ -79,12 +80,8 @@ func play_card():
 func init_deck():
 	for card in cards:
 		var card_data:CardData= card.duplicate(true)
-		#var res := load("res://src/core/model/card.gd")
 		var new_card:Card = card_res.new()
-		new_card.view = new_card.view_res.new()
-		new_card.data = card_data
-		new_card.holder = self
-		new_card.creator = self
+		new_card.initialize(card_data,self)
 		deck.append(new_card)
 
 func bind_data():

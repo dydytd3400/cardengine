@@ -2,7 +2,7 @@
 ##
 ## 基于[ProcessTask]的拓展类，用于管理多个[ProcessTask]子任务。[br]
 ## [br]
-## [ProcessTaskBatch]的执行模块[ProcessTaskExecutor]不再可通过[ProcessTemplate]配置，而是固定由[ProcessTaskExecutor]代理。[br]
+## [ProcessTaskBatch]的执行模块无法通过[ProcessTemplate]配置，而是固定由[ProcessTaskExecutor]代理。[br]
 ## [br]
 ## 和[ProcessTask]一样，[ProcessTaskBatch]仍然可以被做为一个普通[BaseState]被[BaseStateMachine]所管理[br]
 ## @experimental: 该方法尚未完善。
@@ -33,33 +33,52 @@ var _task_count
 func _init(_router: ProcessTaskRouter, _concurrent: bool = false):
 	super._init(ProcessTaskExecutor.new(), _router)
 	concurrent = _concurrent
+	state_exited.connect(on_exited)
 
-## 进入当前任务状态
-## 调度[member executor]执行具体任务，并通过[param msg]附带参数
-func enter(msg: Dictionary = {}) -> bool:
-	if super.enter(msg):
-		_task_count = tasks.size()
-		if concurrent:
-			for item_task in tasks:
-				item_task.state_exited.connect(_finish_one.bind(msg))
-				item_task.enter(msg)
-		else:
-			switch(tasks[0].state_id, msg)
-		return true
-	return false
+### 进入当前任务状态
+### 调度[member executor]执行具体任务，并通过[param msg]附带参数
+#func enter(msg: Dictionary = {}) -> bool:
+	#if super.enter(msg):
+		#_task_count = tasks.size()
+		#if concurrent:
+			#for item_task in tasks:
+				#item_task.state_exited.connect(_finish_one.bind(msg))
+				#item_task.enter(msg)
+		#else:
+			#switch(tasks[0].state_id, msg)
+		#return true
+	#return false
 
+func on_entered(msg: Dictionary):
+	super.on_entered(msg)
+	_task_count = tasks.size()
+	if concurrent:
+		for item_task in tasks:
+			item_task.state_exited.connect(_finish_one.bind(msg))
+			item_task.enter(msg)
+	else:
+		switch(tasks[0].state_id, msg)
 
-func exit() -> bool:
-	if super.exit():
-		if !concurrent:
-			if current_task:
-				current_task.exit()
-		else:
-			for task in tasks:
-				if task.is_active:
-					task.exit()
-		return true
-	return false
+func on_exited():
+	if !concurrent:
+		if current_task:
+			current_task.exit()
+	else:
+		for task in tasks:
+			if task.is_active:
+				task.exit()
+
+#func exit() -> bool:
+	#if super.exit():
+		#if !concurrent:
+			#if current_task:
+				#current_task.exit()
+		#else:
+			#for task in tasks:
+				#if task.is_active:
+					#task.exit()
+		#return true
+	#return false
 
 ## 添加子任务 [param task_id]：子任务在当前流程组的唯一ID。[param new_task]：需要添加的子任务
 func add_task(task_id: StringName, new_task: ProcessTask) -> void:
