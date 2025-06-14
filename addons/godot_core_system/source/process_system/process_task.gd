@@ -26,36 +26,13 @@ func _init(_executor: ProcessTaskExecutor, _router: ProcessTaskRouter):
 	_initial_executor()
 
 func _initial_executor():
-	executor.finished.connect(_executor_finished)
+	executor.finished.connect(_executor_finished) # TODO 为什么下面这种方式有问题
 	#executor.finished.connect(router.next)
 
-#### 进入当前任务状态
-#### 调度[member executor]执行具体任务，并通过[param msg]附带上下文参数，该参数如果没有被修改，通常会被一直传递直到流程结束
-#func enter(msg: Dictionary = {}) -> bool:
-	#if super.enter(msg):
-		#executor.execute(self, msg)
-		#return true
-	#return false
-
-#func execute_at(obj:Variant,msg: Dictionary = {}):
-	#obj.excute
-	#enter(msg)
-
-func enter(msg: Dictionary = {}) -> bool:
-	print("当前栈深[enter]=================================>>>>  "+str(get_stack().size()))
-	return super.enter(msg)
-
-func exit() -> bool:
-	print("当前栈深[exit]=================================>>>>  "+str(get_stack().size()))
-	return super.exit()
-
+## 进入当前任务状态
+## 调度[member executor]执行具体任务，并通过[param msg]附带上下文参数，该参数如果没有被修改，通常会被一直传递直到流程结束
 func on_entered(msg: Dictionary):
-	#if msg.has("battle_field"):
-		#var b:BattleField = msg.battle_field
-		#b.execute(executor,self,msg)
-	#else:
-		executor.execute(self, msg)
-		print("当前栈深[execute]=================================>>>>  "+str(get_stack().size()))
+	executor.execution.emit(self,msg)
 
 ## 切换流程任务
 func switch_to(state_id: StringName, msg: Dictionary = {}) -> void:
@@ -82,4 +59,4 @@ func get_parent_task(task_id: StringName) -> ProcessTask:
 
 # 当前executor执行完毕，路由至下一个流程任务
 func _executor_finished(task:ProcessTask, completed: bool, msg: Dictionary) -> void:
-	router.next(self, completed, msg) # 路由至下一个流程任务
+	router.find_next.emit(task,completed,msg) # 路由至下一个流程任务

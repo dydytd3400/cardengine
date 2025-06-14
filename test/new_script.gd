@@ -30,7 +30,7 @@ func start_safe_recursion():
 func _on_step_completed(_depth,msg = {}):
 	var depth = msg.msg.current_depth
 	# 新的调用栈开始！
-	print("当前栈深度: ", get_stack_depth(),msg.msg)
+	#print("当前栈深度: ", get_stack_depth(),msg.msg)
 
 	if depth >= MAX_DEPTH:
 		print("信号分解完成! 总深度:", depth)

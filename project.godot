@@ -49,4 +49,3 @@ logger/color_info=Color(0.425471, 0.613067, 1, 1)
 logger/color_warning=Color(1, 0.870588, 0.4, 1)
 logger/color_error=Color(1, 0.54902, 0.8, 1)
 logger/color_fatal=Color(1, 0.470588, 0.419608, 1)
-logger/ignore_level=[0]

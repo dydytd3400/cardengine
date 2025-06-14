@@ -94,6 +94,7 @@ func await_evaluate_expression(expression: String, variable_names, variable_valu
 	var result = await expr.execute(variable_values,self)
 	if expr.has_execute_failed():
 		lg.warning("执行表达式失败: " + expr.get_error_text())
+		expr.unreference()
 		return error_id
 	return result
 

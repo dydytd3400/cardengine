@@ -80,7 +80,7 @@ var _logger : CoreSystem.Logger = CoreSystem.logger
 func _init() -> void:
 	# 设置默认序列化策略
 	_set_save_format(default_format)
-	
+
 	# 确保存档目录存在
 	_ensure_save_directory_exists()
 
@@ -119,7 +119,7 @@ func set_save_format(format: StringName) -> void:
 # 创建存档
 func create_save(save_id: String = "") -> bool:
 	var actual_id = _generate_save_id() if save_id.is_empty() else save_id
-	
+
 	# 收集数据
 	var save_data : Dictionary = {
 		"metadata": {
@@ -131,7 +131,7 @@ func create_save(save_id: String = "") -> bool:
 		},
 		"nodes": _collect_node_states(),
 	}
-	
+
 	# 存储数据
 	var save_path = _get_save_path(actual_id)
 	var success = await _save_strategy.save(save_path, save_data)
@@ -145,9 +145,9 @@ func create_save(save_id: String = "") -> bool:
 func load_save(save_id: String) -> bool:
 	if save_id.is_empty():
 		return false
-	
+
 	var save_path = _get_save_path(save_id)
-	
+
 	var result = await _save_strategy.load_save(save_path)
 	if not result.is_empty():
 		_current_save_id = save_id
@@ -173,18 +173,18 @@ func delete_save(save_id: String) -> bool:
 # 创建自动存档
 func create_auto_save() -> String:
 	var auto_save_id = _get_auto_save_id()
-	
+
 	# 创建新存档
 	var success = await create_save(auto_save_id)
 	if not success:
 		CoreSystem.logger.error("Failed to create auto save: %s" % auto_save_id)
 		return ""
-	
+
 	# 清理旧的自动存档
 	var cleanup_success = await _clean_old_auto_saves()
 	if not cleanup_success:
 		CoreSystem.logger.warning("Failed to clean old auto saves")
-	
+
 	# 发送信号
 	auto_save_created.emit(auto_save_id)
 	return auto_save_id
@@ -192,24 +192,24 @@ func create_auto_save() -> String:
 # 获取所有存档列表
 func get_save_list() -> Array[Dictionary]:
 	var saves: Array[Dictionary] = []
-	
+
 	var files = _save_strategy.list_files(save_directory)
 	for file in files:
 		var save_id = _get_save_id_from_file(file)
 		var save_path = _get_save_path(save_id)
-		
+
 		var metadata = await _save_strategy.load_metadata(save_path)
 		if not metadata.is_empty():
 			saves.append({
 				"save_id": save_id,
 				"metadata": metadata
 			})
-	
+
 	# 按时间戳排序
-	saves.sort_custom(func(a, b): 
+	saves.sort_custom(func(a, b):
 		return a.metadata.timestamp > b.metadata.timestamp
 	)
-	
+
 	return saves
 
 # 注册自定义存档格式策略
@@ -276,7 +276,7 @@ func _clean_old_auto_saves() -> void:
 		var save_id = save.get("save_id")
 		return save_id.begins_with(auto_save_prefix)
 	)
-	
+
 	if auto_saves.size() > max_auto_saves:
 		for i in range(max_auto_saves, auto_saves.size()):
 			delete_save(auto_saves[i].id)

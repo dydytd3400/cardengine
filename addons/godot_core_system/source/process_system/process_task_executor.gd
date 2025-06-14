@@ -12,14 +12,12 @@ signal finished(task: ProcessTask,completed: bool, msg: Dictionary)
 signal execution(task: ProcessTask, msg: Dictionary)
 
 func _init() -> void:
-	execution.connect(_execute)
+	execution.connect(_ready_execute,ConnectFlags.CONNECT_DEFERRED)
 
 ## 处理[param task]的具体逻辑,当[ProcessTask]启动时会通过[param msg]携带一些附加参数
-func execute(task: ProcessTask, msg: Dictionary = {}):
+func _ready_execute(task: ProcessTask, msg: Dictionary = {}):
 	write_to_member(msg)
-	#_execute(task, msg)
-	#print("当前栈深[execute]=================================>>>>  "+str(get_stack().size()))
-	execution.emit(task, msg)
+	_execute(task, msg)
 
 ## 完成并结束当前执行模块
 func completed(task: ProcessTask, msg: Dictionary = {}):

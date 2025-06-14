@@ -7,9 +7,15 @@
 class_name ProcessTaskRouter
 extends ProcessTaskReader
 
+signal find_next(current_task: ProcessTask, completed: bool, msg: Dictionary)
+
+func _init() -> void:
+	find_next.connect(_ready_find_next,ConnectFlags.CONNECT_DEFERRED)
+
+
 ## 当前任务结束时，会通过该方法调用[method _find_next]找到下一个同级流程任务并在当前方法路由[br]
 ## 如果[method _find_next]返回空，则流程任务会挂起，直到[method next]被再次执行或退出了当前流程任务。如果返回的流程任务没有父节点，则会直接退出当前流程任务。
-func next(current_task: ProcessTask, completed: bool, msg: Dictionary = {}) -> void:
+func _ready_find_next(current_task: ProcessTask, completed: bool, msg: Dictionary = {}) -> void:
 	write_to_member(msg)
 	var next_task := _find_next(current_task, completed, msg)
 	if next_task == current_task: # 返回自身 则表示当前任务尚未彻底结束 挂起

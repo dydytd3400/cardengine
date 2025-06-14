@@ -48,6 +48,7 @@ func checkmate() -> bool:
 		return false
 	else:
 		lg.info("全部流程结束啦",{},"BattleProcess")
+		print("当前栈深=================================>  "+str(get_stack().size()))
 		return true
 
 func draw_card(player: Player, count: int = 1):
@@ -76,10 +77,6 @@ func create_card(name: int):
 	card.cost = randi_range(0, 10)
 	card.health = randi_range(0, 10)
 	return card
-
-func execute(executor:ProcessTaskExecutor,task:ProcessTask,msg:Dictionary):
-	executor.execute(task,msg)
-	print("当前栈深[BattleField]=================================>>>>  "+str(get_stack().size()))
 
 func _ready() -> void:
 	# 虚构基础数据
