@@ -6,11 +6,13 @@ var cards:Array[CardNode] = []
 var speed = 100
 
 ## 添加后会自动向中心移动
-func hand_to_slot(card:CardNode):
+func add_from_hand(card:CardNode):
 	cards.append(card)
+	NodeUtil.add_by_local($Slot,card)
 
-func slot_to_slot(card:CardNode):
+func add_from_slot(card:CardNode):
 	cards.append(card)
+	NodeUtil.add_by_local($Slot,card)
 
 func remove_card(card:CardNode):
 	if !card:
@@ -21,17 +23,19 @@ func remove_card(card:CardNode):
 		lg.final("CardNode not exsit!")
 		return
 	cards.remove_at(find)
+	$Slot.remove_child(card)
+
 
 func _process(delta: float) -> void:
 	var children =$Slot.get_children()
-	var beremoves = ObjectUtil.find_array_difference(children,cards)
-	var beadds = ObjectUtil.find_array_difference(cards,children)
-	if beremoves && !beremoves.is_empty():
-		for node in beremoves:
-			NodeUtil.remove_from_parent(node)
-	if beadds && !beadds.is_empty():
-		for node in beadds:
-			NodeUtil.add_by_local($Slot,node)
+	var be_removes = ObjectUtil.find_array_difference(children,cards)
+	var be_adds = ObjectUtil.find_array_difference(cards,children)
+	if be_removes && !be_removes.is_empty():
+		for card in be_removes:
+			$Slot.remove_child(card)
+	if be_adds && !be_adds.is_empty():
+		for card in be_adds:
+			NodeUtil.add_by_local($Slot,card)
 
 	for card:CardNode in $Slot.get_children():
 		if card.position.x !=0 || card.position.y != 0:

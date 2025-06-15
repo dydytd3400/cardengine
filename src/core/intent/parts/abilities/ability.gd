@@ -29,7 +29,7 @@ func execute() -> void:
 		effect.BEFORE_effect.connect(_complate_before)
 		effect.WHEN_effect.connect(_complate_when)
 		effect.AFTEL_effect.connect(_complated_after)
-		effect.execute(owner_card, targets)
+		#effect.execute(owner_card, targets)
 
 
 func _complate_before():

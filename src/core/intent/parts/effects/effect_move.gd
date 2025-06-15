@@ -2,43 +2,32 @@ extends Effect
 # 移动效果
 class_name EffectMove
 
-# var controller:TableController
-# func execute(_source: Card, _targets: Array):
-# 	source=_source
-# 	_to_slot(_targets)
-# 	controller = _source.get_player().controller
-# 	_before_move()
+func execute(source: Card, _params: Dictionary = {}):
+	var slot = find_move_slot(source, source.mobility, source.move_area)
+	if slot:
+		move_to(source, slot)
 
-# #开始移动动作
-# func _before_move():
-# 	BEFORE_effect.emit()
-# 	var tween: Tween = source.create_tween().set_parallel(true)  # 并行执行
-# 	# X轴弹性动画
-# 	tween.tween_property(source, "scale:x", 1.2, 0.1).set_trans(Tween.TRANS_BOUNCE)
-# 	tween.tween_property(source, "scale:x", 1.0, 0.3)
-# 	# Y轴弹性动画（反向）
-# 	tween.tween_property(source, "scale:y", 0.8, 0.1).set_trans(Tween.TRANS_BOUNCE)
-# 	tween.tween_property(source, "scale:y", 1.0, 0.3)
-# 	tween.tween_callback(_when_move)  # 可选结束回调
+func find_move_slot(source: Card, step: int, _area: Array[Vector2i]) -> Slot:
+	var solts = source.holder.table.slots_matrix
+	var attack_area := []
+	# 需要先通过攻击范围确定可攻击目标
+	# 在根据可攻击目标确定
+	# 不对不对不对…… 优先级算法太难了……………………………………………………………………………………………………
+	var moveable_area := _moveable_area(solts,_area,source.slot)
+	return null
 
+func move_to(source: Card, slot: Slot):
+	slot.add_from_slot(source)
 
-# #执行移动动作 并结算
-# func _when_move():
-# 	WHEN_effect.emit()
-# 	if target_slot:
-# 		await source.slot.move_to(target_slot)
-# 	_afterl_move()
+## 可移动范围
+func _moveable_area(slots_matrix: Array[Array],  _area: Array[Vector2i], _slot: Slot) -> Array[Vector2i]:
+	var area = []
+	for item in _area:
+		var pos :Vector2i = _slot.position+item
+		if _is_position_valid(pos,slots_matrix) && !slots_matrix[pos.y][pos.x].exclusive:
+			area.append(pos)
+	return area
 
-
-# #移动动作完成 通知上层
-# func _afterl_move():
-# 	AFTEL_effect.emit()
-
-
-# # 移动/受击表现
-# func _shake_effect(_target: Card) -> Tween:
-# 	var shake_tween: Tween = create_tween()
-# 	# 小幅度快速震动（向下偏移10像素，再返回）
-# 	shake_tween.tween_property(_target, "position", _target.position + Vector2(0, 10), 0.1)
-# 	shake_tween.tween_property(_target, "position", _target.position, 0.1)
-# 	return shake_tween
+# 辅助函数：检查位置是否有效
+func _is_position_valid(pos: Vector2i, slots_matrix: Array[Array]) -> bool:
+	return pos.y >= 0 && pos.y < slots_matrix.size() && pos.x >= 0 && pos.x < slots_matrix[0].size()

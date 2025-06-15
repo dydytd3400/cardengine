@@ -8,11 +8,11 @@ class_name ProcessTaskExecutor
 extends ProcessTaskReader
 
 ## 当前执行模块结束信号，[param completed]为[code]true[/code]时，则表示当前[ProcessTask]是通过[method completed]结束的，否则是通过[method cancel]结束的。
-signal finished(task: ProcessTask,completed: bool, msg: Dictionary)
+signal finished(task: ProcessTask, completed: bool, msg: Dictionary)
 signal execution(task: ProcessTask, msg: Dictionary)
 
 func _init() -> void:
-	execution.connect(_ready_execute,ConnectFlags.CONNECT_DEFERRED)
+	execution.connect(_ready_execute, ConnectFlags.CONNECT_DEFERRED)
 
 ## 处理[param task]的具体逻辑,当[ProcessTask]启动时会通过[param msg]携带一些附加参数
 func _ready_execute(task: ProcessTask, msg: Dictionary = {}):
@@ -22,12 +22,12 @@ func _ready_execute(task: ProcessTask, msg: Dictionary = {}):
 ## 完成并结束当前执行模块
 func completed(task: ProcessTask, msg: Dictionary = {}):
 	_completed(task, msg)
-	finished.emit(task,true, msg)
+	finished.emit(task, true, msg)
 
 ## 取消并结束当前执行模块
 func cancel(task: ProcessTask, msg: Dictionary = {}):
 	_cancel(task, msg)
-	finished.emit(task,false, msg)
+	finished.emit(task, false, msg)
 
 func destroy():
 	write_to_members.clear()

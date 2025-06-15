@@ -52,12 +52,12 @@ func read_one(target: Variant, key: String):
 	return value
 
 ## 解析表达式
-func parse_expression(_expr: String, context: Dictionary,need_result : bool):
-	var result = _parse_expression(_expr,context)
-	return evaluate_expression(result[0], result[1], result[2],need_result)
+func parse_expression(_expr: String, context: Dictionary, need_result: bool):
+	var result = _parse_expression(_expr, context)
+	return evaluate_expression(result[0], result[1], result[2], need_result)
 
 ## 执行表达式
-func evaluate_expression(expression: String, variable_names, variable_values,need_result : bool) -> Variant:
+func evaluate_expression(expression: String, variable_names, variable_values, need_result: bool) -> Variant:
 	var expr := Expression.new()
 	# 尝试解析表达式（不包含任何变量）
 	var error = expr.parse(expression, variable_names)
@@ -68,9 +68,9 @@ func evaluate_expression(expression: String, variable_names, variable_values,nee
 	var result = null
 	# 执行表达式（允许常量表达式）
 	if need_result:
-		result = expr.execute(variable_values,self)
+		result = expr.execute(variable_values, self)
 	else:
-		expr.execute(variable_values,self)
+		expr.execute(variable_values, self)
 	if expr.has_execute_failed():
 		lg.warning("执行表达式失败: " + expr.get_error_text())
 		return error_id
@@ -78,7 +78,7 @@ func evaluate_expression(expression: String, variable_names, variable_values,nee
 
 ## 同步解析表达式
 func await_parse_expression(_expr: String, context: Dictionary):
-	var result = _parse_expression(_expr,context)
+	var result = _parse_expression(_expr, context)
 	return await await_evaluate_expression(result[0], result[1], result[2])
 
 ## 同步执行表达式
@@ -91,7 +91,7 @@ func await_evaluate_expression(expression: String, variable_names, variable_valu
 		return error_id
 
 	# 执行表达式（允许常量表达式）
-	var result = await expr.execute(variable_values,self)
+	var result = await expr.execute(variable_values, self)
 	if expr.has_execute_failed():
 		lg.warning("执行表达式失败: " + expr.get_error_text())
 		expr.unreference()
@@ -120,7 +120,7 @@ func _parse_expression(_expr: String, context: Dictionary):
 			variable_values.append(variable_value)
 	return [match_expr, variable_names, variable_values]
 
-func _eq(a,b)->bool:
+func _eq(a, b) -> bool:
 	if !a && !b:
 		return true
 	if typeof(a) == typeof(b):

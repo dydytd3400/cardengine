@@ -60,19 +60,21 @@ func find_player(_player_id:StringName)->Player:
 			return player
 	return null
 
-func create_player(name: String) -> PlayerData:
+func create_player(_name: String) -> PlayerData:
 	var player: PlayerData = PlayerData.new()
 	player.player_id = UUID.generate()
-	player.player_name = name
+	player.player_name = _name
 	player.health = 100
 	for i in range(30):
-		player.cards.append(create_card(i))
+		var card = create_card(i)
+		card.text = _name
+		player.cards.append(card)
 	return player
 
-func create_card(name: int):
+func create_card(_name: int):
 	var card: CardData = CardData.new()
 	card.card_id = UUID.generate()
-	card.card_name = "卡牌_" + str(name)
+	card.card_name = "卡牌_" + str(_name)
 	card.attack = randi_range(0, 10)
 	card.cost = randi_range(0, 10)
 	card.health = randi_range(0, 10)

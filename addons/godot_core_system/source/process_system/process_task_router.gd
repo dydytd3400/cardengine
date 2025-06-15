@@ -10,7 +10,7 @@ extends ProcessTaskReader
 signal find_next(current_task: ProcessTask, completed: bool, msg: Dictionary)
 
 func _init() -> void:
-	find_next.connect(_ready_find_next,ConnectFlags.CONNECT_DEFERRED)
+	find_next.connect(_ready_find_next, ConnectFlags.CONNECT_DEFERRED)
 
 
 ## 当前任务结束时，会通过该方法调用[method _find_next]找到下一个同级流程任务并在当前方法路由[br]

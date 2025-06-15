@@ -20,7 +20,7 @@ func initialize(_width:int,_height:int,players:Array[Player]):
 	width = _width
 	height = _height
 	var count:int = width * height
-	var half: int = height/2 * width
+	var half  := height/2.0 * width
 	slots=[]
 	slots.resize(count)
 	slots_matrix=[]
@@ -37,7 +37,7 @@ func initialize(_width:int,_height:int,players:Array[Player]):
 				holder = players[0]
 			else:
 				holder = players[1]
-			slot.initialize(i,holder)
+			slot.initialize(holder,i,row,col)
 			rows[col] = slot
 			slots[i] = slot
 			i+=1
@@ -46,4 +46,4 @@ func initialize(_width:int,_height:int,players:Array[Player]):
 
 func hand_to_table(card:Card,slot_index:int):
 	cards.append(card)
-	slots[slot_index].hand_to_slot(card)
+	slots[slot_index].add_from_hand(card)

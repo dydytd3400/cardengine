@@ -6,7 +6,7 @@ func initialize(slots:Array[Slot],width:int):
 	NodeUtil.clear_children($Grid)
 	$Grid.columns = width
 	for slot in slots:
-		$Grid.add_child(slot)
+		$Grid.add_child(slot.view)
 
 
 func add_card(card:CardNode,slot:SlotNode):
