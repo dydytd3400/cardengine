@@ -41,6 +41,8 @@ var cards: Array[CardData]:
 	get(): return data.cards
 	set(value):
 		view.cards = value
+var slots:Array[Slot]:
+	get(): return table.slot_of_player[player_id]
 
 ## 当前牌库
 var deck: Array[Card] = []
@@ -70,7 +72,7 @@ func play_card():
 	for i in range(hand.size() - 1, -1, -1):
 		var card = hand[i]
 		if card.cost <= gold: # 费用足够
-			for slot in table.slots:
+			for slot in slots:
 				if slot.add_able: # 有空余卡槽
 					gold -= card.cost # 扣除费用
 					plays.append(card)# 添加进牌桌数组

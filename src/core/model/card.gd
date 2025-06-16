@@ -90,6 +90,16 @@ var exclusive:bool:
 	set(val):
 		if card_type == DataEnums.CardType.TERRAIN:
 			exclusive = val
+## 当前卡牌是否可被选为目标 只要卡牌类型不是技能时，该值都可变 且该值的初始值由计算而来
+var target_able:bool:
+	get():
+		if card_type != DataEnums.CardType.SPELL:
+			return target_able
+		return true
+	set(val):
+		if card_type != DataEnums.CardType.SPELL:
+			target_able = val
+
 
 ## 能力集
 var abilitys: Array[Ability] = []
@@ -152,6 +162,8 @@ func bind_data():
 		mobility_max = data.mobility
 		move_area = data.move_area
 		move_type = data.move_type
+		target_able = true
 	if card_type == DataEnums.CardType.TERRAIN:
 		health_max = data.health
 		exclusive = data.exclusive
+		target_able = true

@@ -21,9 +21,14 @@ func initialize(_width:int,_height:int,players:Array[Player]):
 	height = _height
 	var count:int = width * height
 	var half  := height/2.0 * width
-	slots=[]
+	slots = []
+	slot_of_player = {}
+	var player1_slots:Array[Slot] = []
+	var player2_slots:Array[Slot] = []
+	slot_of_player[players[0].player_id] = player1_slots
+	slot_of_player[players[1].player_id] = player2_slots
 	slots.resize(count)
-	slots_matrix=[]
+	slots_matrix = []
 	slots_matrix.resize(height)
 	var i: int = 0
 	for row in range(height):
@@ -32,12 +37,13 @@ func initialize(_width:int,_height:int,players:Array[Player]):
 		rows.resize(width)
 		for col in range(width):
 			var slot:Slot = slot_res.new()
-			var holder
+			var holder:Player
 			if i<half:
 				holder = players[0]
 			else:
 				holder = players[1]
 			slot.initialize(holder,i,row,col)
+			slot_of_player[holder.player_id].append(slot)
 			rows[col] = slot
 			slots[i] = slot
 			i+=1
