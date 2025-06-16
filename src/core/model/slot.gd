@@ -23,8 +23,11 @@ var position:Vector2i = Vector2i.ZERO
 ## 占据该卡槽的卡牌 可为复数
 var cards:Array[Card] = []
 ## 当前卡槽是否可以添加卡牌
-var add_able:bool:
-	get():return cards.is_empty() || cards.filter(func (card:Card):return card.exclusive).is_empty() # 卡槽为空 或者没有独占状态的卡
+var add_able:bool = true:
+	get():return add_able && (cards.is_empty() || cards.filter(func (card:Card):return card.exclusive).is_empty()) # 卡槽为空 或者没有独占状态的卡
+var pass_able:bool = true:
+	get():return add_able && pass_able
+
 ## 初始化卡槽
 func initialize(_holder: Player,_index:int,y:int,x:int ):
 	view = view_res.instantiate()
