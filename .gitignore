@@ -3,4 +3,5 @@
 .vscode/
 .idea/
 *.log
+*.tmp
 .addons/godot-git-plugin/
