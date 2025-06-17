@@ -123,26 +123,30 @@ var creator: Player
 ## 卡牌所在的卡槽
 var slot: Slot
 
+var states:CardState
+
 func initialize(_data: CardData, _creator: Player, _holder: Player = _creator):
 	view = view_res.instantiate()
 	data = _data
 	holder = _holder
 	creator = _creator
-	#process.enter({"card":self})
+	states = CardState.new(self)
+	states.start(CardState.DECK)
 
 func to_move():
 	lg.info("卡牌: %s 开始移动" % card_name, {}, TAG)
 	if !activated:
 		return
 	if card_type == DataEnums.CardType.CHARACTER:
-		emit_signal(TriggerSignal.CARD_MOVE_BEFORE)
+		if states.take(CardState.MOVE).enter({ "card" = self}):
+			await states.take(CardState.MOVE).state_exited
 
 func to_attack():
 	lg.info("卡牌: %s 开始攻击" % card_name, {}, TAG)
 	if !activated:
 		return
-	if attack_type && attack > 0 && !attack_area.is_empty():
-		move_type.execute()
+	#if attack_type && attack > 0 && !attack_area.is_empty():
+		#move_type.execute()
 
 func to_activate():
 	lg.info("卡牌: %s 开始激活" % card_name, {}, TAG)

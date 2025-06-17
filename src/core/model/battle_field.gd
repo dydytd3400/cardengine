@@ -78,6 +78,10 @@ func create_card(_name: int):
 	card.attack = randi_range(0, 10)
 	card.cost = randi_range(0, 10)
 	card.health = randi_range(0, 10)
+	card.card_type = DataEnums.CardType.CHARACTER
+	card.mobility = 1
+	card.move_type = AbilityMove.new()
+	card.move_area = [Vector2i(0,1),Vector2i(0,-1),Vector2i(-1,0),Vector2i(1,0)]
 	return card
 
 func _ready() -> void:

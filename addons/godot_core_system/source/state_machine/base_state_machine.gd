@@ -15,6 +15,9 @@ var values: Dictionary = {}
 ## 上一个状态
 var previous_state: StringName = &""
 
+func take(state_id:StringName)->BaseState:
+	return states[state_id]
+
 func enter(msg: Dictionary = {}) -> bool:
 	if not super(msg):
 		return false
