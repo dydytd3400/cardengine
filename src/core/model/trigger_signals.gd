@@ -1,4 +1,0 @@
-class_name TriggerSignal
-
-const CARD_MOVE_BEFORE = "CARD_MOVE_BEFORE"
-const CARD_MOVE_AFTTER = "CARD_MOVE_AFTTER"

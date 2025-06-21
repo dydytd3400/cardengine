@@ -27,6 +27,8 @@ var add_able:bool = true:
 	get():return add_able && (cards.is_empty() || cards.filter(func (card:Card):return card.exclusive).is_empty()) # 卡槽为空 或者没有独占状态的卡
 var pass_able:bool = true:
 	get():return add_able && pass_able
+var target_able:bool = true:
+	get():return !cards.is_empty() && cards[-1].target_able
 
 ## 初始化卡槽
 func initialize(_holder: Player,_index:int,y:int,x:int ):

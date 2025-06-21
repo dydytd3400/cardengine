@@ -112,7 +112,7 @@ func find_reachable_positions(
 			# 检查邻居是否有效且未访问过
 			if is_valid_position(neighbor, map) and not visited.get(neighbor, false):
 				# 检查邻居是否可通行
-				if _passable.call(map[neighbor.y][neighbor.x]):
+				if _passable.call(neighbor):
 					visited[neighbor] = true
 					steps[neighbor] = new_steps
 					queue.append({"pos": neighbor, "steps": new_steps})

@@ -8,6 +8,10 @@
 class_name ProcessTask
 extends BaseState
 
+# 信号
+## 状态改变
+signal process_changed(process_id: StringName,msg:Dictionary)
+
 ## 当前[ProcessTask]的执行模块
 var executor: ProcessTaskExecutor
 ## 当前[ProcessTask]的路由模块
@@ -17,6 +21,7 @@ var router: ProcessTaskRouter
 var parent: Variant:
 	set(value): parent = value
 	get: return parent if parent else state_machine
+
 
 ## 构造方法，需要传入[ProcessTaskExecutor]和[ProcessTaskRouter]，也就预示着[ProcessTask]只能直接创建
 func _init(_executor: ProcessTaskExecutor, _router: ProcessTaskRouter):
@@ -28,6 +33,16 @@ func _init(_executor: ProcessTaskExecutor, _router: ProcessTaskRouter):
 func _initial_executor():
 	executor.finished.connect(_executor_finished) # TODO 为什么下面这种方式有问题
 	#executor.finished.connect(router.next)
+
+func enter(msg: Dictionary = {}) -> bool:
+	var entered = super.enter(msg)
+	if entered:
+		if parent:
+			if parent is ProcessTask:
+				parent.process_changed.emit(state_id,msg)
+		else:
+			process_changed.emit(state_id,msg)
+	return entered
 
 ## 进入当前任务状态
 ## 调度[member executor]执行具体任务，并通过[param msg]附带上下文参数，该参数如果没有被修改，通常会被一直传递直到流程结束

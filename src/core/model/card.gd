@@ -131,15 +131,14 @@ func initialize(_data: CardData, _creator: Player, _holder: Player = _creator):
 	holder = _holder
 	creator = _creator
 	states = CardState.new(self)
-	states.start(CardState.DECK)
 
 func to_move():
 	lg.info("卡牌: %s 开始移动" % card_name, {}, TAG)
 	if !activated:
 		return
 	if card_type == DataEnums.CardType.CHARACTER:
-		if states.take(CardState.MOVE).enter({ "card" = self}):
-			await states.take(CardState.MOVE).state_exited
+		#states.take(CardState.MOVE).enter({ "card" = self})
+		states.switch(CardState.MOVE,{ "card" = self})
 
 func to_attack():
 	lg.info("卡牌: %s 开始攻击" % card_name, {}, TAG)

@@ -81,14 +81,18 @@ func play_card():
 					hand.remove_at(i)# 从手牌移除
 					break
 
-
-## 初始化牌库
-func init_deck():
+## 初始化卡牌
+func initialize():
 	for card in cards:
 		var card_data: CardData = card.duplicate(true)
 		var new_card: Card = card_res.new()
 		new_card.initialize(card_data, self)
 		deck.append(new_card)
+
+## 初始化牌库
+func init_deck():
+	for card in deck:
+		card.states.start(CardState.DECK)
 
 func bind_data():
 	health_max = data.health

@@ -4,7 +4,7 @@ extends BaseState
 
 # 信号
 ## 状态改变
-signal state_changed(from_state: BaseState, to_state: BaseState)
+signal state_changed(from_state: BaseState, to_state: BaseState,msg:Dictionary)
 
 ## 当前状态
 var current_state: BaseState = null
@@ -146,7 +146,7 @@ func switch(state_id: StringName, msg: Dictionary = {}) -> void:
 		return
 
 	current_state.enter(msg)
-	state_changed.emit(from_state, current_state)
+	state_changed.emit(from_state, current_state,msg)
 
 
 ## 获取变量
