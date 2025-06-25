@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="Trigger" load_steps=2 format=3 uid="uid://d1r6efc4uh0xi"]
+
+[ext_resource type="Script" uid="uid://5cchq3iok3v6" path="res://src/datas/parts/triggers/trigger.gd" id="1_kmnwn"]
+
+[resource]
+script = ExtResource("1_kmnwn")
+trigger_name = "CardStateMove"
+metadata/_custom_type_script = "uid://5cchq3iok3v6"

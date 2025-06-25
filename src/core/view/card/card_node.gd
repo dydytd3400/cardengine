@@ -48,7 +48,7 @@ var attack_max: int = 0:
 ## 可攻击区域 以自身为中心的相对坐标
 var attack_area: Array[Vector2] = []
 ## 攻击方式
-var attack_type: AbilityAttack
+var attack_type: Ability
 
 ## 移动距离 单次移动可移动的最大格数
 var mobility: int = 0
@@ -57,7 +57,7 @@ var mobility_max: int = 0
 ## 可移动区域 以自身为中心的相对坐标
 var move_area: Array[Vector2] = []
 ## 移动方式
-var move_type: AbilityMove
+var move_type: Ability
 
 ## 能力集
 var abilitys: Array[Ability] = []

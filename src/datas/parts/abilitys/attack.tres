@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="Ability" load_steps=7 format=3 uid="uid://blhi5ttk7tnle"]
+
+[ext_resource type="Script" uid="uid://d1c7ywophuqis" path="res://src/datas/parts/effects/effect_attack.gd" id="1_jno7p"]
+[ext_resource type="Script" uid="uid://bp6hidqak0cd7" path="res://src/datas/parts/filters/target_filter_self.gd" id="2_ida5t"]
+[ext_resource type="Script" uid="uid://b7jd7b7l1vu8v" path="res://src/datas/parts/abilitys/ability.gd" id="3_clcw7"]
+[ext_resource type="Resource" uid="uid://ev4mhubign14" path="res://src/datas/parts/triggers/attack.tres" id="3_vrm2o"]
+
+[sub_resource type="Resource" id="Resource_ida5t"]
+script = ExtResource("1_jno7p")
+metadata/_custom_type_script = "uid://d1c7ywophuqis"
+
+[sub_resource type="Resource" id="Resource_3xc6e"]
+script = ExtResource("2_ida5t")
+metadata/_custom_type_script = "uid://bp6hidqak0cd7"
+
+[resource]
+script = ExtResource("3_clcw7")
+trigger = ExtResource("3_vrm2o")
+filter = SubResource("Resource_3xc6e")
+effect = SubResource("Resource_ida5t")
+enable = true
+metadata/_custom_type_script = "uid://b7jd7b7l1vu8v"

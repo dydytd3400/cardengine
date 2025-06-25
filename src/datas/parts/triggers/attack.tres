@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="Trigger" load_steps=2 format=3 uid="uid://ev4mhubign14"]
+
+[ext_resource type="Script" uid="uid://5cchq3iok3v6" path="res://src/datas/parts/triggers/trigger.gd" id="1_ncdqi"]
+
+[resource]
+script = ExtResource("1_ncdqi")
+trigger_name = "CardStateAttack"
+metadata/_custom_type_script = "uid://5cchq3iok3v6"

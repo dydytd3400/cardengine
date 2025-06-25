@@ -1,9 +1,10 @@
-extends Node
-class_name Card
+@tool
+class_name Card extends Node
 #var TAG = "BattleProcess"
 var TAG = "Card"
 var view: CardNode
 var view_res: PackedScene = load("res://src/core/view/card/card_node.tscn")
+@export
 var data: CardData:
 	set(value):
 		data = value
@@ -60,7 +61,7 @@ var attack_max: int:
 ## 可攻击区域 以自身为中心的相对坐标
 var attack_area: Array[Vector2i] = []
 ## 攻击方式
-var attack_type: AbilityAttack
+var attack_type: Ability
 
 #========================移动相关========================
 ## 移动距离 单次移动可移动的最大格数
@@ -77,7 +78,7 @@ var mobility_max: int = 0:
 ## 可移动区域 以自身为中心的相对坐标
 var move_area: Array[Vector2i] = []
 ## 移动方式
-var move_type: AbilityMove
+var move_type: Ability
 ## 卡牌类型
 var card_type:DataEnums.CardType:
 	get():return data.card_type
@@ -132,41 +133,53 @@ func initialize(_data: CardData, _creator: Player, _holder: Player = _creator):
 	creator = _creator
 	states = CardState.new(self)
 
+func to_table():
+	lg.info("卡牌: %s 进入牌桌" % card_name, {}, TAG)
+	states.switch(CardState.TABLE,{ "card" = self})
+
+func to_activate():
+	lg.info("卡牌: %s 开始激活" % card_name, {}, TAG)
+	if activated:
+		return
+	if states.current_state && states.current_state.state_id == CardState.TABLE:
+		activated = true
+		states.switch(CardState.ACTIVATE,{ "card" = self})
+
 func to_move():
 	lg.info("卡牌: %s 开始移动" % card_name, {}, TAG)
 	if !activated:
 		return
 	if card_type == DataEnums.CardType.CHARACTER:
-		#states.take(CardState.MOVE).enter({ "card" = self})
 		states.switch(CardState.MOVE,{ "card" = self})
 
 func to_attack():
 	lg.info("卡牌: %s 开始攻击" % card_name, {}, TAG)
 	if !activated:
 		return
-	#if attack_type && attack > 0 && !attack_area.is_empty():
-		#move_type.execute()
-
-func to_activate():
-	lg.info("卡牌: %s 开始激活" % card_name, {}, TAG)
-	if activated:
-		return
-	activated = true
 
 func bind_data():
 	card_name = data.card_name
 	cost_max = data.cost
 	text = data.text
+	abilitys = data.abilitys
 	if card_type == DataEnums.CardType.CHARACTER:
 		health_max = data.health
 		attack_type = data.attack_type
 		attack_max = data.attack
-		attack_area = data.attack_area
+		attack_area = data.attack_area.area
 		mobility_max = data.mobility
-		move_area = data.move_area
+		move_area = data.move_area.area
 		move_type = data.move_type
 		target_able = true
 	if card_type == DataEnums.CardType.TERRAIN:
 		health_max = data.health
 		exclusive = data.exclusive
 		target_able = true
+
+	if attack_type:
+		attack_type.initialize(self)
+	if move_type:
+		move_type.initialize(self)
+	if abilitys:
+		for ability in abilitys:
+			ability.initialize(self)

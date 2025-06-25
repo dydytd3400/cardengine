@@ -38,10 +38,10 @@ var exclusive:bool = true
 var attack: int = 0
 ## 可攻击区域 以自身为中心的相对坐标
 @export
-var attack_area: Array[Vector2i] = []
+var attack_area: RangeArea
 ## 攻击方式
 @export
-var attack_type: AbilityAttack
+var attack_type: Ability
 
 #========================移动相关========================
 ## 移动距离 单次移动可移动的最大格数
@@ -50,10 +50,10 @@ var attack_type: AbilityAttack
 var mobility: int = 0
 ## 可移动区域 以自身为中心的相对坐标
 @export
-var move_area: Array[Vector2i] = []
+var move_area: RangeArea
 ## 移动方式
 @export
-var move_type: AbilityMove
+var move_type: Ability
 
 ## 能力集
 @export_group("","")

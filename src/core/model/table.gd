@@ -54,3 +54,4 @@ func initialize(_width:int,_height:int,players:Array[Player]):
 func hand_to_table(card:Card,slot_index:int):
 	cards.append(card)
 	slots[slot_index].add_from_hand(card)
+	card.to_table()
