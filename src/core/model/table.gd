@@ -15,8 +15,10 @@ var width: int             = 0
 var height: int               = 0
 var slots_matrix: Array[Array] = []
 var slot_of_player: Dictionary = {}
+var players:Array[Player] = []
 
-func initialize(_width:int,_height:int,players:Array[Player]):
+func initialize(_width:int,_height:int,_players:Array[Player]):
+	players = _players
 	width = _width
 	height = _height
 	var count:int = width * height

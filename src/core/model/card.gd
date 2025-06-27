@@ -38,6 +38,8 @@ var health: int = 0:
 	set(value):
 		health = value
 		view.health = value
+		if value<=0:
+			to_death()
 ## 初始血量
 var health_max: int:
 	get(): return data.health
@@ -85,6 +87,8 @@ var card_type:DataEnums.CardType:
 ## 独占 仅卡牌类型为地形时，该值才可变
 var exclusive:bool:
 	get():
+		if !alive:
+			return false
 		if card_type == DataEnums.CardType.TERRAIN:
 			return exclusive
 		return true
@@ -94,6 +98,8 @@ var exclusive:bool:
 ## 当前卡牌是否可被选为目标 只要卡牌类型不是技能时，该值都可变 且该值的初始值由计算而来
 var target_able:bool:
 	get():
+		if !alive:
+			return false
 		if card_type != DataEnums.CardType.SPELL:
 			return target_able
 		return true
@@ -111,9 +117,13 @@ var text: String:
 		view.text = val
 
 var activated = false:
+	get():return alive && activated
 	set(val):
 		activated = val
 		view.activated = val
+
+var alive = false:
+	get(): return  CardState.ALIVE_STATE.find(states.current_state.state_id) >= 0
 
 ## 卡牌持有者 仅卡牌处于战场时有值 当[member holder]为空时，则代表该卡牌为中立单位
 #TODO 后期是否需要拓展出中立单位对象 否则需要多出一个字段来标记是否处于战场
@@ -136,6 +146,7 @@ func initialize(_data: CardData, _creator: Player, _holder: Player = _creator):
 func to_table():
 	lg.info("卡牌: %s 进入牌桌" % card_name, {}, TAG)
 	states.switch(CardState.TABLE,{ "card" = self})
+	await CoreSystem.get_tree().create_timer(0.5)
 
 func to_activate():
 	lg.info("卡牌: %s 开始激活" % card_name, {}, TAG)
@@ -149,27 +160,35 @@ func to_move():
 	lg.info("卡牌: %s 开始移动" % card_name, {}, TAG)
 	if !activated:
 		return
-	if card_type == DataEnums.CardType.CHARACTER:
+	if move_type && move_area && !move_area.is_empty():
 		states.switch(CardState.MOVE,{ "card" = self})
+		await move_type.ability_finish
 
 func to_attack():
 	lg.info("卡牌: %s 开始攻击" % card_name, {}, TAG)
 	if !activated:
 		return
+	if attack_type && attack_area && !attack_area.is_empty():
+		states.switch(CardState.MOVE,{ "card" = self})
+		await move_type.ability_finish
+
+func to_death():
+	lg.info("卡牌: %s 被干死了！" % card_name, {}, TAG,lg.LogLevel.WARNING)
+	states.switch(CardState.USED,{ "card" = self})
 
 func bind_data():
 	card_name = data.card_name
 	cost_max = data.cost
 	text = data.text
 	abilitys = data.abilitys
-	if card_type == DataEnums.CardType.CHARACTER:
+	if card_type == DataEnums.CardType.ORGANISM:
 		health_max = data.health
-		attack_type = data.attack_type
 		attack_max = data.attack
+		attack_type = data.attack_type
 		attack_area = data.attack_area.area
 		mobility_max = data.mobility
-		move_area = data.move_area.area
 		move_type = data.move_type
+		move_area = data.move_area.area
 		target_able = true
 	if card_type == DataEnums.CardType.TERRAIN:
 		health_max = data.health
@@ -183,3 +202,5 @@ func bind_data():
 	if abilitys:
 		for ability in abilitys:
 			ability.initialize(self)
+	if data.frame_style:
+		view.frame_style = data.frame_style

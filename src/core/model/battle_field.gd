@@ -49,11 +49,11 @@ func pick_first() -> Player:
 
 func checkmate() -> bool:
 	lg.info("第%d个回合结束" % turn_count, {}, "BattleProcess")
-	if turn_count < 10:
+	if turn_count < 50:
 		switch_next()
 		return false
 	else:
-		lg.info("全部流程结束啦", {}, "BattleProcess")
+		lg.info("全部流程结束啦", {}, "BattleProcess",lg.LogLevel.ERROR)
 		print("当前栈深=================================>  " + str(get_stack().size()))
 		return true
 
@@ -72,35 +72,40 @@ func on_battle_process_changed(process_id:StringName,msg:Dictionary):
 
 # =====================================================
 
-func create_player(_name: String) -> PlayerData:
+func create_player(_name: String,is_self:bool) -> PlayerData:
 	var player: PlayerData = PlayerData.new()
 	player.player_id = UUID.generate()
 	player.player_name = _name
 	player.health = 100
 	for i in range(30):
-		var card = create_card(i)
+		var card = create_card(i,is_self)
 		card.text = _name
 		player.cards.append(card)
 	return player
 
-func create_card(_name: int):
+@export
+var move_ability:Ability
+var move_area:Ability
+
+func create_card(_name: int,is_self:bool):
 	var card: CardData = CardData.new()
 	card.card_id = UUID.generate()
 	card.card_name = "卡牌_" + str(_name)
 	card.attack = randi_range(0, 10)
 	card.cost = randi_range(0, 10)
 	card.health = randi_range(0, 10)
-	card.card_type = DataEnums.CardType.CHARACTER
+	card.card_type = DataEnums.CardType.ORGANISM
 	card.mobility = 1
-	card.move_type = AbilityMove.new()
-	card.move_area = [Vector2i(0, 1), Vector2i(0, -1), Vector2i(-1, 0), Vector2i(1, 0)]
-	card.attack_area = [Vector2i(0, 1), Vector2i(0, -1), Vector2i(-1, 0), Vector2i(1, 0)]
+	card.move_type = load("res://src/core/datas/parts/abilitys/move_walk.tres")
+	card.move_area = load("res://src/core/datas/parts/areas/four_direction.tres")
+	card.attack_area = load("res://src/core/datas/parts/areas/four_direction.tres")
+	card.frame_style = "frame_silver" if is_self else "frame_gold"
 	return card
 
 func _ready() -> void:
 	# 虚构基础数据
-	players[0].data = create_player("张三")
-	players[1].data = create_player("李四")
+	players[0].data = create_player("张三",true)
+	players[1].data = create_player("李四",false)
 	var process: ProcessTask = ProcessTemplate.new().generate(ProcessConfig.battle_process_config)
 	process.process_changed.connect(on_battle_process_changed)
 	process.enter({"battle_field" = self})

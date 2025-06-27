@@ -12,6 +12,8 @@ var attack_node:AttributeNode
 var health_node:AttributeNode
 @export
 var card_text_node:Label
+@export
+var frame_node:TextureRect
 
 ## 卡牌名称
 var card_name: String:
@@ -66,6 +68,14 @@ var text: String:
 	set(val):
 		card_text_node.text=val
 
+## 卡牌边框
+var frame_style:String:
+	set(val):
+		var frame_res = load("res://assets/textures/"+val+".png")
+		var a :CompressedTexture2D
+		if frame_res:
+			frame_node.texture = frame_res
+
 var activated = false
 
 var showing = true:
@@ -73,3 +83,6 @@ var showing = true:
 		showing = val
 		$CardBack.visible = !showing
 		$Attributes.visible = showing
+
+func death():
+	await TweenUtil.size_to(self,0.5,Vector2.ZERO)

@@ -80,41 +80,41 @@ func enable_file_logging(enable: bool) -> void:
 ## 记录调试日志
 ## [param message] 消息
 ## [param context] 上下文
-func debug(message: String, context: Dictionary = {},tag:String = "") -> void:
-	_log(LogLevel.DEBUG, message, context,tag)
+func debug(message: String, context: Dictionary = {},tag:String = "",msg_color_level:LogLevel = LogLevel.DEBUG) -> void:
+	_log(LogLevel.DEBUG, message, context,tag,msg_color_level)
 
 ## 记录信息日志
 ## [param message] 消息
 ## [param context] 上下文
-func info(message: String, context: Dictionary = {},tag:String = "") -> void:
-	_log(LogLevel.INFO, message, context,tag)
+func info(message: String, context: Dictionary = {},tag:String = "",msg_color_level:LogLevel = LogLevel.INFO) -> void:
+	_log(LogLevel.INFO, message, context,tag,msg_color_level)
 
 ## 记录警告日志
 ## [param message] 消息
 ## [param context] 上下文
-func warning(message: String, context: Dictionary = {},tag:String = "") -> void:
+func warning(message: String, context: Dictionary = {},tag:String = "",msg_color_level:LogLevel = LogLevel.WARNING) -> void:
 	if ignore_level.has(LogLevel.WARNING):
 		return
-	_log(LogLevel.WARNING, message, context,tag)
+	_log(LogLevel.WARNING, message, context,tag,msg_color_level)
 	push_warning(message)
 
 ## 记录错误日志
 ## [param message] 消息
 ## [param context] 上下文
-func error(message: String, context: Dictionary = {},tag:String = "") -> void:
+func error(message: String, context: Dictionary = {},tag:String = "",msg_color_level:LogLevel = LogLevel.ERROR) -> void:
 	if ignore_level.has(LogLevel.ERROR):
 		return
-	_log(LogLevel.ERROR, message, context,tag)
+	_log(LogLevel.ERROR, message, context,tag,msg_color_level)
 	print_stack()
 	push_error(message)
 
 ## 记录致命错误日志
 ## [param message] 消息
 ## [param context] 上下文
-func fatal(message: String, context: Dictionary = {},tag:String = "") -> void:
+func fatal(message: String, context: Dictionary = {},tag:String = "",msg_color_level:LogLevel = LogLevel.FATAL) -> void:
 	if ignore_level.has(LogLevel.FATAL):
 		return
-	_log(LogLevel.FATAL, message, context,tag)
+	_log(LogLevel.FATAL, message, context,tag,msg_color_level)
 	print_stack()
 	assert(!SETTING_SCRIPT.IS_DEBUG,message)
 	push_error(message)
@@ -124,14 +124,16 @@ func fatal(message: String, context: Dictionary = {},tag:String = "") -> void:
 ## [param level] 日志级别
 ## [param message] 消息
 ## [param context] 上下文
-func _log(level: LogLevel, message: String, context: Dictionary,tag:String = "") -> void:
+func _log(level: LogLevel, message: String, context: Dictionary,tag:String = "",msg_color_level:LogLevel = level) -> void:
 	if ignore_level.has(level):
 		return
 	if level < _current_level:
 		return
 	if tag && !tag.is_empty() && !tag_filter.is_empty() && !tag_filter.has(tag):
 		return
-
+	if msg_color_level in _log_colors && msg_color_level != level:
+		var msg_color = _log_colors[msg_color_level]
+		message = "[color=%s]%s[/color]" % [msg_color.to_html(), message]
 	var timestamp = Time.get_datetime_string_from_system()
 	var level_name = LogLevel.keys()[level]
 	var formatted_message = "[%s] [%s] %s" % [timestamp, level_name, message]

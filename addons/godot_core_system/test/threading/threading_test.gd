@@ -160,7 +160,7 @@ func _run_async_test(thread_tool, test_name: String) -> void:
 			# 返回包含 ID 的结果字典
 			return { "id": captured_item.id, "data": result_data }
 		)
-	
+
 	var items_size = items.size()
 	# 3. 等待所有任务完成 (基于回调更新的 completed_count)
 	while completed_count < items_size:
@@ -201,7 +201,7 @@ func _on_async_task_completed(result_dict, task_id, results_array: Array) -> voi
 			break # 找到后退出循环
 
 	results_array.append(item_data) # 将实际数据添加到结果数组
-	
+
 	completed_count += 1
 
 ## 示例：触发单线程测试

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TriggererCondition" load_steps=2 format=3 uid="uid://j7fs77v01tc8"]
+
+[ext_resource type="Script" uid="uid://baglygpabfyap" path="res://src/core/model/parts/conditions/triggerer_condition.gd" id="1_4j87k"]
+
+[resource]
+script = ExtResource("1_4j87k")
+mode = "LISTENER"
+type = "CARD"
+metadata/_custom_type_script = "uid://3nxpfmucrjwx"

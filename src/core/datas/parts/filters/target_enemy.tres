@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="TargetFilterEnemy" load_steps=2 format=3 uid="uid://c7oodbot5afmd"]
+
+[ext_resource type="Script" uid="uid://s6l71ii1mxfa" path="res://src/core/model/parts/filters/target_filter_enemy.gd" id="1_wtjsb"]
+
+[resource]
+script = ExtResource("1_wtjsb")
+metadata/_custom_type_script = "uid://s6l71ii1mxfa"

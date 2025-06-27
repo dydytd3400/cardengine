@@ -44,6 +44,9 @@ var cards: Array[CardData]:
 var slots:Array[Slot]:
 	get(): return table.slot_of_player[player_id]
 
+var enemy:Player:
+	get(): return table.players[0] if player_id == table.players[1].player_id else table.players[1]
+
 ## 当前牌库
 var deck: Array[Card] = []
 ## 当前手牌
@@ -58,6 +61,8 @@ var trashed: Array[Card] = []
 var is_first: bool = false
 @export
 var card_res: Resource
+
+var abilitys:Array[Ability] = [load("res://src/core/datas/parts/abilitys/bury.tres")]
 
 ## 利息增长
 func interest_payout(_turn_count: int) -> int:
@@ -88,6 +93,8 @@ func initialize():
 		var new_card: Card = card_res.new()
 		new_card.initialize(card_data, self)
 		deck.append(new_card)
+	for ability in abilitys:
+		ability.initialize(self)
 
 ## 初始化牌库
 func init_deck():

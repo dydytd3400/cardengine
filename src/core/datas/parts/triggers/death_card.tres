@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="Trigger" load_steps=2 format=3 uid="uid://d3fcdqteqc03b"]
+
+[ext_resource type="Script" uid="uid://5cchq3iok3v6" path="res://src/core/model/parts/triggers/trigger.gd" id="1_akx5a"]
+
+[resource]
+script = ExtResource("1_akx5a")
+trigger_name = "CardStateUsed"
+metadata/_custom_type_script = "uid://5cchq3iok3v6"

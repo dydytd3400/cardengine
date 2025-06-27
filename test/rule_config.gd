@@ -90,7 +90,7 @@ const battle_process_config = {
 					 				"executor" = {
 													"resource" = Process.EXECITOR_EXPRESSION,
 													"expressions" = [{
-														"expression" = "@context{card}.to_move()",
+														"expression" = "await @context{card}.to_move()",
 														"finally" = "complete"
 													}]
 												}
@@ -109,7 +109,13 @@ const battle_process_config = {
 					 },
 					{
 						"key" = "出牌",
-						"executor" = root % "player/play_card"
+						"executor" = {
+										"resource" = Process.EXECITOR_EXPRESSION,
+										"expressions" = [{
+											"expression" = "@context{battle_field}.current_player.play_card()",
+											"finally" = "complete"
+										}]
+									}
 					}
 				]
 			}, {
@@ -117,9 +123,6 @@ const battle_process_config = {
 				"executor" = {
 					"resource" = Process.EXECITOR_EXPRESSION,
 					"expressions" = [{
-						#"expression" = "@context{battle_field}.checkmate()",
-						#"finally" = "complete",
-						#"finally_append" = "gameover"
 						"expression" = "1 == 1",
 						"finally" = "complete",
 					}]
@@ -127,7 +130,6 @@ const battle_process_config = {
 				"router" = {
 					"resource" = Process.ROUTER_MATCH,
 					"matchers" = [{
-						#"matcher" = "@context{gameover}",
 						"matcher" = "@context{battle_field}.checkmate()",
 						"回合流程" = false
 					} ]

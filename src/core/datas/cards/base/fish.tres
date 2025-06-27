@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://dpbkpupe3p0d6"]
+
+[ext_resource type="Script" uid="uid://b7jd7b7l1vu8v" path="res://src/core/model/parts/abilitys/ability.gd" id="1_5cmu8"]
+[ext_resource type="Resource" uid="uid://c4rw8w3sn68m1" path="res://src/core/datas/parts/areas/eight_direction.tres" id="2_1rw06"]
+[ext_resource type="Resource" uid="uid://blhi5ttk7tnle" path="res://src/core/datas/parts/abilitys/attack.tres" id="3_wuqkj"]
+[ext_resource type="Script" uid="uid://cp1rxu1phxaax" path="res://src/core/datas/card_data.gd" id="5_o350x"]
+
+[resource]
+script = ExtResource("5_o350x")
+card_name = "鱼"
+card_id = &""
+cost = 1
+card_type = 0
+health = 1
+exclusive = true
+attack = 1
+attack_area = ExtResource("2_1rw06")
+attack_type = ExtResource("3_wuqkj")
+mobility = 0
+abilitys = Array[ExtResource("1_5cmu8")]([])
+text = ""
+metadata/_custom_type_script = "uid://cp1rxu1phxaax"

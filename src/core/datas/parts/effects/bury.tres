@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="EffectBury" load_steps=2 format=3 uid="uid://dis356j7k676a"]
+
+[ext_resource type="Script" uid="uid://cn5xbxrj0kllw" path="res://src/core/model/parts/effects/effect_bury.gd" id="1_0oopk"]
+
+[resource]
+script = ExtResource("1_0oopk")
+metadata/_custom_type_script = "uid://cn5xbxrj0kllw"

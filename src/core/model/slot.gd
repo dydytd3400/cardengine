@@ -55,13 +55,13 @@ func add_from_slot(card:Card):
 	if !card.slot:
 		_error("Card not in slot!",card)
 		return
-	card.slot.remove_card(card)
+	card.slot.remove_card(card,false)
 	card.slot = self
 	cards.append(card)
-	view.add_from_slot(card.view)
+	await view.add_from_slot(card.view)
 
 ## 移除卡牌
-func remove_card(card:Card):
+func remove_card(card:Card,remove_from_view:bool = true):
 	if !card:
 		_error("Card is empty!")
 		return
@@ -70,7 +70,8 @@ func remove_card(card:Card):
 		_error("Card not exist!",card)
 		return
 	cards.remove_at(find)
-	view.remove_card(card.view)
+	if remove_from_view:
+		view.remove_card(card.view)
 
 func _error(msg:String,target:Card = null):
 	var target_str = ""

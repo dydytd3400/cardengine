@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TriggererConditionOrganism" load_steps=2 format=3 uid="uid://dh3ao60idfv8v"]
+
+[ext_resource type="Script" uid="uid://cwv3qo2313lka" path="res://src/core/model/parts/conditions/triggerer_condition_organism.gd" id="1_8vgxq"]
+
+[resource]
+script = ExtResource("1_8vgxq")
+mode = "LISTENER"
+type = "NORMAL"
+metadata/_custom_type_script = "uid://cwv3qo2313lka"

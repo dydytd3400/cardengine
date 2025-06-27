@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="Ability" load_steps=11 format=3 uid="uid://ceear5rrpmeq7"]
+
+[ext_resource type="Resource" uid="uid://dis356j7k676a" path="res://src/core/datas/parts/effects/bury.tres" id="1_y8dfg"]
+[ext_resource type="Script" uid="uid://b7jd7b7l1vu8v" path="res://src/core/model/parts/abilitys/ability.gd" id="2_d0jt0"]
+[ext_resource type="Resource" uid="uid://cdjpaw0on40bo" path="res://src/core/datas/parts/filters/target_self.tres" id="3_2kvhb"]
+[ext_resource type="Resource" uid="uid://i52towkgk7hu" path="res://src/core/datas/parts/triggers/used.tres" id="4_hy2sh"]
+[ext_resource type="Script" uid="uid://baglygpabfyap" path="res://src/core/model/parts/conditions/triggerer_condition.gd" id="5_mh1ka"]
+[ext_resource type="Resource" uid="uid://dqid2238xgrfo" path="res://src/core/datas/parts/conditions/card_triggerer.tres" id="6_mo3c1"]
+[ext_resource type="Resource" uid="uid://duwis84c5nk37" path="res://src/core/datas/parts/conditions/player_listener.tres" id="7_u73f1"]
+[ext_resource type="Resource" uid="uid://b0c7c2yehwwqy" path="res://src/core/datas/parts/conditions/player_listener_own_triggerer.tres" id="8_d0jt0"]
+[ext_resource type="Script" uid="uid://bmpbs78iqn7gn" path="res://src/core/model/parts/conditions/triggerer_conditions_and.gd" id="8_pmf01"]
+
+[sub_resource type="Resource" id="Resource_mxgfv"]
+script = ExtResource("8_pmf01")
+conditions = Array[ExtResource("5_mh1ka")]([ExtResource("6_mo3c1"), ExtResource("7_u73f1"), ExtResource("8_d0jt0")])
+mode = "NORMAL"
+type = "NORMAL"
+metadata/_custom_type_script = "uid://bmpbs78iqn7gn"
+
+[resource]
+script = ExtResource("2_d0jt0")
+trigger = ExtResource("4_hy2sh")
+target_filter = ExtResource("3_2kvhb")
+triggerer_condition = SubResource("Resource_mxgfv")
+effect = ExtResource("1_y8dfg")
+enable = true
+metadata/_custom_type_script = "uid://b7jd7b7l1vu8v"

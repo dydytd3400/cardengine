@@ -10,6 +10,8 @@ const ATTACK = "CardStateAttack"
 const USED = "CardStateUsed"
 const TRASHED = "CardStateTrashed"
 
+const ALIVE_STATE = [TABLE,ACTIVATE,MOVE,ATTACK]
+
 var card:Card
 
 func _init(_card:Card) -> void:

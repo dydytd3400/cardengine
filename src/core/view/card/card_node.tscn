@@ -1,7 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://dbmu4c085mniq"]
 
 [ext_resource type="Script" uid="uid://b0yvh6181tyt1" path="res://src/core/view/card/card_node.gd" id="1_tt8ny"]
-[ext_resource type="Texture2D" uid="uid://cy2uenr3inbdl" path="res://assets/textures/frame_gold.png" id="2_jmrts"]
 [ext_resource type="Texture2D" uid="uid://b0ld8qmbplu5u" path="res://assets/textures/blank_red.png" id="2_psp7l"]
 [ext_resource type="Texture2D" uid="uid://b5mxuq4egb38a" path="res://assets/textures/_00002_.png" id="3_tcbdu"]
 [ext_resource type="Script" uid="uid://cn1j5jv844iio" path="res://src/widgets/radio_split_container_v.gd" id="4_cu85u"]
@@ -9,10 +8,11 @@
 [ext_resource type="FontFile" uid="uid://brra2lqyjienr" path="res://assets/fonts/font1.ttf" id="5_dkkip"]
 [ext_resource type="Script" uid="uid://chwbfeblaeq2v" path="res://src/widgets/percent_container.gd" id="6_n7rth"]
 [ext_resource type="Texture2D" uid="uid://doo17m6mcbvfx" path="res://assets/icons/health.svg" id="6_s1mum"]
+[ext_resource type="Texture2D" uid="uid://dxe48qm6uvmfk" path="res://assets/textures/frame_silver.png" id="7_n7rth"]
 [ext_resource type="Texture2D" uid="uid://diueksfidpx5g" path="res://assets/icons/attack.svg" id="7_s1mum"]
 [ext_resource type="Texture2D" uid="uid://d2evsx7j4lt1t" path="res://assets/icons/cost.svg" id="9_dkkip"]
 
-[node name="CardNode" type="PanelContainer" node_paths=PackedStringArray("card_name_node", "cost_node", "attack_node", "health_node", "card_text_node")]
+[node name="CardNode" type="PanelContainer" node_paths=PackedStringArray("card_name_node", "cost_node", "attack_node", "health_node", "card_text_node", "frame_node")]
 custom_minimum_size = Vector2(65, 90)
 anchors_preset = 8
 anchor_left = 0.5
@@ -32,6 +32,7 @@ cost_node = NodePath("Attributes/Cost")
 attack_node = NodePath("Attributes/Attack")
 health_node = NodePath("Attributes/Health")
 card_text_node = NodePath("Mask/VRadioSplitContainer/Panel/InfoContainer/TextContainer/Text")
+frame_node = NodePath("Mask/Frame")
 metadata/_custom_type_script = "uid://b0yvh6181tyt1"
 
 [node name="Mask" type="TextureRect" parent="."]
@@ -57,7 +58,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-split_offset = 108
 dragging_enabled = false
 dragger_visibility = 2
 script = ExtResource("4_cu85u")
@@ -82,9 +82,6 @@ grow_vertical = 2
 [node name="NameContainer" type="Control" parent="Mask/VRadioSplitContainer/Panel/InfoContainer"]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 6.175
-offset_right = 123.825
-offset_bottom = 18.0
 script = ExtResource("6_n7rth")
 width_percent = 0.905
 height_percent = 0.25
@@ -106,10 +103,6 @@ vertical_alignment = 1
 [node name="TextContainer" type="Control" parent="Mask/VRadioSplitContainer/Panel/InfoContainer"]
 layout_mode = 2
 anchors_preset = 0
-offset_left = 13.0
-offset_top = 18.864
-offset_right = 117.0
-offset_bottom = 66.384
 script = ExtResource("6_n7rth")
 width_percent = 0.8
 height_percent = 0.66
@@ -141,7 +134,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_jmrts")
+texture = ExtResource("7_n7rth")
 expand_mode = 1
 
 [node name="Attributes" type="Control" parent="."]
@@ -149,10 +142,10 @@ layout_mode = 2
 
 [node name="Health" parent="Attributes" instance=ExtResource("5_bfbcb")]
 layout_mode = 1
-offset_left = 43.42
-offset_top = 63.54
-offset_right = 83.46
-offset_bottom = 103.5
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
 initial_value = 2
 value = 3
 margin_bottom = -2
@@ -168,10 +161,10 @@ vertical_margin = 0.853
 
 [node name="Attack" parent="Attributes" instance=ExtResource("5_bfbcb")]
 layout_mode = 1
-offset_left = -81.51
-offset_top = 63.54
-offset_right = -41.47
-offset_bottom = 103.5
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
 initial_value = 2
 value = 2
 margin_bottom = 6
@@ -186,10 +179,10 @@ vertical_margin = 0.853
 
 [node name="Cost" parent="Attributes" instance=ExtResource("5_bfbcb")]
 layout_mode = 1
-offset_left = 43.42
-offset_top = -103.86
-offset_right = 83.46
-offset_bottom = -63.9
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
 initial_value = 2
 value = 3
 margin_bottom = 4

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TriggererConditionsAnd" load_steps=5 format=3 uid="uid://d0vh0i77l00wh"]
+
+[ext_resource type="Script" uid="uid://baglygpabfyap" path="res://src/core/model/parts/conditions/triggerer_condition.gd" id="1_51cij"]
+[ext_resource type="Resource" uid="uid://c0jfdv5l38nbg" path="res://src/core/datas/parts/conditions/aself.tres" id="2_utqyi"]
+[ext_resource type="Resource" uid="uid://yu0cm122rgr1" path="res://src/core/datas/parts/conditions/card_both.tres" id="3_3xw8w"]
+[ext_resource type="Script" uid="uid://bmpbs78iqn7gn" path="res://src/core/model/parts/conditions/triggerer_conditions_and.gd" id="4_cl0yq"]
+
+[resource]
+script = ExtResource("4_cl0yq")
+conditions = Array[ExtResource("1_51cij")]([ExtResource("2_utqyi"), ExtResource("3_3xw8w")])
+mode = "NORMAL"
+type = "NORMAL"
+metadata/_custom_type_script = "uid://baglygpabfyap"

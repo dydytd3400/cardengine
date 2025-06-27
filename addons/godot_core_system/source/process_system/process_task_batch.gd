@@ -11,7 +11,7 @@ extends ProcessTask
 
 # 信号
 ## 状态改变
-signal state_changed(from_state: ProcessTask, to_state: ProcessTask)
+signal state_changed(from_state: ProcessTask, to_state: ProcessTask,msg:Dictionary)
 
 ## 子任务集数组容器，该数组的下标即为被添加进当前流程任务组的时序
 var tasks: Array[ProcessTask] = []
@@ -87,7 +87,7 @@ func switch(state_id: StringName, msg: Dictionary = {}) -> void:
 		return
 
 	current_task.enter(msg)
-	state_changed.emit(from_task, current_task)
+	state_changed.emit(from_task, current_task,msg)
 
 
 func _finish_one(msg: Dictionary = {}) -> void:

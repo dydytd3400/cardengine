@@ -38,7 +38,11 @@ enabled=PackedStringArray("res://addons/godot_core_system/plugin.cfg")
 
 folder_colors={
 "res://addons/": "green",
-"res://src/": "orange"
+"res://src/": "orange",
+"res://src/core/datas/": "blue",
+"res://src/core/intent/": "gray",
+"res://src/core/model/": "red",
+"res://src/core/view/": "green"
 }
 
 [godot_core_system]
@@ -49,3 +53,4 @@ logger/color_warning=Color(1, 0.870588, 0.4, 1)
 logger/color_error=Color(1, 0.54902, 0.8, 1)
 logger/color_fatal=Color(1, 0.470588, 0.419608, 1)
 logger/ignore_level=[0]
+trigger_system/subscribe_event_bus=false

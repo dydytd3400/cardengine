@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="TargetFilterSelf" load_steps=2 format=3 uid="uid://cdjpaw0on40bo"]
+
+[ext_resource type="Script" uid="uid://bp6hidqak0cd7" path="res://src/core/model/parts/filters/target_filter_self.gd" id="1_kfl68"]
+
+[resource]
+script = ExtResource("1_kfl68")
+metadata/_custom_type_script = "uid://bp6hidqak0cd7"

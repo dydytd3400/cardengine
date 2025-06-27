@@ -203,3 +203,6 @@ static func find_nearest_element(map: Array[Array], index: int, filter: Callable
 					min_distance = distance
 					element = map[r][c]  # Godot中通常用(x,y)表示列行
 	return element
+
+static func remove_all(source_ary:Array,remove_ary:Array):
+	return source_ary.filter(func(item): return item not in remove_ary)
