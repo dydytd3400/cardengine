@@ -22,4 +22,6 @@ func execute(triggerer, msg: Dictionary, source) -> void:
 		if targets:
 			effect.execute(source, triggerer, targets, msg)
 			await effect.effect_finish
+		else:
+			await CoreSystem.get_tree().physics_frame
 	ability_finish.emit()

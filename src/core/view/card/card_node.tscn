@@ -58,6 +58,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+split_offset = 108
 dragging_enabled = false
 dragger_visibility = 2
 script = ExtResource("4_cu85u")
@@ -82,6 +83,9 @@ grow_vertical = 2
 [node name="NameContainer" type="Control" parent="Mask/VRadioSplitContainer/Panel/InfoContainer"]
 layout_mode = 3
 anchors_preset = 0
+offset_left = 6.175
+offset_right = 123.825
+offset_bottom = 18.0
 script = ExtResource("6_n7rth")
 width_percent = 0.905
 height_percent = 0.25
@@ -103,6 +107,10 @@ vertical_alignment = 1
 [node name="TextContainer" type="Control" parent="Mask/VRadioSplitContainer/Panel/InfoContainer"]
 layout_mode = 2
 anchors_preset = 0
+offset_left = 13.0
+offset_top = 18.864
+offset_right = 117.0
+offset_bottom = 66.384
 script = ExtResource("6_n7rth")
 width_percent = 0.8
 height_percent = 0.66
@@ -142,10 +150,10 @@ layout_mode = 2
 
 [node name="Health" parent="Attributes" instance=ExtResource("5_bfbcb")]
 layout_mode = 1
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 0.0
-offset_bottom = 0.0
+offset_left = 43.42
+offset_top = 63.54
+offset_right = 83.46
+offset_bottom = 103.5
 initial_value = 2
 value = 3
 margin_bottom = -2
@@ -161,10 +169,10 @@ vertical_margin = 0.853
 
 [node name="Attack" parent="Attributes" instance=ExtResource("5_bfbcb")]
 layout_mode = 1
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 0.0
-offset_bottom = 0.0
+offset_left = -81.51
+offset_top = 63.54
+offset_right = -41.47
+offset_bottom = 103.5
 initial_value = 2
 value = 2
 margin_bottom = 6
@@ -179,10 +187,10 @@ vertical_margin = 0.853
 
 [node name="Cost" parent="Attributes" instance=ExtResource("5_bfbcb")]
 layout_mode = 1
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 0.0
-offset_bottom = 0.0
+offset_left = 43.42
+offset_top = -103.86
+offset_right = 83.46
+offset_bottom = -63.9
 initial_value = 2
 value = 3
 margin_bottom = 4

@@ -99,7 +99,7 @@ const battle_process_config = {
 					 				"executor" = {
 													"resource" = Process.EXECITOR_EXPRESSION,
 													"expressions" = [{
-														"expression" = "@context{card}.to_attack()",
+														"expression" = "await @context{card}.to_attack()",
 														"finally" = "complete"
 													}]
 												}

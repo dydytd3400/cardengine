@@ -53,7 +53,7 @@ func checkmate() -> bool:
 		switch_next()
 		return false
 	else:
-		lg.info("全部流程结束啦", {}, "BattleProcess",lg.LogLevel.ERROR)
+		lg.info("全部流程结束啦", {}, "",lg.LogLevel.ERROR)
 		print("当前栈深=================================>  " + str(get_stack().size()))
 		return true
 
@@ -67,7 +67,7 @@ func find_player(_player_id: StringName) -> Player:
 	return null
 
 func on_battle_process_changed(process_id:StringName,msg:Dictionary):
-	lg.info("=============>>>>>>>>>"+process_id)
+	#lg.info("=============>>>>>>>>>"+process_id)
 	trigger_dispatcher.sysytem_state_changed(process_id,msg)
 
 # =====================================================
@@ -96,9 +96,9 @@ func create_card(_name: int,is_self:bool):
 	card.health = randi_range(1, 10)
 	card.card_type = DataEnums.CardType.ORGANISM
 	card.mobility = 2
-	card.move_type = load("res://src/core/datas/parts/abilitys/move_walk.tres")
+	card.move_type = load("res://src/core/datas/parts/abilitys/move_walk.tres").duplicate()
 	card.move_area = load("res://src/core/datas/parts/areas/four_direction.tres")
-	card.attack_type = load("res://src/core/datas/parts/abilitys/attack.tres")
+	card.attack_type = load("res://src/core/datas/parts/abilitys/attack.tres").duplicate()
 	card.attack_area = load("res://src/core/datas/parts/areas/four_direction.tres")
 	card.frame_style = "frame_silver" if is_self else "frame_gold"
 	return card

@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="EffectMove" load_steps=2 format=3 uid="uid://bm3pjkbb4jnrc"]
-
-[ext_resource type="Script" uid="uid://dbonmmidkvr7c" path="res://src/core/model/parts/effects/effect_move.gd" id="1_nxph4"]
-
-[resource]
-script = ExtResource("1_nxph4")
-flyable = false
-metadata/_custom_type_script = "uid://dbonmmidkvr7c"

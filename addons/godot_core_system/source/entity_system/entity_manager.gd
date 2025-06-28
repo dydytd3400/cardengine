@@ -50,7 +50,7 @@ func get_entity_scene(entity_id: StringName) -> PackedScene:
 ## [param scene_path] 场景路径
 ## [param load_mode] 加载模式
 ## [return] 加载的实体
-func load_entity(entity_id: StringName, scene_path: String, 
+func load_entity(entity_id: StringName, scene_path: String,
 		load_mode: CoreSystem.ResourceManager.LOAD_MODE = CoreSystem.ResourceManager.LOAD_MODE.IMMEDIATE) -> PackedScene:
 	if _entity_resource_cache.has(entity_id):
 		push_warning("实体已存在: %s" % entity_id)
@@ -61,7 +61,7 @@ func load_entity(entity_id: StringName, scene_path: String,
 	if not scene:
 		# push_error("无法加载实体场景: %s" % scene_path)
 		return null
-		
+
 	_entity_resource_cache[entity_id] = scene
 	entity_loaded.emit(entity_id, scene)
 	return scene
@@ -80,14 +80,14 @@ func create_entity(entity_id: StringName, entity_config: Resource, parent : Node
 	var instance : Node =  _resource_manager.get_instance(_entity_path_map[entity_id])
 	if not instance:
 		instance = get_entity_scene(entity_id).instantiate()
-	
+
 	if not instance or not instance is Node:
 		push_error("实体实例不是 Node 类型: %s" % entity_id)
 		return
 
 	if parent:
 		parent.add_child(instance)
-	
+
 	## 初始化实体
 	if not instance.has_method("initialize"):
 		return

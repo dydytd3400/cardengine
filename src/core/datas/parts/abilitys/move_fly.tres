@@ -1,16 +1,21 @@
-[gd_resource type="Resource" script_class="Ability" load_steps=6 format=3 uid="uid://c0038a0ex04x8"]
+[gd_resource type="Resource" script_class="Ability" load_steps=7 format=3 uid="uid://c0038a0ex04x8"]
 
-[ext_resource type="Resource" uid="uid://bqx4p4vy8bgyj" path="res://src/core/datas/parts/effects/move_fly.tres" id="1_bu8pw"]
+[ext_resource type="Script" uid="uid://dbonmmidkvr7c" path="res://src/core/model/parts/effects/effect_move.gd" id="1_6mxsi"]
 [ext_resource type="Resource" uid="uid://c7oodbot5afmd" path="res://src/core/datas/parts/targets/enemy.tres" id="2_bu8pw"]
 [ext_resource type="Script" uid="uid://b7jd7b7l1vu8v" path="res://src/core/model/parts/abilitys/ability.gd" id="3_7m22b"]
 [ext_resource type="Resource" uid="uid://d1r6efc4uh0xi" path="res://src/core/datas/parts/triggers/move.tres" id="4_hogdw"]
 [ext_resource type="Resource" uid="uid://cn40csj6f2o0l" path="res://src/core/datas/parts/conditions/organism_equal.tres" id="5_6mxsi"]
+
+[sub_resource type="Resource" id="Resource_6xw8n"]
+script = ExtResource("1_6mxsi")
+flyable = true
+metadata/_custom_type_script = "uid://dbonmmidkvr7c"
 
 [resource]
 script = ExtResource("3_7m22b")
 trigger = ExtResource("4_hogdw")
 target_filter = ExtResource("2_bu8pw")
 triggerer_condition = ExtResource("5_6mxsi")
-effect = ExtResource("1_bu8pw")
+effect = SubResource("Resource_6xw8n")
 enable = true
 metadata/_custom_type_script = "uid://b7jd7b7l1vu8v"

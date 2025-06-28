@@ -14,6 +14,7 @@ func add_from_hand(card:CardNode):
 	cards.append(card)
 	card.size.x = $Slot.size.x
 	card.size.y = $Slot.size.y
+	card.pivot_offset = size / 2
 	NodeUtil.add_by_local(canvas_node,card)
 	adding_from_hand.append(card)
 
@@ -21,6 +22,7 @@ func add_from_slot(card:CardNode):
 	cards.append(card)
 	card.size.x = $Slot.size.x
 	card.size.y = $Slot.size.y
+	card.pivot_offset = size / 2
 	NodeUtil.add_by_local(canvas_node,card)
 	await TweenUtil.move_to(card,0.25,Vector2.ZERO)
 

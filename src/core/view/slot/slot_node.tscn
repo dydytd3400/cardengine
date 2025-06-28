@@ -23,9 +23,10 @@ margin_top_percent = 0.06
 metadata/_custom_type_script = "uid://bmj0g0fjngpwc"
 
 [node name="SlotCanvas1" type="PanelContainer" parent="."]
+visible = false
 layout_mode = 2
 
-[node name="Slot" type="PanelContainer" parent="."]
+[node name="Slot" type="Container" parent="."]
 layout_mode = 2
 
 [node name="SlotCanvas" type="Node2D" parent="Slot"]

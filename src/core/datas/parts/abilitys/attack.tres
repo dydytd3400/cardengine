@@ -1,16 +1,20 @@
-[gd_resource type="Resource" script_class="Ability" load_steps=6 format=3 uid="uid://dls21tojxsnl5"]
+[gd_resource type="Resource" script_class="Ability" load_steps=7 format=3 uid="uid://dls21tojxsnl5"]
 
-[ext_resource type="Resource" uid="uid://bl37arq27xljx" path="res://src/core/datas/parts/effects/attack_base.tres" id="1_5yljr"]
+[ext_resource type="Script" uid="uid://d1c7ywophuqis" path="res://src/core/model/parts/effects/effect_attack.gd" id="1_5yljr"]
 [ext_resource type="Script" uid="uid://b7jd7b7l1vu8v" path="res://src/core/model/parts/abilitys/ability.gd" id="2_7g3v1"]
 [ext_resource type="Resource" uid="uid://cv4kpwq5tner0" path="res://src/core/datas/parts/targets/attack_area_closest.tres" id="3_gi5xy"]
 [ext_resource type="Resource" uid="uid://ev4mhubign14" path="res://src/core/datas/parts/triggers/attack.tres" id="4_6wq53"]
 [ext_resource type="Resource" uid="uid://d0vh0i77l00wh" path="res://src/core/datas/parts/conditions/card_self..tres" id="5_pnurn"]
+
+[sub_resource type="Resource" id="Resource_7g3v1"]
+script = ExtResource("1_5yljr")
+metadata/_custom_type_script = "uid://d1c7ywophuqis"
 
 [resource]
 script = ExtResource("2_7g3v1")
 trigger = ExtResource("4_6wq53")
 target_filter = ExtResource("3_gi5xy")
 triggerer_condition = ExtResource("5_pnurn")
-effect = ExtResource("1_5yljr")
+effect = SubResource("Resource_7g3v1")
 enable = true
 metadata/_custom_type_script = "uid://b7jd7b7l1vu8v"

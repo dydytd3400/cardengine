@@ -8,8 +8,8 @@ func initialize(_table: Table,_players:Array[Player]):
 	for player in _players:
 		for card in player.deck: # 为玩家牌库的卡牌注册状态监听
 			card.states.state_changed.connect(card_state_changed.bind(card))
-		for ability in player.abilitys: # 为玩家自身绑定触发器
-			bind_trigger(ability.trigger)
+		   # 为玩家自身绑定触发器
+		bind_trigger(player.bury_ability.trigger)
 
 ## 卡牌状态监听
 func card_state_changed(_from_state: BaseState, _to_state: BaseState, _msg: Dictionary, triggerer: Card):

@@ -15,7 +15,7 @@ func filter(source,targets):
 	else:
 		lg.warning("TargetClosest source type error!")
 		return null
-
+	closest.clear()
 	super.filter(source,targets)
 
 	if closest.is_empty():

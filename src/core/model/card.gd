@@ -1,6 +1,6 @@
 @tool
 class_name Card extends Node
-#var TAG = "BattleProcess"
+signal take_damaged
 var TAG = "Card"
 var view: CardNode
 var view_res: PackedScene = load("res://src/core/view/card/card_node.tscn")
@@ -38,8 +38,7 @@ var health: int = 0:
 	set(value):
 		health = value
 		view.health = value
-		if value<=0 && card_type != DataEnums.CardType.SPELL:
-			to_death()
+
 ## 初始血量
 var health_max: int:
 	get(): return data.health
@@ -170,16 +169,17 @@ func to_move():
 		await move_type.ability_finish
 
 func to_attack():
-	lg.info("卡牌: %s 开始攻击" % card_name, {}, TAG)
+	lg.info("卡牌: %s 开始攻击" % card_name, {},TAG)
 	if !activated:
 		return
 	if attack_type && attack_area && !attack_area.is_empty():
 		states.switch(CardState.ATTACK,{ "card" = self})
-		await move_type.ability_finish
+		await attack_type.ability_finish
 
 func to_death():
-	lg.info("卡牌: %s 被干死了！" % card_name, {}, TAG,lg.LogLevel.WARNING)
+	lg.info("卡牌: %s 被干死了！" % card_name, {}, "Effect",lg.LogLevel.WARNING)
 	states.switch(CardState.USED,{ "card" = self})
+	await holder.bury_ability.ability_finish
 
 func is_enemy(target):
 	if !target:
@@ -221,3 +221,9 @@ func bind_data():
 			ability.initialize(self)
 	if data.frame_style:
 		view.frame_style = data.frame_style
+
+func take_damage(attack:int):
+	health = health - attack # 伤害结算
+	if health<=0 && card_type != DataEnums.CardType.SPELL:
+		to_death()
+	take_damaged.emit()

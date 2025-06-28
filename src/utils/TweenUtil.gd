@@ -1,11 +1,16 @@
 class_name TweenUtil
 
+static func scale_to(node: Control, duration: float, scale: Vector2,finished : Callable = func (): return )->Signal:
+	var tween: Tween = node.create_tween();
+	tween.tween_property(node, "scale", scale, duration)
+	tween.tween_callback(finished)
+	return tween.finished
+
 static func size_to(node: Control, duration: float, size: Vector2,finished : Callable = func (): return )->Signal:
 	var tween: Tween = node.create_tween();
 	tween.tween_property(node, "size", size, duration)
 	tween.tween_callback(finished)
 	return tween.finished
-
 
 static func size_by_x(node: Control, duration: float, x: int,finished : Callable = func (): return )->Signal:
 	var size: Vector2 = Vector2(node.get_size())

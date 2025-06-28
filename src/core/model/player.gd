@@ -62,7 +62,7 @@ var is_first: bool = false
 @export
 var card_res: Resource
 
-var abilitys:Array[Ability] = [load("res://src/core/datas/parts/abilitys/bury.tres")]
+var bury_ability:Ability = load("res://src/core/datas/parts/abilitys/bury.tres").duplicate()
 
 ## 利息增长
 func interest_payout(_turn_count: int) -> int:
@@ -100,13 +100,13 @@ func is_enemy(target):
 
 ## 初始化卡牌
 func initialize():
+	bury_ability.initialize(self)
 	for card in cards:
 		var card_data: CardData = card.duplicate(true)
 		var new_card: Card = card_res.new()
 		new_card.initialize(card_data, self)
 		deck.append(new_card)
-	for ability in abilitys:
-		ability.initialize(self)
+
 
 ## 初始化牌库
 func init_deck():
