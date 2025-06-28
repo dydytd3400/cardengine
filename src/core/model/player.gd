@@ -86,6 +86,18 @@ func play_card():
 					hand.remove_at(i)# 从手牌移除
 					break
 
+func is_enemy(target):
+	if !target:
+		lg.warning("Enemy check target is empty!")
+		return false
+	if target is Player:
+		return self != target
+	if target is Card:
+		return self != target.holder
+	if target is Slot:
+		return self != target.holder
+	return false
+
 ## 初始化卡牌
 func initialize():
 	for card in cards:

@@ -16,11 +16,17 @@ var height: int               = 0
 var slots_matrix: Array[Array] = []
 var slot_of_player: Dictionary = {}
 var players:Array[Player] = []
+var astar_grid = AStarGrid2D.new()
 
 func initialize(_width:int,_height:int,_players:Array[Player]):
 	players = _players
 	width = _width
 	height = _height
+	astar_grid.region = Rect2i(0, 0, width, height)
+	astar_grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER  # 禁止对角线移动
+	#astar_grid.jumping_enabled = true # 启用或禁用跳跃，以跳过中间点并加快搜索算法的速度。  似乎并非是否可以越过障碍物
+
+
 	var count:int = width * height
 	var half  := height/2.0 * width
 	slots = []
@@ -45,10 +51,12 @@ func initialize(_width:int,_height:int,_players:Array[Player]):
 			else:
 				holder = players[1]
 			slot.initialize(holder,i,row,col)
+			slot.content_changed.connect(slot_content_changed)
 			slot_of_player[holder.player_id].append(slot)
 			rows[col] = slot
 			slots[i] = slot
 			i+=1
+	astar_grid.update()
 	view.initialize(slots,width)
 	lg.info("桌面初始化完成",{},TAG)
 
@@ -57,3 +65,10 @@ func hand_to_table(card:Card,slot_index:int):
 	cards.append(card)
 	slots[slot_index].add_from_hand(card)
 	card.to_table()
+
+func slot_content_changed(slot:Slot):
+	var passable = slot.pass_able
+	var is_solid = astar_grid.is_point_solid(slot.position)
+	if passable != is_solid:
+		astar_grid.set_point_solid(slot.position, passable)
+		astar_grid.update()

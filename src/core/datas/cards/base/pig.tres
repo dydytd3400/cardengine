@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b7jd7b7l1vu8v" path="res://src/core/model/parts/abilitys/ability.gd" id="1_8k7sl"]
 [ext_resource type="Resource" uid="uid://o0h5j4m1duwf" path="res://src/core/datas/parts/areas/four_direction.tres" id="2_8k7sl"]
-[ext_resource type="Resource" uid="uid://blhi5ttk7tnle" path="res://src/core/datas/parts/abilitys/attack.tres" id="3_4h1c4"]
+[ext_resource type="Resource" uid="uid://dls21tojxsnl5" path="res://src/core/datas/parts/abilitys/attack.tres" id="3_vboud"]
 [ext_resource type="Resource" uid="uid://dfrlry85vqgbo" path="res://src/core/datas/parts/abilitys/move_walk.tres" id="4_4h1c4"]
 [ext_resource type="Script" uid="uid://cp1rxu1phxaax" path="res://src/core/datas/card_data.gd" id="4_bia4m"]
 
@@ -16,10 +16,11 @@ health = 1
 exclusive = true
 attack = 1
 attack_area = ExtResource("2_8k7sl")
-attack_type = ExtResource("3_4h1c4")
+attack_type = ExtResource("3_vboud")
 mobility = 2
 move_area = ExtResource("2_8k7sl")
 move_type = ExtResource("4_4h1c4")
 abilitys = Array[ExtResource("1_8k7sl")]([])
 text = ""
+frame_style = "frame_silver"
 metadata/_custom_type_script = "uid://cp1rxu1phxaax"

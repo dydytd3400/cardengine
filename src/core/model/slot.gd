@@ -1,6 +1,8 @@
 extends Node
 class_name Slot
 
+signal content_changed(slot:Slot)
+
 var view:SlotNode
 var view_res:PackedScene = load("res://src/core/view/slot/slot_node.tscn")
 
@@ -45,6 +47,7 @@ func add_from_hand(card:Card):
 		return
 	card.slot = self
 	cards.append(card)
+	content_changed.emit(self)
 	view.add_from_hand(card.view)
 
 ## 从卡槽添加至卡槽
@@ -58,6 +61,7 @@ func add_from_slot(card:Card):
 	card.slot.remove_card(card,false)
 	card.slot = self
 	cards.append(card)
+	content_changed.emit(self)
 	await view.add_from_slot(card.view)
 
 ## 移除卡牌
@@ -70,8 +74,21 @@ func remove_card(card:Card,remove_from_view:bool = true):
 		_error("Card not exist!",card)
 		return
 	cards.remove_at(find)
+	content_changed.emit(self)
 	if remove_from_view:
 		view.remove_card(card.view)
+
+func is_enemy(target):
+	if !target:
+		lg.warning("Enemy check target is empty!")
+		return false
+	if target is Player:
+		return holder != target
+	if target is Card:
+		return holder != target.holder
+	if target is Slot:
+		return holder != target.holder
+	return false
 
 func _error(msg:String,target:Card = null):
 	var target_str = ""

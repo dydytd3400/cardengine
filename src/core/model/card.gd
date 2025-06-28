@@ -38,7 +38,7 @@ var health: int = 0:
 	set(value):
 		health = value
 		view.health = value
-		if value<=0:
+		if value<=0 && card_type != DataEnums.CardType.SPELL:
 			to_death()
 ## 初始血量
 var health_max: int:
@@ -125,6 +125,11 @@ var activated = false:
 var alive = false:
 	get(): return  CardState.ALIVE_STATE.find(states.current_state.state_id) >= 0
 
+var resist_able = true:
+	get():return alive && card_type == DataEnums.CardType.ORGANISM && resist_able
+	set(val):
+		resist_able = val
+
 ## 卡牌持有者 仅卡牌处于战场时有值 当[member holder]为空时，则代表该卡牌为中立单位
 #TODO 后期是否需要拓展出中立单位对象 否则需要多出一个字段来标记是否处于战场
 var holder: Player
@@ -169,12 +174,24 @@ func to_attack():
 	if !activated:
 		return
 	if attack_type && attack_area && !attack_area.is_empty():
-		states.switch(CardState.MOVE,{ "card" = self})
+		states.switch(CardState.ATTACK,{ "card" = self})
 		await move_type.ability_finish
 
 func to_death():
 	lg.info("卡牌: %s 被干死了！" % card_name, {}, TAG,lg.LogLevel.WARNING)
 	states.switch(CardState.USED,{ "card" = self})
+
+func is_enemy(target):
+	if !target:
+		lg.warning("Enemy check target is empty!")
+		return false
+	if target is Player:
+		return holder != target
+	if target is Card:
+		return holder != target.holder
+	if target is Slot:
+		return holder != target.holder
+	return false
 
 func bind_data():
 	card_name = data.card_name

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ConditionsAnd" load_steps=7 format=3 uid="uid://b0c7c2yehwwqy"]
+
+[ext_resource type="Script" uid="uid://bixobjol38ll8" path="res://src/core/model/parts/conditions/condition.gd" id="1_7y610"]
+[ext_resource type="Resource" uid="uid://duwis84c5nk37" path="res://src/core/datas/parts/conditions/player_right.tres" id="2_13y35"]
+[ext_resource type="Script" uid="uid://bir6n2n4iulrs" path="res://src/core/model/parts/conditions/conditions_and.gd" id="2_c78t0"]
+[ext_resource type="Resource" uid="uid://c07q6l1ilfgyv" path="res://src/core/datas/parts/conditions/card_left.tres" id="3_kntk8"]
+[ext_resource type="Script" uid="uid://bc2jbv1cvle64" path="res://src/core/model/parts/conditions/condition_right_own_left.gd" id="4_xtv0s"]
+
+[sub_resource type="Resource" id="Resource_jn51e"]
+script = ExtResource("4_xtv0s")
+metadata/_custom_type_script = "uid://bc2jbv1cvle64"
+
+[resource]
+script = ExtResource("2_c78t0")
+conditions = Array[ExtResource("1_7y610")]([ExtResource("2_13y35"), ExtResource("3_kntk8"), SubResource("Resource_jn51e")])

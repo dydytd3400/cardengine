@@ -91,13 +91,14 @@ func create_card(_name: int,is_self:bool):
 	var card: CardData = CardData.new()
 	card.card_id = UUID.generate()
 	card.card_name = "卡牌_" + str(_name)
-	card.attack = randi_range(0, 10)
+	card.attack = randi_range(1, 10)
 	card.cost = randi_range(0, 10)
-	card.health = randi_range(0, 10)
+	card.health = randi_range(1, 10)
 	card.card_type = DataEnums.CardType.ORGANISM
-	card.mobility = 1
+	card.mobility = 2
 	card.move_type = load("res://src/core/datas/parts/abilitys/move_walk.tres")
 	card.move_area = load("res://src/core/datas/parts/areas/four_direction.tres")
+	card.attack_type = load("res://src/core/datas/parts/abilitys/attack.tres")
 	card.attack_area = load("res://src/core/datas/parts/areas/four_direction.tres")
 	card.frame_style = "frame_silver" if is_self else "frame_gold"
 	return card

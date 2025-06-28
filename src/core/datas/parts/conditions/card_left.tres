@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="ConditionInspectType" load_steps=2 format=3 uid="uid://c07q6l1ilfgyv"]
+
+[ext_resource type="Script" uid="uid://cwbdttfjv5rvv" path="res://src/core/model/parts/conditions/condition_inspect_type.gd" id="1_xdjeu"]
+
+[resource]
+script = ExtResource("1_xdjeu")
+type = "CARD"
+inspect_mode = "LEFT"

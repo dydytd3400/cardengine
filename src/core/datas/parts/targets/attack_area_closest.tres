@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="TargetAttackArea" load_steps=5 format=3 uid="uid://cv4kpwq5tner0"]
+
+[ext_resource type="Script" uid="uid://ein07jykuow5" path="res://src/core/model/parts/targets/target_attack_area.gd" id="1_76tih"]
+[ext_resource type="Resource" uid="uid://bl5k6tmp2thpb" path="res://src/core/datas/parts/conditions/organism_enemy.tres" id="1_ujqsg"]
+[ext_resource type="Script" uid="uid://6quuyusq3leq" path="res://src/core/model/parts/filters/filter_closest.gd" id="7_61m86"]
+
+[sub_resource type="Resource" id="Resource_prpsb"]
+script = ExtResource("7_61m86")
+metadata/_custom_type_script = "uid://6quuyusq3leq"
+
+[resource]
+script = ExtResource("1_76tih")
+condition = ExtResource("1_ujqsg")
+filter = SubResource("Resource_prpsb")
+metadata/_custom_type_script = "uid://ein07jykuow5"

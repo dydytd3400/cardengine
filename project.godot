@@ -54,3 +54,4 @@ logger/color_error=Color(1, 0.54902, 0.8, 1)
 logger/color_fatal=Color(1, 0.470588, 0.419608, 1)
 logger/ignore_level=[0]
 trigger_system/subscribe_event_bus=false
+logger/tag_filter=["Effect"]

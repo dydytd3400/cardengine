@@ -33,10 +33,10 @@ func find_move_slot(source: Card) -> Array[Slot]:
 func move_to(source: Card, slots: Array[Slot]):
 	if slots && !slots.is_empty():
 		for slot in slots:
-			lg.info("卡牌: %s 即将从[%d,%d]移动到[%d,%d]" % [source.name,source.slot.position.x,source.slot.position.y,slot.position.x,slot.position.y])
+			lg.info("卡牌: %s 即将从[%d,%d]移动到[%d,%d]" % [source.card_name,source.slot.position.x,source.slot.position.y,slot.position.x,slot.position.y],{},TAG)
 			await slot.add_from_slot(source)
 	else :
-		lg.info("卡牌: %s 无可移动空间" % source.name,{},"",lg.LogLevel.FATAL)
+		lg.info("卡牌: %s 无可移动空间" % source.card_name,{},TAG,lg.LogLevel.FATAL)
 		await CoreSystem.get_tree().process_frame
 
 	effect_finish.emit()

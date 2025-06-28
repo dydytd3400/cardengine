@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="Ability" load_steps=6 format=3 uid="uid://dfrlry85vqgbo"]
 
 [ext_resource type="Resource" uid="uid://bm3pjkbb4jnrc" path="res://src/core/datas/parts/effects/move_base.tres" id="1_e51uw"]
-[ext_resource type="Resource" uid="uid://c7oodbot5afmd" path="res://src/core/datas/parts/filters/target_enemy.tres" id="2_st05a"]
+[ext_resource type="Resource" uid="uid://c7oodbot5afmd" path="res://src/core/datas/parts/targets/enemy.tres" id="2_st05a"]
 [ext_resource type="Script" uid="uid://b7jd7b7l1vu8v" path="res://src/core/model/parts/abilitys/ability.gd" id="3_3ax8y"]
 [ext_resource type="Resource" uid="uid://d1r6efc4uh0xi" path="res://src/core/datas/parts/triggers/move.tres" id="4_nu7o5"]
-[ext_resource type="Resource" uid="uid://cn40csj6f2o0l" path="res://src/core/datas/parts/conditions/organism_aself.tres" id="5_3t4xk"]
+[ext_resource type="Resource" uid="uid://cn40csj6f2o0l" path="res://src/core/datas/parts/conditions/organism_equal.tres" id="5_3t4xk"]
 
 [resource]
 script = ExtResource("3_3ax8y")

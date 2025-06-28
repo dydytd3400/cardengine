@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://b7jd7b7l1vu8v" path="res://src/core/model/parts/abilitys/ability.gd" id="1_4ay7r"]
 [ext_resource type="Resource" uid="uid://o0h5j4m1duwf" path="res://src/core/datas/parts/areas/four_direction.tres" id="2_4ay7r"]
 [ext_resource type="Script" uid="uid://cp1rxu1phxaax" path="res://src/core/datas/card_data.gd" id="3_4ay7r"]
-[ext_resource type="Resource" uid="uid://blhi5ttk7tnle" path="res://src/core/datas/parts/abilitys/attack.tres" id="3_wgr74"]
-[ext_resource type="Resource" uid="uid://dimxwisk7xou1" path="res://src/core/datas/parts/abilitys/move_fly.tres" id="4_4ay7r"]
+[ext_resource type="Resource" uid="uid://dls21tojxsnl5" path="res://src/core/datas/parts/abilitys/attack.tres" id="3_k7i66"]
+[ext_resource type="Resource" uid="uid://c0038a0ex04x8" path="res://src/core/datas/parts/abilitys/move_fly.tres" id="4_4ay7r"]
 
 [resource]
 script = ExtResource("3_4ay7r")
@@ -16,10 +16,11 @@ health = 1
 exclusive = true
 attack = 1
 attack_area = ExtResource("2_4ay7r")
-attack_type = ExtResource("3_wgr74")
+attack_type = ExtResource("3_k7i66")
 mobility = 1
 move_area = ExtResource("2_4ay7r")
 move_type = ExtResource("4_4ay7r")
 abilitys = Array[ExtResource("1_4ay7r")]([])
 text = "飞行"
+frame_style = "frame_silver"
 metadata/_custom_type_script = "uid://cp1rxu1phxaax"

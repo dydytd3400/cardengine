@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="ConditionsAnd" load_steps=9 format=3 uid="uid://cn40csj6f2o0l"]
+
+[ext_resource type="Script" uid="uid://bixobjol38ll8" path="res://src/core/model/parts/conditions/condition.gd" id="1_26ueu"]
+[ext_resource type="Script" uid="uid://cwbdttfjv5rvv" path="res://src/core/model/parts/conditions/condition_inspect_type.gd" id="2_vr3jr"]
+[ext_resource type="Script" uid="uid://hjbf8sgvvra6" path="res://src/core/model/parts/conditions/condition_inspect_organism.gd" id="3_4ob65"]
+[ext_resource type="Script" uid="uid://br8jjnhvamj6d" path="res://src/core/model/parts/conditions/condition_equal.gd" id="4_yi02y"]
+[ext_resource type="Script" uid="uid://bir6n2n4iulrs" path="res://src/core/model/parts/conditions/conditions_and.gd" id="5_mkn0i"]
+
+[sub_resource type="Resource" id="Resource_w7gxp"]
+script = ExtResource("2_vr3jr")
+type = "CARD"
+inspect_mode = "BOTH"
+metadata/_custom_type_script = "uid://cwbdttfjv5rvv"
+
+[sub_resource type="Resource" id="Resource_xfv5n"]
+script = ExtResource("3_4ob65")
+inspect_mode = "BOTH"
+metadata/_custom_type_script = "uid://hjbf8sgvvra6"
+
+[sub_resource type="Resource" id="Resource_1bsuj"]
+script = ExtResource("4_yi02y")
+metadata/_custom_type_script = "uid://br8jjnhvamj6d"
+
+[resource]
+script = ExtResource("5_mkn0i")
+conditions = Array[ExtResource("1_26ueu")]([SubResource("Resource_w7gxp"), SubResource("Resource_xfv5n"), SubResource("Resource_1bsuj")])

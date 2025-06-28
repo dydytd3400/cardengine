@@ -2,6 +2,7 @@
 class_name Effect extends Resource
 
 signal effect_finish
+const TAG="Effect"
 
 ## 使效果生效
 ## [param _source] 效果来源,通常代表哪个目标执行了该效果
