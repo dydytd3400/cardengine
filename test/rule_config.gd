@@ -112,7 +112,7 @@ const battle_process_config = {
 						"executor" = {
 										"resource" = Process.EXECITOR_EXPRESSION,
 										"expressions" = [{
-											"expression" = "@context{battle_field}.current_player.play_card()",
+											"expression" = "await @context{battle_field}.current_player.play_card()",
 											"finally" = "complete"
 										}]
 									}

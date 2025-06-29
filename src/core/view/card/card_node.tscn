@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dbmu4c085mniq"]
+[gd_scene load_steps=15 format=3 uid="uid://dbmu4c085mniq"]
 
 [ext_resource type="Script" uid="uid://b0yvh6181tyt1" path="res://src/core/view/card/card_node.gd" id="1_tt8ny"]
 [ext_resource type="Texture2D" uid="uid://b0ld8qmbplu5u" path="res://assets/textures/blank_red.png" id="2_psp7l"]
@@ -11,6 +11,42 @@
 [ext_resource type="Texture2D" uid="uid://dxe48qm6uvmfk" path="res://assets/textures/frame_silver.png" id="7_n7rth"]
 [ext_resource type="Texture2D" uid="uid://diueksfidpx5g" path="res://assets/icons/attack.svg" id="7_s1mum"]
 [ext_resource type="Texture2D" uid="uid://d2evsx7j4lt1t" path="res://assets/icons/cost.svg" id="9_dkkip"]
+
+[sub_resource type="Animation" id="Animation_n7rth"]
+resource_name = "new_animation"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.34151, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.5, 1.5)]
+}
+
+[sub_resource type="Animation" id="Animation_7hwpm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pj8c8"]
+_data = {
+&"RESET": SubResource("Animation_7hwpm"),
+&"new_animation": SubResource("Animation_n7rth")
+}
 
 [node name="CardNode" type="PanelContainer" node_paths=PackedStringArray("card_name_node", "cost_node", "attack_node", "health_node", "card_text_node", "frame_node")]
 custom_minimum_size = Vector2(65, 90)
@@ -209,3 +245,8 @@ visible = false
 layout_mode = 2
 texture = ExtResource("2_psp7l")
 expand_mode = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_pj8c8")
+}

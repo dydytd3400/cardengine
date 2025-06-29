@@ -23,6 +23,8 @@ func initialize(_width:int,_height:int,_players:Array[Player]):
 	width = _width
 	height = _height
 	astar_grid.region = Rect2i(0, 0, width, height)
+	astar_grid.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN # 曼哈顿启发式算法
+	astar_grid.default_estimate_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN # 曼哈顿启发式算法
 	astar_grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER  # 禁止对角线移动
 	#astar_grid.jumping_enabled = true # 启用或禁用跳跃，以跳过中间点并加快搜索算法的速度。  似乎并非是否可以越过障碍物
 
@@ -63,12 +65,14 @@ func initialize(_width:int,_height:int,_players:Array[Player]):
 
 func hand_to_table(card:Card,slot_index:int):
 	cards.append(card)
-	slots[slot_index].add_from_hand(card)
+	var anim_time = slots[slot_index].add_from_hand(card)
+	await get_tree().create_timer(anim_time).timeout
 	card.to_table()
 
 func slot_content_changed(slot:Slot):
-	var passable = slot.pass_able
+	var current_is_solid = slot.pass_able
 	var is_solid = astar_grid.is_point_solid(slot.position)
-	if passable != is_solid:
-		astar_grid.set_point_solid(slot.position, passable)
+	if current_is_solid != is_solid:
+		lg.info("槽位[%d,%d]当前%s可通过" % [slot.position.x,slot.position.y,"不" if is_solid else ""],{},"Effect")
+		astar_grid.set_point_solid(slot.position, current_is_solid)
 		astar_grid.update()

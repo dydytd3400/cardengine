@@ -1,6 +1,5 @@
 @tool
 class_name Card extends Node
-signal take_damaged
 var TAG = "Card"
 var view: CardNode
 var view_res: PackedScene = load("res://src/core/view/card/card_node.tscn")
@@ -125,7 +124,7 @@ var alive = false:
 	get(): return  CardState.ALIVE_STATE.find(states.current_state.state_id) >= 0
 
 var resist_able = true:
-	get():return alive && card_type == DataEnums.CardType.ORGANISM && resist_able
+	get():return card_type == DataEnums.CardType.ORGANISM && resist_able
 	set(val):
 		resist_able = val
 
@@ -150,7 +149,6 @@ func initialize(_data: CardData, _creator: Player, _holder: Player = _creator):
 func to_table():
 	lg.info("卡牌: %s 进入牌桌" % card_name, {}, TAG)
 	states.switch(CardState.TABLE,{ "card" = self})
-	await CoreSystem.get_tree().create_timer(0.5)
 
 func to_activate():
 	lg.info("卡牌: %s 开始激活" % card_name, {}, TAG)
@@ -226,4 +224,3 @@ func take_damage(attack:int):
 	health = health - attack # 伤害结算
 	if health<=0 && card_type != DataEnums.CardType.SPELL:
 		to_death()
-	take_damaged.emit()

@@ -81,7 +81,7 @@ func play_card():
 				if slot.add_able: # 有空余卡槽
 					gold -= card.cost # 扣除费用
 					plays.append(card)# 添加进牌桌数组
-					table.hand_to_table(card,slot.index) # 添加进牌桌
+					await table.hand_to_table(card,slot.index) # 添加进牌桌
 					lg.info("玩家: %s打出了一张牌%d费:%s,当前剩余%d枚金币" % [player_name, card.cost, card.card_name, gold], {}, "BattleProcess")
 					hand.remove_at(i)# 从手牌移除
 					break

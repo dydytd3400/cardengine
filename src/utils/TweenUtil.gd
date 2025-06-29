@@ -23,20 +23,20 @@ static func size_by_y(node: Control, duration: float, y: int,finished : Callable
 	size.y += y
 	return size_to(node, duration, size,finished)
 
-static func move_to(node: Node, duration: float, position: Vector2,finished : Callable = func (): return )->Signal:
+static func move_to(node: Node, duration: float, position: Vector2,finished : Callable = func (): return )->Tween:
 	var tween: Tween = node.create_tween();
 	tween.tween_property(node, "position", position, duration)
 	tween.tween_callback(finished)
-	return tween.finished
+	return tween
 
 
-static func move_by_x(node: Node, duration: float, x: int,finished : Callable = func (): return )->Signal:
+static func move_by_x(node: Node, duration: float, x: int,finished : Callable = func (): return )->Tween:
 	var position: Vector2 = Vector2(node.get_position())
 	position.x += x
 	return move_to(node, duration, position,finished)
 
 
-static func move_by_y(node: Node, duration: float, y: int,finished : Callable = func (): return )->Signal:
+static func move_by_y(node: Node, duration: float, y: int,finished : Callable = func (): return )->Tween:
 	var position: Vector2 = Vector2(node.get_position())
 	position.y += y
 	return move_to(node, duration, position,finished)

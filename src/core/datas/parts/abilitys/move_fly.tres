@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Ability" load_steps=7 format=3 uid="uid://c0038a0ex04x8"]
 
-[ext_resource type="Script" uid="uid://dbonmmidkvr7c" path="res://src/core/model/parts/effects/effect_move.gd" id="1_6mxsi"]
+[ext_resource type="Script" uid="uid://cs4fvb8sj0ege" path="res://src/core/model/parts/effects/effect_move.gd" id="1_6mxsi"]
 [ext_resource type="Resource" uid="uid://c7oodbot5afmd" path="res://src/core/datas/parts/targets/enemy.tres" id="2_bu8pw"]
 [ext_resource type="Script" uid="uid://b7jd7b7l1vu8v" path="res://src/core/model/parts/abilitys/ability.gd" id="3_7m22b"]
 [ext_resource type="Resource" uid="uid://d1r6efc4uh0xi" path="res://src/core/datas/parts/triggers/move.tres" id="4_hogdw"]
@@ -8,8 +8,8 @@
 
 [sub_resource type="Resource" id="Resource_6xw8n"]
 script = ExtResource("1_6mxsi")
-flyable = true
-metadata/_custom_type_script = "uid://dbonmmidkvr7c"
+flyable = false
+metadata/_custom_type_script = "uid://cs4fvb8sj0ege"
 
 [resource]
 script = ExtResource("3_7m22b")

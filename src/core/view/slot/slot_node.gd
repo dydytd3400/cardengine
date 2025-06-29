@@ -16,7 +16,9 @@ func add_from_hand(card:CardNode):
 	card.size.y = $Slot.size.y
 	card.pivot_offset = size / 2
 	NodeUtil.add_by_local(canvas_node,card)
-	adding_from_hand.append(card)
+	var anim_time = 0.25
+	TweenUtil.move_to(card,anim_time,Vector2.ZERO)
+	return anim_time
 
 func add_from_slot(card:CardNode):
 	cards.append(card)
@@ -24,7 +26,6 @@ func add_from_slot(card:CardNode):
 	card.size.y = $Slot.size.y
 	card.pivot_offset = size / 2
 	NodeUtil.add_by_local(canvas_node,card)
-	await TweenUtil.move_to(card,0.25,Vector2.ZERO)
 
 func remove_card(card:CardNode):
 	if !card:

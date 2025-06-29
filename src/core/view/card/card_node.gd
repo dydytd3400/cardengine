@@ -86,3 +86,12 @@ var showing = true:
 
 func death():
 	await TweenUtil.size_to(self,0.5,Vector2.ZERO)
+
+
+var top_scale:float:
+	set(val):
+		top_scale = val
+		_top_scale(val)
+
+func _top_scale(scale:float):
+	material.set_shader_param("top_scale", scale)

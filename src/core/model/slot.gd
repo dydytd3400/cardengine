@@ -30,7 +30,13 @@ var add_able:bool = true:
 var pass_able:bool = true:
 	get():return add_able && pass_able
 var target_able:bool = true:
-	get():return !cards.is_empty() && cards[-1].target_able
+	get():return exterior && exterior.target_able
+
+var exterior:Card:
+	get():
+		if cards.is_empty():
+			return null
+		return cards[-1]
 
 ## 初始化卡槽
 func initialize(_holder: Player,_index:int,y:int,x:int ):
@@ -44,15 +50,19 @@ func initialize(_holder: Player,_index:int,y:int,x:int ):
 func add_from_hand(card:Card):
 	if !add_able:
 		_error("Cannot Add！",card)
-		return
+		return 0
 	card.slot = self
 	cards.append(card)
 	content_changed.emit(self)
-	view.add_from_hand(card.view)
+	return view.add_from_hand(card.view)
 
 ## 从卡槽添加至卡槽
 func add_from_slot(card:Card):
 	if !add_able:
+		var curt = cards[0]
+		lg.info("槽位：[%d,%d] 已存在卡牌: %s ，卡牌: %s 移动失败：[%d,%d]" % [position.x,position.y,
+																			curt.card_name,card.card_name,
+																			card.slot.position.x,card.slot.position.y],{},"Effect",lg.LogLevel.ERROR)
 		_error("Cannot Add！",card)
 		return
 	if !card.slot:
@@ -62,7 +72,8 @@ func add_from_slot(card:Card):
 	card.slot = self
 	cards.append(card)
 	content_changed.emit(self)
-	await view.add_from_slot(card.view)
+	lg.info("卡牌: %s 成功到达[%d,%d]" % [card.card_name,position.x,position.y],{},"Effect",lg.LogLevel.DEBUG)
+	view.add_from_slot(card.view)
 
 ## 移除卡牌
 func remove_card(card:Card,remove_from_view:bool = true):
