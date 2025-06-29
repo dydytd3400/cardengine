@@ -1,57 +1,61 @@
 class_name TweenUtil
 
-static func scale_to(node: Control, duration: float, scale: Vector2,finished : Callable = func (): return )->Signal:
+static func scale_to(node: Control, duration: float, scale: Vector2, finished: Callable = func (): return )->Signal:
 	var tween: Tween = node.create_tween();
 	tween.tween_property(node, "scale", scale, duration)
 	tween.tween_callback(finished)
 	return tween.finished
 
-static func size_to(node: Control, duration: float, size: Vector2,finished : Callable = func (): return )->Signal:
+
+static func size_to(node: Control, duration: float, size: Vector2, finished: Callable = func (): return )->Signal:
 	var tween: Tween = node.create_tween();
 	tween.tween_property(node, "size", size, duration)
 	tween.tween_callback(finished)
 	return tween.finished
 
-static func size_by_x(node: Control, duration: float, x: int,finished : Callable = func (): return )->Signal:
+
+static func size_by_x(node: Control, duration: float, x: int, finished: Callable = func (): return )->Signal:
 	var size: Vector2 = Vector2(node.get_size())
 	size.x += x
-	return size_to(node, duration, size,finished)
+	return size_to(node, duration, size, finished)
 
 
-static func size_by_y(node: Control, duration: float, y: int,finished : Callable = func (): return )->Signal:
+static func size_by_y(node: Control, duration: float, y: int, finished: Callable = func (): return )->Signal:
 	var size: Vector2 = Vector2(node.get_size())
 	size.y += y
-	return size_to(node, duration, size,finished)
+	return size_to(node, duration, size, finished)
 
-static func move_to(node: Node, duration: float, position: Vector2,finished : Callable = func (): return )->Tween:
+
+static func move_to(node: Node, duration: float, position: Vector2, finished: Callable = func (): return )->Tween:
 	var tween: Tween = node.create_tween();
 	tween.tween_property(node, "position", position, duration)
 	tween.tween_callback(finished)
 	return tween
 
 
-static func move_by_x(node: Node, duration: float, x: int,finished : Callable = func (): return )->Tween:
+static func move_by_x(node: Node, duration: float, x: int, finished: Callable = func (): return )->Tween:
 	var position: Vector2 = Vector2(node.get_position())
 	position.x += x
-	return move_to(node, duration, position,finished)
+	return move_to(node, duration, position, finished)
 
 
-static func move_by_y(node: Node, duration: float, y: int,finished : Callable = func (): return )->Tween:
+static func move_by_y(node: Node, duration: float, y: int, finished: Callable = func (): return )->Tween:
 	var position: Vector2 = Vector2(node.get_position())
 	position.y += y
-	return move_to(node, duration, position,finished)
+	return move_to(node, duration, position, finished)
 
-static func alpha_to(node: Control, duration: float, alpha: float,finished : Callable = func (): return  )->Signal:
+
+static func alpha_to(node: Control, duration: float, alpha: float, finished: Callable = func (): return  )->Signal:
 	var tween: Tween = node.create_tween();
 	tween.tween_property(node, "modulate:a", alpha, duration)
 	tween.tween_callback(finished)
 	return tween.finished
 
 
-static func alpha_by(node: Control, duration: float, alpha: int,finished : Callable = func (): return )->Signal:
+static func alpha_by(node: Control, duration: float, alpha: int, finished: Callable = func (): return )->Signal:
 	var position: Vector2 = Vector2(node.get_size())
 	position.x += alpha
-	return size_to(node, duration, position,finished)
+	return size_to(node, duration, position, finished)
 
 
 static func spawn(node: Node, initial_scale: float = 1, initial_rotation = 0, shadow: Node = null)->Tween:

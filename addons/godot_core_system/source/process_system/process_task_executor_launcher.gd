@@ -19,12 +19,14 @@ var empty_able: bool = false
 ## 流程任务配置字典
 var process: Dictionary
 var _task_count: int = 0
+
+
 func _execute(task: ProcessTask, msg: Dictionary = {}) -> void:
 	if !process || process.is_empty():
 		lg.fatal("process is empty!")
 		return
-	var is_array = context_values && !context_values.is_empty()
-	var is_single = context_value != null
+	var is_array: bool = context_values && !context_values.is_empty()
+	var is_single      = context_value != null
 	if is_array && is_single:
 		lg.fatal("Cannot assign both context_value and context_values (mutually exclusive)")
 		return
@@ -36,16 +38,16 @@ func _execute(task: ProcessTask, msg: Dictionary = {}) -> void:
 			_task_count = context_values.size()
 			for value in context_values:
 				var process_task: ProcessTask = _create_task(task, process, task.level + 1)
-				var current_msg = msg.duplicate()
+				var current_msg: Dictionary   = msg.duplicate()
 				current_msg[context_key] = value
 				process_task.state_exited.connect(_finish_one.bind(task, msg))
 				process_task.enter(current_msg)
 		else:
-			var last_task = _create_task(task, process, task.level + 1)
-			var first_task = last_task
+			var last_task: ProcessTask  = _create_task(task, process, task.level + 1)
+			var first_task: ProcessTask = last_task
 			if context_values.size() > 1:
 				for i in range(1, context_values.size()):
-					var current_value = context_values[i]
+					var current_value             = context_values[i]
 					var current_task: ProcessTask = _create_task(task, process, task.level + 1)
 					if i == context_values.size() - 1:
 						current_task.state_exited.connect(completed.bind(task, msg))
@@ -56,7 +58,7 @@ func _execute(task: ProcessTask, msg: Dictionary = {}) -> void:
 			_enter_current_task(first_task, context_values[0], msg) # 第一个进入
 	elif empty_able:
 		var process_task: ProcessTask = _create_task(task, process, task.level + 1)
-		var current_msg = msg.duplicate()
+		var current_msg: Dictionary   = msg.duplicate()
 		if context_key && !context_key.is_empty():
 			current_msg[context_key] = context_value
 		process_task.enter(current_msg)
@@ -64,15 +66,18 @@ func _execute(task: ProcessTask, msg: Dictionary = {}) -> void:
 	else:
 		completed(task, msg)
 
+
 func _enter_current_task(current: ProcessTask, value: Variant, msg: Dictionary):
-	var current_msg = msg.duplicate()
+	var current_msg: Dictionary = msg.duplicate()
 	current_msg[context_key] = value
 	current.enter(current_msg)
+
 
 func _finish_one(task: ProcessTask, msg: Dictionary):
 	_task_count -= 1
 	if _task_count <= 0:
 		completed(task, msg)
+
 
 func _create_task(current_task: ProcessTask, config: Dictionary, level: int) -> ProcessTask:
 	var process_task: ProcessTask = ProcessTemplate.new().generate(process, level)

@@ -17,11 +17,11 @@ var repeat: int = 0
 var run_now: bool = false
 ## 定时任务停止后，是否立即结束执行模块
 var finish_on_stop: bool = false
-
 ## 定时器ID 不建议手动复制
-var _timer_id = UUID.generate()
+var _timer_id: String = UUID.generate()
 ## 已执行次数记录 不建议手动复制
-var _run_count = 0
+var _run_count: int = 0
+
 
 ## 创建并启动定时任务
 func execute(task: ProcessTask, msg: Dictionary = {}) -> void:
@@ -33,6 +33,7 @@ func execute(task: ProcessTask, msg: Dictionary = {}) -> void:
 		run(task, msg)
 	CoreSystem.time_manager.create_timer(_timer_id, duration, loop, run.bind(task, msg))
 
+
 func run(task: ProcessTask, msg: Dictionary):
 	_run_count += 1
 	if !loop || _run_count >= repeat:
@@ -41,15 +42,18 @@ func run(task: ProcessTask, msg: Dictionary):
 	if _run_count == 0 and finish_on_stop:
 		completed(task, msg)
 
+
 ## 完成并结束当前执行模块,该方法会停止之前正在执行的定时任务
 func completed(task: ProcessTask, msg: Dictionary = {}):
 	stop_timer(true)
 	super.completed(task, msg)
 
+
 ## 取消并结束当前执行模块,该方法会停止之前正在执行的定时任务
 func cancel(task: ProcessTask, msg: Dictionary = {}):
 	stop_timer(true)
 	super.cancel(task, msg)
+
 
 ## 停止计时任务
 func stop_timer(unlog: bool = false):
@@ -59,6 +63,7 @@ func stop_timer(unlog: bool = false):
 	elif !unlog:
 		lg.warning("Timer is unstarted.")
 
+
 ## 暂停计时任务
 func pause_timer(unlog: bool = false):
 	if CoreSystem.time_manager.has_timer(_timer_id):
@@ -66,12 +71,14 @@ func pause_timer(unlog: bool = false):
 	elif !unlog:
 		lg.warning("Timer is unstarted.")
 
+
 ## 恢复计时任务
 func resume_timer(unlog: bool = false):
 	if CoreSystem.time_manager.has_timer(_timer_id):
 		CoreSystem.time_manager.resume_timer(_timer_id)
 	elif !unlog:
 		lg.warning("Timer is unstarted.")
+
 
 func _execute(task: ProcessTask, msg: Dictionary = {}):
 	task._debug("Execute Task to do something ")

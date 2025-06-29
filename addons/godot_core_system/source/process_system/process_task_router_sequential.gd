@@ -15,7 +15,7 @@ func _find_next(current_task: ProcessTask, _completed: bool, _msg: Dictionary = 
 		return current_task
 	if current_task.parent is ProcessTaskBatch: # 目前只有流程任务组存在默认路由
 		var process: ProcessTaskBatch = current_task.parent as ProcessTaskBatch
-		var at: int = process.tasks.find(current_task)
+		var at: int                   = process.tasks.find(current_task)
 		if at < 0:
 			lg.fatal("State not exist at %d" % at)
 			return null
@@ -27,8 +27,8 @@ func _find_next(current_task: ProcessTask, _completed: bool, _msg: Dictionary = 
 		next_task = process.tasks[at + 1]
 	else:
 		var parent: BaseStateMachine = current_task.parent as BaseStateMachine
-		var state_keys = parent.states.keys()
-		var at: int = state_keys.find(current_task.state_id)
+		var state_keys               = parent.states.keys()
+		var at: int                  = state_keys.find(current_task.state_id)
 		if at < 0:
 			lg.fatal("State not exist at %d" % at)
 			return null

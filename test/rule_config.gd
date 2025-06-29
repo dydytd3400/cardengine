@@ -1,25 +1,22 @@
 ## 流程配置字典
 class_name ProcessConfig extends RefCounted
-const root = "res://src/core/intent/battles/%s.gd"
-const battle_process_config = {
+const root:String  = "res://src/core/intent/battles/%s.gd"
+const battle_process_config: Dictionary = {
 		"key" = "对战流程",
 		"nodes" = [ {
 				"key" = "战场初始化",# 通常准备一些初始数据
 				"executor" = {
-					"resource" = Process.EXECITOR_EXPRESSION,
+					"resource" = ProcessConstant.EXECITOR_EXPRESSION,
 					"expressions" = [{
 						"expression" = "@context{battle_field}.initialize()",
 						"finally" = "complete"
 					}]
 				}
 
-			#},{
-				#"key" = "卡牌初始化",# 进行各个对象初始状态切换和展示
-				#"executor" = root % "battle_initial"
 			}, {
 				"key" = "决出先手玩家",
 				"executor" = {
-					"resource" = Process.EXECITOR_EXPRESSION,
+					"resource" = ProcessConstant.EXECITOR_EXPRESSION,
 					"expressions" = [{
 						"expression" = "@context{battle_field}.pick_first()",
 						"finally" = "complete"
@@ -56,9 +53,8 @@ const battle_process_config = {
 						"executor" = root % "turn_initial",
 					}, {
 						"key" = "发放利息",
-						#"executor" = root % "player/interest_payout",
 						"executor" = {
-										"resource" = Process.EXECITOR_EXPRESSION,
+										"resource" = ProcessConstant.EXECITOR_EXPRESSION,
 										"expressions" = [{
 											"expression" = "@context{battle_field}.current_player.interest_payout(floor(@context{battle_field}.turn_count/2.0))",
 											"finally" = "complete"
@@ -71,7 +67,7 @@ const battle_process_config = {
 					 {
 					 	"key" = "牌桌流程",
 					 	"executor" = {
-					 		"resource" = Process.EXECITOR_LAUNCHER,
+					 		"resource" = ProcessConstant.EXECITOR_LAUNCHER,
 					 		"context_key" = "card",
 					 		"context_values" = "@context{battle_field.current_player.plays}",
 					 		"process" = {
@@ -79,7 +75,7 @@ const battle_process_config = {
 					 			"nodes" = [ {
 					 				"key" = "激活",
 									"executor" = {
-													"resource" = Process.EXECITOR_EXPRESSION,
+													"resource" = ProcessConstant.EXECITOR_EXPRESSION,
 													"expressions" = [{
 														"expression" = "@context{card}.to_activate()",
 														"finally" = "complete"
@@ -88,7 +84,7 @@ const battle_process_config = {
 					 			},{
 					 				"key" = "移动",
 					 				"executor" = {
-													"resource" = Process.EXECITOR_EXPRESSION,
+													"resource" = ProcessConstant.EXECITOR_EXPRESSION,
 													"expressions" = [{
 														"expression" = "await @context{card}.to_move()",
 														"finally" = "complete"
@@ -97,7 +93,7 @@ const battle_process_config = {
 					 			}, {
 					 				"key" = "攻击",
 					 				"executor" = {
-													"resource" = Process.EXECITOR_EXPRESSION,
+													"resource" = ProcessConstant.EXECITOR_EXPRESSION,
 													"expressions" = [{
 														"expression" = "await @context{card}.to_attack()",
 														"finally" = "complete"
@@ -110,7 +106,7 @@ const battle_process_config = {
 					{
 						"key" = "出牌",
 						"executor" = {
-										"resource" = Process.EXECITOR_EXPRESSION,
+										"resource" = ProcessConstant.EXECITOR_EXPRESSION,
 										"expressions" = [{
 											"expression" = "await @context{battle_field}.current_player.play_card()",
 											"finally" = "complete"
@@ -121,14 +117,14 @@ const battle_process_config = {
 			}, {
 				"key" = "回合结束胜负判定",
 				"executor" = {
-					"resource" = Process.EXECITOR_EXPRESSION,
+					"resource" = ProcessConstant.EXECITOR_EXPRESSION,
 					"expressions" = [{
 						"expression" = "1 == 1",
 						"finally" = "complete",
 					}]
 				},
 				"router" = {
-					"resource" = Process.ROUTER_MATCH,
+					"resource" = ProcessConstant.ROUTER_MATCH,
 					"matchers" = [{
 						"matcher" = "@context{battle_field}.checkmate()",
 						"回合流程" = false
@@ -138,7 +134,7 @@ const battle_process_config = {
 		"monitor" = ""
 	}
 
-const card_process_config =  {
+const card_process_config :Dictionary=  {
 			 			"key" = "卡牌流程",
 			 			"nodes" = [ {
 			 				"key" = "牌库",

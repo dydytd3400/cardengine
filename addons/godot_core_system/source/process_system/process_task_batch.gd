@@ -11,8 +11,7 @@ extends ProcessTask
 
 # 信号
 ## 状态改变
-signal state_changed(from_state: ProcessTask, to_state: ProcessTask,msg:Dictionary)
-
+signal state_changed(from_state: ProcessTask, to_state: ProcessTask, msg: Dictionary)
 ## 子任务集数组容器，该数组的下标即为被添加进当前流程任务组的时序
 var tasks: Array[ProcessTask] = []
 ## 子任务集字典容器，方便通过state_id获取任务
@@ -20,20 +19,19 @@ var tasks_dict: Dictionary[StringName, ProcessTask] = {}
 ## 是否为并发任务
 ## 该值为true时，该[ProcessTaskBatch]的当前层级的子[ProcessTask]将会并发执行，在执行完成后，[ProcessTask]会各自退出且不再进行路由。当所有子[ProcessTask]都退出后，该[ProcessTaskBatch]也随之完成。
 var concurrent: bool = false
-
 ## 当前状态
 var current_task: ProcessTask
-
 ## 上一个状态
 var previous_task: StringName = &""
-
 var _task_count
+
 
 ## 构造方法，和[ProcessTask]一样只能直接创建，不同之处在于只可以传入一个[ProcessTaskRouter]。
 func _init(_router: ProcessTaskRouter, _concurrent: bool = false):
 	super._init(ProcessTaskExecutor.new(), _router)
 	concurrent = _concurrent
 	state_exited.connect(on_exited)
+
 
 ## 进入当前任务状态
 ## 调度[member executor]执行具体任务，并通过[param msg]附带参数
@@ -47,6 +45,7 @@ func on_entered(msg: Dictionary):
 	else:
 		switch(tasks[0].state_id, msg)
 
+
 func on_exited():
 	if !concurrent:
 		if current_task:
@@ -55,6 +54,7 @@ func on_exited():
 		for task in tasks:
 			if task.is_active:
 				task.exit()
+
 
 ## 添加子任务 [param task_id]：子任务在当前流程组的唯一ID。[param new_task]：需要添加的子任务
 func add_task(task_id: StringName, new_task: ProcessTask) -> void:
@@ -65,6 +65,7 @@ func add_task(task_id: StringName, new_task: ProcessTask) -> void:
 	new_task.parent = self
 	tasks_dict[task_id] = new_task
 	new_task.state_id = task_id
+
 
 ## 切换状态
 func switch(state_id: StringName, msg: Dictionary = {}) -> void:
@@ -87,7 +88,7 @@ func switch(state_id: StringName, msg: Dictionary = {}) -> void:
 		return
 
 	current_task.enter(msg)
-	state_changed.emit(from_task, current_task,msg)
+	state_changed.emit(from_task, current_task, msg)
 
 
 func _finish_one(msg: Dictionary = {}) -> void:
@@ -104,6 +105,7 @@ func get_current_task_name() -> StringName:
 ## 通过task_id获取子任务
 func get_task(task_id: StringName) -> ProcessTask:
 	return tasks_dict[task_id]
+
 
 ## 通过task_index获取子任务
 func get_task_at(task_index: int) -> ProcessTask:

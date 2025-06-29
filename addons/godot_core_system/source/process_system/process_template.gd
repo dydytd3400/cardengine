@@ -19,9 +19,9 @@ var executor_source: Dictionary
 ## 当前节点的路由
 ## [i]可选，默认为：[/i][ProcessTaskRouterSequential]
 var router_source: Dictionary
-
 ## 自定义执行模块和路由模块的加载回调方法，具体参数参见[method module_loader]
 var custom_module_loader: Callable = Callable()
+
 
 #TODO 该属性应该属于可编辑模版的拓展字段，不应该在基础模版体现
 #var name: String # 当前节点显示名称 [b]必填[/b]
@@ -35,6 +35,7 @@ func validation() -> bool:
 		lg.fatal("Template key empty!")
 		return false
 	return true
+
 
 ## 填充配置项
 ## [param config] 配置字典 会验证整个配置字典的合法性
@@ -62,12 +63,12 @@ func populate(config: Dictionary) -> bool:
 			router_source = config.router
 	if config.has("nodes"):
 		var nodes_dict: Array = config.nodes
-		var has_nodes = !nodes_dict.is_empty()
+		var has_nodes: bool   = !nodes_dict.is_empty()
 		if config.has("concurrent"):
 			concurrent = config.has("concurrent")
 		else:
 			concurrent = false
-		var has_executor = executor_source && !executor_source.is_empty()
+		var has_executor: bool = executor_source && !executor_source.is_empty()
 		if has_nodes && has_executor:
 			lg.warning("Template[%s] nodes configured, executor disabled! " % config.key)
 		var key_map: Dictionary = {}
@@ -80,6 +81,7 @@ func populate(config: Dictionary) -> bool:
 				nodes.append(template)
 				key_map[node.key] = 1
 	return true
+
 
 ## 填充配置项并生成对应的流程任务[br]
 ## [param config] 配置字典 不为空时会验证整个配置字典的合法性，否则会只当对前已经填充的配置属性进行合法性校验[br]
@@ -108,12 +110,14 @@ func _create_process_task_batch(level: int = 0) -> ProcessTaskBatch:
 		current_node.add_task(node.key, node.generate({}, level + 1, custom_module_loader))
 	return current_node
 
+
 ## 创建流程任务
 func _create_process_task(level: int = 0) -> ProcessTask:
 	var current_node = ProcessTask.new(_create_process_executor(), _create_process_router())
 	current_node.state_id = key
 	current_node.level = level
 	return current_node
+
 
 ## 创建流程任务执行模块
 func _create_process_executor() -> ProcessTaskExecutor:
@@ -129,6 +133,7 @@ func _create_process_executor() -> ProcessTaskExecutor:
 		return null
 	return executor
 
+
 ## 创建流程任务路由
 func _create_process_router() -> ProcessTaskRouter:
 	var router
@@ -138,9 +143,11 @@ func _create_process_router() -> ProcessTaskRouter:
 		router = _creator_default_router()
 	return router
 
+
 ## 创建流程任务默认路由
 func _creator_default_router() -> ProcessTaskRouter:
 	return ProcessTaskRouterSequential.new()
+
 
 ## 执行模块和路由模块的默认加载器[br]
 ## [param type]为模块类型，值为："executor"或"router"。[br]
@@ -163,6 +170,7 @@ func module_loader(type: String, key: String, module_config: Dictionary) -> Vari
 			else:
 				module[param] = module_config[param]
 	return module
+
 
 func _init(config: Dictionary = {}):
 	if config && !config.is_empty():

@@ -7,17 +7,17 @@ extends Resource
 ## 卡牌名称
 @export
 var card_name: String = ""
+
 ## 卡牌UUID
 @export_storage
 var card_id: StringName
-
 ## 当前费用
 @export
 var cost: int = 0
 
 ## 卡牌类型
 @export
-var card_type :DataEnums.CardType = DataEnums.CardType.ORGANISM:
+var card_type: DataEnums.CardType = DataEnums.CardType.ORGANISM:
 	set(value):
 		card_type = value
 		if  Engine.is_editor_hint():
@@ -28,8 +28,7 @@ var card_type :DataEnums.CardType = DataEnums.CardType.ORGANISM:
 var health: int = 0
 ## 独占
 @export
-var exclusive:bool = true
-
+var exclusive: bool = true
 #========================攻击相关========================
 ## 当前攻击力[br]
 ## 移动和攻击为两个特殊能力，属于多数卡牌的基础能力，一旦有，同类型就只可能有一个，所以从能力集[member abilitys]中单列出来
@@ -42,7 +41,6 @@ var attack_area: RangeArea
 ## 攻击方式
 @export
 var attack_type: Ability
-
 #========================移动相关========================
 ## 移动距离 单次移动可移动的最大格数
 @export_group("Moves")
@@ -54,24 +52,26 @@ var move_area: RangeArea
 ## 移动方式
 @export
 var move_type: Ability
-
 ## 能力集
-@export_group("","")
+@export_group("", "")
 @export
 var abilitys: Array[Ability] = []
 ## 卡牌描述
 @export
 var text: String
+
 ## 卡牌边框 该字段为动态属性 无法通过资源配置
 @export_storage
-var frame_style:String = "frame_silver"
+var frame_style: String = "frame_silver"
 
 var _property_usages := {}
+
+
 func _validate_property(property: Dictionary) -> void:
 	if  Engine.is_editor_hint():
-		var attacks = ["attack","attack_area","attack_type"]
-		var moves = ["mobility","move_area","move_type"]
-		var hide = false
+		var attacks: Array[String] = ["attack", "attack_area", "attack_type"]
+		var moves: Array[String]   = ["mobility", "move_area", "move_type"]
+		var hide: bool             = false
 		match card_type:
 			DataEnums.CardType.SPELL:
 				hide = property.name == "health" || property.name == "exclusive" || attacks.has(property.name) || moves.has(property.name)

@@ -1,8 +1,8 @@
 # 攻击效果
-class_name EffectAttack extends Effect
+class_name EffectAttack
+extends Effect
 
 signal attack_once
-
 # 攻击者节点（通常附加在这个节点上）
 var attacker: CardNode = null
 # 目标节点（在代码中设置）
@@ -12,7 +12,8 @@ var original_position: Vector2 = Vector2.ZERO
 # 动画状态
 enum {IDLE, CHARGING, IMPACT, RETURNING}
 
-func execute(source: Card,_triggerer,targets, _params: Dictionary={}):
+
+func execute(source: Card, _triggerer, targets, _params: Dictionary = {}):
 	await CoreSystem.get_tree().process_frame
 	original_position = source.view.position
 	attacker = source.view
@@ -21,19 +22,19 @@ func execute(source: Card,_triggerer,targets, _params: Dictionary={}):
 			if !targets.is_empty():
 				for target in targets:
 					if target:
-						await attack(source,target)
+						await attack(source, target)
 			else:
-				lg.info("卡牌: %s 无可攻击目标" % source.card_name,{},TAG,lg.LogLevel.FATAL)
+				lg.info("卡牌: %s 无可攻击目标" % source.card_name, {}, TAG, lg.LogLevel.FATAL)
 				await CoreSystem.get_tree().process_frame
-		else :
-			await attack(source,targets)
+		else:
+			await attack(source, targets)
 	else:
-		lg.info("卡牌: %s 无可攻击目标" % source.card_name,{},TAG,lg.LogLevel.FATAL)
+		lg.info("卡牌: %s 无可攻击目标" % source.card_name, {}, TAG, lg.LogLevel.FATAL)
 		await CoreSystem.get_tree().process_frame
 	effect_finish.emit()
 
 
-func attack(source_card:Card,target_card: Card):
+func attack(source_card: Card, target_card: Card):
 	if  !target_card:
 		return
 
@@ -48,7 +49,7 @@ func attack(source_card:Card,target_card: Card):
 	charge_tween.set_ease(Tween.EASE_OUT)
 	charge_tween.set_trans(Tween.TRANS_CUBIC)
 	charge_tween.tween_property(attacker, "position", impact_position, 0.2)
-	charge_tween.tween_callback(_on_impact_reached.bind(source_card,target_card))
+	charge_tween.tween_callback(_on_impact_reached.bind(source_card, target_card))
 	await attack_once
 
 
@@ -58,7 +59,7 @@ func calculate_impact_position() -> Vector2:
 		return original_position
 
 	# 计算冲击偏移（向目标方向移动，但停在目标前方）
-	var direction = (target.global_position - attacker.global_position).normalized()
+	var direction     = (target.global_position - attacker.global_position).normalized()
 	var impact_offset = direction * 30  # 冲击距离
 
 	# 确保不会穿过目标
@@ -68,10 +69,11 @@ func calculate_impact_position() -> Vector2:
 
 	return original_position + impact_offset
 
-func _on_impact_reached(source_card:Card,target_card: Card):
+
+func _on_impact_reached(source_card: Card, target_card: Card):
 
 	target_card.take_damage(source_card.attack)
-	if target_card.resist_able:# 目标反击
+	if target_card.resist_able: # 目标反击
 		source_card.take_damage(target_card.attack)
 
 	# 触发目标受击效果
@@ -87,8 +89,10 @@ func _on_impact_reached(source_card:Card,target_card: Card):
 	return_tween.tween_property(attacker, "position", original_position, 0.3)
 	return_tween.tween_callback(_on_return_complete)
 
+
 func _on_return_complete():
 	attack_once.emit()
+
 
 func take_damage():
 	# 创建受击动画（震动+变红）

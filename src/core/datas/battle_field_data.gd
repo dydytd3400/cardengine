@@ -5,8 +5,8 @@ class_name BattleFieldData
 @export
 var players: Array[PlayerData] = []
 @export
-var turn_count = 0
+var turn_count: int = 0
 @export
-var first_index = -1
+var first_index: int = -1
 @export
-var current_player_index = -1
+var current_player_index: int = -1

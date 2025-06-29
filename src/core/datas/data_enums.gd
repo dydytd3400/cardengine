@@ -5,5 +5,5 @@ class_name DataEnums
 enum CardType {
 	ORGANISM,
 	SPELL,
-	TERRAIN ,
+	TERRAIN,
 }

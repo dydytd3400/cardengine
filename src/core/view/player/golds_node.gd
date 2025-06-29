@@ -2,10 +2,9 @@
 class_name GoldsNode
 extends Node2D
 
-
-var gold:int :
+var gold: int:
 	set(value):
-		var v:int = value / 2
-		for i in range(1,6):
-			var node = str(i)
+		var v = value / 2.0
+		for i in range(1, 6):
+			var node: String = str(i)
 			get_node(node).visible = i<=v

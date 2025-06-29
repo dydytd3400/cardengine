@@ -10,8 +10,7 @@ extends BaseState
 
 # 信号
 ## 状态改变
-signal process_changed(process_id: StringName,msg:Dictionary)
-
+signal process_changed(process_id: StringName, msg: Dictionary)
 ## 当前[ProcessTask]的执行模块
 var executor: ProcessTaskExecutor
 ## 当前[ProcessTask]的路由模块
@@ -30,24 +29,29 @@ func _init(_executor: ProcessTaskExecutor, _router: ProcessTaskRouter):
 	state_entered.connect(on_entered)
 	_initial_executor()
 
+
 func _initial_executor():
 	executor.finished.connect(_executor_finished) # TODO 为什么下面这种方式有问题
-	#executor.finished.connect(router.next)
+
+
+#executor.finished.connect(router.next)
 
 func enter(msg: Dictionary = {}) -> bool:
-	var entered = super.enter(msg)
+	var entered: bool = super.enter(msg)
 	if entered:
 		if parent:
 			if parent is ProcessTask:
-				parent.process_changed.emit(state_id,msg)
+				parent.process_changed.emit(state_id, msg)
 		else:
-			process_changed.emit(state_id,msg)
+			process_changed.emit(state_id, msg)
 	return entered
+
 
 ## 进入当前任务状态
 ## 调度[member executor]执行具体任务，并通过[param msg]附带上下文参数，该参数如果没有被修改，通常会被一直传递直到流程结束
 func on_entered(msg: Dictionary):
-	executor.execution.emit(self,msg)
+	executor.execution.emit(self, msg)
+
 
 ## 切换流程任务
 func switch_to(state_id: StringName, msg: Dictionary = {}) -> void:
@@ -72,6 +76,7 @@ func get_parent_task(task_id: StringName) -> ProcessTask:
 	lg.warning("Has no parent")
 	return null
 
+
 # 当前executor执行完毕，路由至下一个流程任务
-func _executor_finished(task:ProcessTask, completed: bool, msg: Dictionary) -> void:
-	router.find_next.emit(task,completed,msg) # 路由至下一个流程任务
+func _executor_finished(task: ProcessTask, completed: bool, msg: Dictionary) -> void:
+	router.find_next.emit(task, completed, msg) # 路由至下一个流程任务

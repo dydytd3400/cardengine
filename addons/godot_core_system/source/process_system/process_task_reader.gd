@@ -12,14 +12,17 @@ extends RefCounted
 ## self["member"] = context["sth_target"]["member_a"]["0"]["x"][3]
 ## [/codeblock]
 var write_to_members: Dictionary[String, String] = {}
-var error_id = UUID.generate()
+var error_id: String = UUID.generate()
+
+
 ## 读取上下文配置并写入成员
 func write_to_member(context: Dictionary):
 	for member in write_to_members.keys():
-		var key = write_to_members[member]
+		var key   = write_to_members[member]
 		var value = read(key, context, null)
 		if value:
 			self[member] = value
+
 
 func read(key: String, context: Dictionary, target: Variant):
 	if !key || key.is_empty():
@@ -39,10 +42,11 @@ func read(key: String, context: Dictionary, target: Variant):
 	key = key.trim_prefix(type).trim_suffix("}")
 	return read_one(value, key)
 
+
 func read_one(target: Variant, key: String):
 	if !target:
 		return null
-	var keys = key.split(".")
+	var keys  = key.split(".")
 	var value = target
 	for p in keys:
 		var r = p
@@ -51,10 +55,12 @@ func read_one(target: Variant, key: String):
 		value = value[r]
 	return value
 
+
 ## 解析表达式
 func parse_expression(_expr: String, context: Dictionary, need_result: bool):
 	var result = _parse_expression(_expr, context)
 	return evaluate_expression(result[0], result[1], result[2], need_result)
+
 
 ## 执行表达式
 func evaluate_expression(expression: String, variable_names, variable_values, need_result: bool) -> Variant:
@@ -76,10 +82,12 @@ func evaluate_expression(expression: String, variable_names, variable_values, ne
 		return error_id
 	return result
 
+
 ## 同步解析表达式
 func await_parse_expression(_expr: String, context: Dictionary):
 	var result = _parse_expression(_expr, context)
 	return await await_evaluate_expression(result[0], result[1], result[2])
+
 
 ## 同步执行表达式
 func await_evaluate_expression(expression: String, variable_names, variable_values) -> Variant:
@@ -98,17 +106,18 @@ func await_evaluate_expression(expression: String, variable_names, variable_valu
 		return error_id
 	return result
 
+
 func _parse_expression(_expr: String, context: Dictionary):
 	var _placeholder_regex: RegEx
 	_placeholder_regex = RegEx.new()
 	_placeholder_regex.compile(r"@(context|member)\{(.*?)\}")
-	var variable_names = []
+	var variable_names  = []
 	var variable_values = []
-	var match_expr = _expr
+	var match_expr      = _expr
 	for match_result in _placeholder_regex.search_all(_expr):
 		var variable_formater = match_result.get_string(0)
-		var variable_type = match_result.get_string(1)
-		var variable_name = match_result.get_string(2)
+		var variable_type     = match_result.get_string(1)
+		var variable_name     = match_result.get_string(2)
 		match_expr = match_expr.replace(variable_formater, variable_name)
 		if !variable_names.has(variable_name):
 			var variable_value
@@ -119,6 +128,7 @@ func _parse_expression(_expr: String, context: Dictionary):
 			variable_names.append(variable_name)
 			variable_values.append(variable_value)
 	return [match_expr, variable_names, variable_values]
+
 
 func _eq(a, b) -> bool:
 	if !a && !b:

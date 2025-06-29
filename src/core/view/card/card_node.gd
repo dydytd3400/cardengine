@@ -3,17 +3,17 @@ class_name CardNode
 extends PanelContainer
 
 @export
-var card_name_node:Label
+var card_name_node: Label
 @export
-var cost_node:AttributeNode
+var cost_node: AttributeNode
 @export
-var attack_node:AttributeNode
+var attack_node: AttributeNode
 @export
-var health_node:AttributeNode
+var health_node: AttributeNode
 @export
-var card_text_node:Label
+var card_text_node: Label
 @export
-var frame_node:TextureRect
+var frame_node: TextureRect
 
 ## 卡牌名称
 var card_name: String:
@@ -24,6 +24,7 @@ var card_name: String:
 var cost: int = 0:
 	set(val):
 		cost_node.value=val
+
 ## 初始费用
 var cost_max: int = 0:
 	set(val):
@@ -33,6 +34,7 @@ var cost_max: int = 0:
 var health: int = 0:
 	set(val):
 		health_node.value=val
+
 ## 初始血量
 var health_max: int = 0:
 	set(val):
@@ -42,6 +44,7 @@ var health_max: int = 0:
 var attack: int = 0:
 	set(val):
 		attack_node.value=val
+
 ## 初始血量
 var attack_max: int = 0:
 	set(val):
@@ -51,7 +54,6 @@ var attack_max: int = 0:
 var attack_area: Array[Vector2] = []
 ## 攻击方式
 var attack_type: Ability
-
 ## 移动距离 单次移动可移动的最大格数
 var mobility: int = 0
 ## 初始移动距离
@@ -60,19 +62,19 @@ var mobility_max: int = 0
 var move_area: Array[Vector2] = []
 ## 移动方式
 var move_type: Ability
-
 ## 能力集
 var abilitys: Array[Ability] = []
+
 ## 卡牌描述
 var text: String:
 	set(val):
 		card_text_node.text=val
 
 ## 卡牌边框
-var frame_style:String:
+var frame_style: String:
 	set(val):
 		var frame_res = load("res://assets/textures/"+val+".png")
-		var a :CompressedTexture2D
+		var a: CompressedTexture2D
 		if frame_res:
 			frame_node.texture = frame_res
 
@@ -84,14 +86,15 @@ var showing = true:
 		$CardBack.visible = !showing
 		$Attributes.visible = showing
 
+
 func death():
-	await TweenUtil.size_to(self,0.5,Vector2.ZERO)
+	await TweenUtil.size_to(self, 0.5, Vector2.ZERO)
 
-
-var top_scale:float:
+var top_scale: float:
 	set(val):
 		top_scale = val
 		_top_scale(val)
 
-func _top_scale(scale:float):
+
+func _top_scale(scale: float):
 	material.set_shader_param("top_scale", scale)

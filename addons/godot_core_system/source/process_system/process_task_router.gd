@@ -9,6 +9,7 @@ extends ProcessTaskReader
 
 signal find_next(current_task: ProcessTask, completed: bool, msg: Dictionary)
 
+
 func _init() -> void:
 	find_next.connect(_ready_find_next, ConnectFlags.CONNECT_DEFERRED)
 
@@ -26,12 +27,10 @@ func _ready_find_next(current_task: ProcessTask, completed: bool, msg: Dictionar
 			lg.warning("Has no parent, [%s] exit and [%s] enter" % [current_task.state_id, next_task.state_id])
 			current_task.exit()
 			next_task.enter(msg)
-		#elif !(parent is ProcessTaskBatch && parent.concurrent): # 当前任务不是并发子任务时，进行路由，否则不做处理
+			#elif !(parent is ProcessTaskBatch && parent.concurrent): # 当前任务不是并发子任务时，进行路由，否则不做处理
 			#current_task.switch_to(next_task.state_id,msg)
 		elif parent is ProcessTaskBatch:
 			if !parent.concurrent:
-				var next_task_id = next_task.state_id
-				var current_task_id = current_task.state_id
 				current_task.switch_to(next_task.state_id, msg)
 			else:
 				current_task.exit()

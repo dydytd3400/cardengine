@@ -23,15 +23,15 @@
 class_name ProcessTaskExecutorExpression
 extends ProcessTaskExecutor
 
+var expressions: Array[Variant] = []
 
-var expressions = []
 
 func _execute(task: ProcessTask, _msg: Dictionary = {}):
 	#print("当前栈深[_execute]=================================>>>>  "+str(get_stack().size()))
 	for expr_cfg in expressions:
 		var expr: String = expr_cfg.expression
 
-		var is_need_result = false
+		var is_need_result: bool = false
 		# 以下任一条件满足 即代表需要取得表达式返回值
 		if expr_cfg.has("append"): # 将执行结果追加至上下文
 			is_need_result = true
@@ -57,7 +57,7 @@ func _execute(task: ProcessTask, _msg: Dictionary = {}):
 
 		if expr_cfg.has("append"): # 将执行结果追加至上下文
 			_msg[expr_cfg["append"]] = expr_value
-		var is_complete = false
+		var is_complete: bool = false
 		if expr_cfg.has("complete") && _eq(expr_cfg["complete"], expr_value): # 表达式执行结果符合complate走向
 			if expr_cfg.has("complete_append"): # 将执行结果追加至上下文
 				_msg[expr_cfg["complete_append"]] = expr_value

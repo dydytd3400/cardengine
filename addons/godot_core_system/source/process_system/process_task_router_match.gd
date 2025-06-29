@@ -7,7 +7,7 @@
 class_name ProcessTaskRouterMatch
 extends ProcessTaskRouter
 
-var matchers = []
+var matchers: Array[Variant] = []
 
 
 ## 返回下一个同级流程任务
@@ -19,12 +19,12 @@ func _find_next(_current_task: ProcessTask, _completed: bool, _msg: Dictionary =
 			matcher = matcher.trim_prefix("await ")
 			matcher_value = await await_parse_expression(matcher, _msg)
 		else:
-			matcher_value = parse_expression(matcher, _msg,true)
+			matcher_value = parse_expression(matcher, _msg, true)
 
-		if _eq(error_id,matcher_value):
+		if _eq(error_id, matcher_value):
 			continue
 		for key in cfg:
 			if key != "matcher":
-				if _eq(cfg[key],matcher_value):
+				if _eq(cfg[key], matcher_value):
 					return _current_task.get_parent_task(key)
 	return null

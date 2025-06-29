@@ -1,7 +1,7 @@
-class_name Ability extends Resource
+class_name Ability
+extends Resource
 
 signal ability_finish
-
 @export
 var trigger: Trigger
 @export
@@ -13,12 +13,14 @@ var effect: Effect
 @export
 var enable: bool = true
 
+
 func initialize(source) -> void:
 	trigger.triggered.connect(execute.bind(source))
 
+
 func execute(triggerer, msg: Dictionary, source) -> void:
 	if enable && triggerer_condition.evaluate(triggerer, source):
-		var targets = target_filter.find_target(source,triggerer)
+		var targets = target_filter.find_target(source, triggerer)
 		if targets:
 			effect.execute(source, triggerer, targets, msg)
 			await effect.effect_finish
